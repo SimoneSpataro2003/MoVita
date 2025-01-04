@@ -1,0 +1,33 @@
+.h-input{
+  border-style: none;
+  border-bottom: 2px solid white; /* Aggiunge solo la linea sotto */
+  border-radius: 0; /* Rimuove gli angoli arrotondati */
+  outline: none; /* Rimuove l'effetto di focus predefinito */
+  box-shadow: none; /* Rimuove eventuali ombreggiature */
+  background: transparent; /* Rende lo sfondo trasparente */
+  padding-left: 0; /* Rimuove il padding laterale */
+  color: white;
+}
+.h-input::placeholder{
+  color: white;
+  opacity: 0.6;
+}
+
+
+.h-buttonoutline{
+  border-style: none;
+  border-radius: 0; /* Rimuove gli angoli arrotondati */
+  outline: none; /* Rimuove l'effetto di focus predefinito */
+  box-shadow: none; /* Rimuove eventuali ombreggiature */
+}
+
+.h-button{
+  border-style: none;
+  border-radius: 0; /* Rimuove gli angoli arrotondati */
+  outline: none; /* Rimuove l'effetto di focus predefinito */
+}
+
+.underlined{
+  border-bottom: 2px solid; /* Aggiunge solo la linea sotto */
+}
+
