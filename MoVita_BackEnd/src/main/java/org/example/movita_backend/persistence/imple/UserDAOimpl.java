@@ -5,14 +5,31 @@ import org.example.movita_backend.persistence.model.User;
 import org.example.movita_backend.persistence.proxy.UserProxy;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDAOimpl implements UserDAO {
-    Connection connection;
+    private final Connection connection;
 
     public UserDAOimpl(Connection connection) {
         this.connection = connection;
+    }
+
+    @Override
+    public User getUserById(int id) {
+        String query = "SELECT * FROM utente WHERE id = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setInt(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return mapEntity(resultSet);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private User mapEntity(ResultSet rs) throws SQLException {

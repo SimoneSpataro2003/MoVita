@@ -22,11 +22,24 @@ public class UserController {
         User user = (User) request.getSession().getAttribute("user");
 
         // vari controlli di questo tipo...
-        if(user == null) {
+        if(user == null)
+        {
             throw new AuthenticationException("Non sei autorizzato!");
         }
 
         return ResponseEntity.ok(user.getFriends());
+    }
+
+    @GetMapping("user/{userId}")
+    public ResponseEntity<User> getUser(@PathVariable int userId) throws AuthenticationException {
+        User user = DBManager.getInstance().getUserDAO().getUserById(userId);
+
+        if(user == null)
+        {
+            throw new AuthenticationException("Non sei autorizzato!");
+        }
+
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("user/payment/{userId}")
