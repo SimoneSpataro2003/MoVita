@@ -1,0 +1,91 @@
+<main class="container">
+
+    <div class="row mb-3 ">
+        <section class="col-10 border p-4">
+            <h1>{{eventi[0].nome}}</h1>
+        </section>
+        <section class="col-2 border p-3 justify-content-center align-items-center ">
+
+            <button type="button" class="btn btn-primary">Partecipa</button>
+        </section>
+    </div>
+    <div class="row">
+        <div class=" border col-md-8 p-0">
+            <section class="border p-3 m-3">
+                {{eventi[0].organizzatore}}
+            </section>
+
+            <section class="border p-3 m-3">
+                <div class="container ">
+                    <img [src]="eventi[0].immagine[0]" class="img-thumbnail" alt="...">
+
+                </div>
+            </section>
+
+        </div>
+
+        <div class="border col-md-4 mb-3 ">
+            <section class="border p-3 mb-3">
+                <ul>
+                    <li>Capienza: {{eventi[0].capienzaMax}}</li>
+                    <li>Eta minima: AGGIUNGERE AD INTERFACCIA</li>
+                    <li>Prezzo: {{eventi[0].prezzo}}</li>
+                </ul>
+            </section>
+            <section class="border p-3">
+                Mappa
+                <img src="..." class="img-thumbnail" alt="...">
+            </section>
+        </div>
+    </div>
+    <section class="row">
+        <article class=" border col-md-8 p-3">
+            <h2>Descrizione</h2>
+
+            <div class="border p-3 m-3">
+                <p>{{eventi[0].descrizione}}</p>
+            </div>
+
+        </article>
+    </section>
+    <section class="row">
+        <div class=" border col-md-8 p-3">
+            <h2>Partecipanti</h2>
+
+
+            Riutilizzabile
+            <app-card-utente *ngFor="let utente of eventi[0].partecipanti" [username]="utente"></app-card-utente>
+
+        </div>
+    </section>
+    <section class="row">
+        <div class=" border col-md-8 p-3">
+            <h2>Eventi Simili</h2>
+            Riutilizzabile
+            <div class="card" style="width: 18rem;">
+                <img src="..." class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    <section class="row">
+        <div class=" border col-md-8 p-3">
+            <h2>Recensioni </h2>
+
+            <article>
+                Riutilizzabile
+                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus nesciunt hic incidunt fugit sapiente
+                    magni unde corrupti. Repellat nostrum minima placeat incidunt iusto repudiandae hic accusantium
+                    asperiores, assumenda porro ipsam!</p>
+            </article>
+
+        </div>
+    </section>
+
+</main>
