@@ -1,0 +1,60 @@
+{
+    "utenti": [
+        {
+            "id": 0,
+            "tipo": 0,
+            "verificato": true,
+            "username": "Simone",
+            "password": "simonino",
+            "luogo": "Marano Marchesato",
+            "email": "simone@gmail.com",
+            "credito": 100,
+            "immagine_profilo": "",
+            "eta": 21,
+            "valutazione": 10
+        },
+        {
+            "id": 1,
+            "tipo": 0,
+            "verificato": true,
+            "username": "Giuseppe",
+            "password": "giuseppino",
+            "luogo": "Piano Lago",
+            "email": "giuseppe@gmail.com",
+            "credito": 90,
+            "immagine_profilo": "",
+            "eta": 21,
+            "valutazione": 9
+        },
+        {
+            "id": 2,
+            "tipo": 0,
+            "verificato": true,
+            "username": "Thomas",
+            "password": "thomasino",
+            "luogo": "Montalto",
+            "email": "thomas@gmail.com",
+            "credito": 80,
+            "immagine_profilo": "",
+            "eta": 21,
+            "valutazione": 8
+        },
+        {
+            "id": 3,
+            "tipo": 0,
+            "verificato": true,
+            "username": "Samuele",
+            "password": "samuelino",
+            "luogo": "Mendicino",
+            "email": "samuele@gmail.com",
+            "credito": 70,
+            "immagine_profilo": "",
+            "eta": 21,
+            "valutazione": 7
+        }
+    ]
+
+
+
+
+}
