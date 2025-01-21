@@ -1,10 +1,10 @@
-package org.example.movita_backend.controller.rest;
+package org.example.movita_backend.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.example.movita_backend.exception.user.AuthenticationException;
 import org.example.movita_backend.persistence.DBManager;
-import org.example.movita_backend.persistence.model.Payment;
-import org.example.movita_backend.persistence.model.User;
+import org.example.movita_backend.model.Payment;
+import org.example.movita_backend.model.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

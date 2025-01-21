@@ -1,4 +1,4 @@
-package org.example.movita_backend.persistence.model;
+package org.example.movita_backend.model;
 
 import lombok.Data;
 

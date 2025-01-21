@@ -1,6 +1,6 @@
 package org.example.movita_backend.persistence.proxy;
 
-import org.example.movita_backend.persistence.model.User;
+import org.example.movita_backend.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

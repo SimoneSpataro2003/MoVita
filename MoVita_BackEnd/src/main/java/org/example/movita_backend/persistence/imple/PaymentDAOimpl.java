@@ -1,7 +1,7 @@
 package org.example.movita_backend.persistence.imple;
 
 import org.example.movita_backend.persistence.dao.PaymentDAO;
-import org.example.movita_backend.persistence.model.Payment;
+import org.example.movita_backend.model.Payment;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

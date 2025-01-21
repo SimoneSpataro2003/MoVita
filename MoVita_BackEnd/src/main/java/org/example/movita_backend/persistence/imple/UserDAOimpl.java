@@ -1,7 +1,7 @@
 package org.example.movita_backend.persistence.imple;
 
 import org.example.movita_backend.persistence.dao.UserDAO;
-import org.example.movita_backend.persistence.model.User;
+import org.example.movita_backend.model.User;
 import org.example.movita_backend.persistence.proxy.UserProxy;
 
 import java.sql.Connection;
