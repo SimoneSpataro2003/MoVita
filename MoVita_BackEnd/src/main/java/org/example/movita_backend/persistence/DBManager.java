@@ -1,9 +1,9 @@
 package org.example.movita_backend.persistence;
 
 import org.example.movita_backend.persistence.dao.PaymentDAO;
-import org.example.movita_backend.persistence.dao.UserDAO;
-import org.example.movita_backend.persistence.imple.PaymentDAOimpl;
-import org.example.movita_backend.persistence.imple.UserDAOimpl;
+import org.example.movita_backend.persistence.dao.UserDao;
+import org.example.movita_backend.persistence.impl.PaymentDaoJDBC;
+import org.example.movita_backend.persistence.impl.UserDaoJDBC;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -21,13 +21,15 @@ public class DBManager {
         return instance;
     }
 
-    Connection connection;
+    private UserDaoJDBC userDao;
+
+    Connection connection = null;
 
     public Connection getConnection() {
         if (connection == null){
             try {
                 connection = DriverManager.getConnection(
-                        "jdbc:postgresql://localhost:5432/movita_db", "root", "root");
+                        "jdbc:postgresql://localhost:5432/movita_db", "postgres", "221003");
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -35,11 +37,14 @@ public class DBManager {
         return connection;
     }
 
-    public UserDAO getUserDAO() {
-        return new UserDAOimpl(getConnection());
+    public UserDao getUserDAO() {
+        if(userDao == null){
+            userDao = new UserDaoJDBC();
+        }
+        return userDao;
     }
 
     public PaymentDAO getPaymentDAO() {
-        return new PaymentDAOimpl(getConnection());
+        return new PaymentDaoJDBC(getConnection());
     }
 }

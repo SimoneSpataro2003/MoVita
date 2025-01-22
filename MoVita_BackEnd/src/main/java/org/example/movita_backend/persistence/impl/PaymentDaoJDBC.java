@@ -1,4 +1,4 @@
-package org.example.movita_backend.persistence.imple;
+package org.example.movita_backend.persistence.impl;
 
 import org.example.movita_backend.persistence.dao.PaymentDAO;
 import org.example.movita_backend.model.Payment;
@@ -10,10 +10,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentDAOimpl implements PaymentDAO {
+public class PaymentDaoJDBC implements PaymentDAO {
     Connection connection;
 
-    public PaymentDAOimpl(Connection connection) {
+    public PaymentDaoJDBC(Connection connection) {
         this.connection = connection;
     }
 

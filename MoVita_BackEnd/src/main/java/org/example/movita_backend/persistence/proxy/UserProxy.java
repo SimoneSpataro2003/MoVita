@@ -17,44 +17,56 @@ public class UserProxy extends User {
     }
 
     @Override
-    public List<User> getFriends() {
-        if (super.getFriends() != null) {
-            return super.getFriends();
+    public List<User> getAmici() {
+        if (super.amici != null) {
+            return super.amici;
         }
 
+        String query = "SELECT * FROM amicizia a, utente u WHERE u.id = a.id_utente2 AND id_utente1 = ?";
         List<User> friends = new ArrayList<>();
-        String query = "SELECT * " +
-                "FROM utente u2, amicizia a " +
-                "WHERE u2.id = a.id_utente2 AND a.id_utente1 = ? " +
-                "ORDER BY a.id_utente2 DESC";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setLong(1, this.getId());
 
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                while (rs.next()) {
-                    User user = new User();
+            ResultSet rs = preparedStatement.executeQuery();
 
-                    user.setId(rs.getInt("id"));
-                    user.setTipo(rs.getShort("tipo"));
-                    user.setVerificato(rs.getBoolean("verificato"));
-                    user.setUsername(rs.getString("username"));
-                    user.setPassword(rs.getString("password"));
-                    user.setLuogo(rs.getString("luogo"));
-                    user.setEmail(rs.getString("email"));
-                    user.setCredito(rs.getInt("credito"));
-                    user.setImmagineProfilo(rs.getObject("immagine_profilo", Short.class));
-                    user.setEta(rs.getShort("eta"));
-                    user.setValutazione(rs.getShort("valutazione"));
+            while (rs.next()) {
+                friends.add(mapUser(rs));
 
-                    friends.add(user);
-                }
             }
+
+            this.amici = friends;
+            return friends;
         } catch (SQLException e) {
             throw new RuntimeException("Errore nel recupero degli amici dal database", e);
         }
+    }
 
-        super.setFriends(friends);
-        return friends;
+    //TODO: ALTRI PROXY!
+
+    private User mapUser(ResultSet rs) throws SQLException {
+        User u = new User();
+
+        u.setId(rs.getInt("id"));
+        u.setEmail(rs.getString("email"));
+        u.setPassword(rs.getString("password"));
+        u.setNome(rs.getString("nome"));
+        u.setImmagineProfilo(rs.getString("immagine_profilo"));
+        u.setCitta(rs.getString("citta"));
+        u.setAzienda(rs.getBoolean("azienda"));
+        u.setPersonaCognome(rs.getString("persona_cognome"));
+        u.setPersonaUsername(rs.getString("persona_username"));
+        u.setAziendaPartitaIva(rs.getString("azienda_p_iva"));
+        u.setAziendaIndirizzo(rs.getString("azienda_indirizzo"));
+        u.setAziendaRecapito(rs.getString("azienda_recapito"));
+        u.setPremium(rs.getBoolean("premium"));
+        u.setPremiumDataInizio(rs.getString("premium_data_inizio"));
+        u.setPremiumDataFine(rs.getString("premium_data_fine"));
+        u.setAdmin(rs.getBoolean("admin"));
+        u.setDataCreazione(rs.getString("data_creazione"));
+        u.setDataUltimaModifica(rs.getString("data_ultima_modifica"));
+        u.setMostraConsigliEventi(rs.getBoolean("mostra_consigli_eventi"));
+
+        return u;
     }
 }

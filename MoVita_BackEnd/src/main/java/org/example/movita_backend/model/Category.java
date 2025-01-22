@@ -15,6 +15,6 @@ public class Category {
     protected String descrizione;
 
     // Relations
-    private List<User> utentiInteressati;
-    private List<Event> eventi;
+    protected List<User> utentiInteressati;
+    protected List<Event> eventi;
 }

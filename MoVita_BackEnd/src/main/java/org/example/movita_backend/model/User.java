@@ -2,6 +2,7 @@ package org.example.movita_backend.model;
 
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
@@ -15,6 +16,7 @@ import java.util.List;
 @ToString
 public class User implements UserDetails {
     protected int id;
+    protected String username;
     protected String email;
     protected String password;
     protected String nome;
@@ -22,7 +24,6 @@ public class User implements UserDetails {
     protected String citta;
     protected boolean azienda;
     protected String personaCognome;
-    protected String personaUsername;
     protected String aziendaPartitaIva;
     protected String aziendaIndirizzo;
     protected String aziendaRecapito;
@@ -35,15 +36,15 @@ public class User implements UserDetails {
     protected boolean mostraConsigliEventi;
 
     // Relations
-    private List<User> amici;
-    private List<Category> categorieInteressate;
+    protected List<User> amici;
+    protected List<Category> categorieInteressate;
     //private List<???> eventiPartecipati;
     //private List<???> eventiRecensiti;
     //private List<???> eventiCreati;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return List.of(new SimpleGrantedAuthority(getRuolo()));
     }
 
     @Override
@@ -72,7 +73,14 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return "";
+        return username;
+    }
+
+    private String getRuolo(){
+        if(admin)
+            return "admin";
+        else
+            return "user";
     }
 }
 

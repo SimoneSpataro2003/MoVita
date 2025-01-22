@@ -12,7 +12,7 @@ import java.util.List;
 public class Event {
     protected int id;
     protected String nome;
-    protected String date;
+    protected String data;
     protected float prezzo;
     protected String citta;
     protected String indirizzo;
@@ -24,7 +24,8 @@ public class Event {
     protected User creatore;
 
     // Relations
-    private List<Category> categorie;
-    //private List<???> recensori;
-    //private List<???> partecipanti;
+    protected List<Category> categorie;
+    //protected List<???> partecipanti; <---?? Non solo List<Evento>, ma anche altre informazioni!
+
+    //protected List<???> recensori; <--- Stesso problema qui
 }

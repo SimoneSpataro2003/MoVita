@@ -4,11 +4,11 @@ import lombok.Data;
 
 @Data
 public class Payment {
-    private int id;
-    private String titolo;
-    private int ammontare;
-    private String data;
-    private int id_utente;
+    protected int id;
+    protected String titolo;
+    protected int ammontare;
+    protected String data;
+    protected int id_utente;
 
     public Payment() {
     }
