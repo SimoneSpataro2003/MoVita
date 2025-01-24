@@ -6,6 +6,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 
+import java.awt.desktop.UserSessionEvent;
 import java.util.Collection;
 import java.util.List;
 
@@ -41,6 +42,8 @@ public class User implements UserDetails {
     //private List<???> eventiPartecipati;
     //private List<???> eventiRecensiti;
     //private List<???> eventiCreati;
+    protected List<User> utentiCercati;
+    protected List<Payment> pagamenti;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

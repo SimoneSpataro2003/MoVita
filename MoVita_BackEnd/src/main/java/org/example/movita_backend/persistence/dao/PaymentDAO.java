@@ -5,5 +5,6 @@ import org.example.movita_backend.model.Payment;
 import java.util.List;
 
 public interface PaymentDAO {
-    List<Payment> getPaymentsByUserId(int userId);
+    void addPayment(Payment payment);
+    void clearAllPayments();
 }

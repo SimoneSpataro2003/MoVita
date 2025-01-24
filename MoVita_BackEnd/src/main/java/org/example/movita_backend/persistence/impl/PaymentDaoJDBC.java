@@ -1,5 +1,6 @@
 package org.example.movita_backend.persistence.impl;
 
+import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.PaymentDAO;
 import org.example.movita_backend.model.Payment;
 
@@ -10,40 +11,56 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaymentDaoJDBC implements PaymentDAO {
-    Connection connection;
+public class PaymentDaoJDBC implements PaymentDAO
+{
+    private final Connection connection;
 
-    public PaymentDaoJDBC(Connection connection) {
-        this.connection = connection;
+    public PaymentDaoJDBC()
+    {
+        connection = DBManager.getInstance().getConnection();
     }
 
     @Override
-    public List<Payment> getPaymentsByUserId(int userId) {
-        List<Payment> payments = new ArrayList<>();
-        String query= "SELECT * FROM pagamento WHERE id_utente = ?";
+    public void addPayment(Payment payment) {
+        String query = "INSERT INTO pagamento (titolo_pagamento, ammontare, data, id_utente) VALUES (?, ?, ?, ?)";
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setLong(1, userId);
-
-            try (ResultSet rs = preparedStatement.executeQuery()) {
-                while (rs.next()) {
-                    payments.add(mapEntity(rs));
-                }
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException("Errore nel recupero dei pagamenti dal database", e);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query))
+        {
+            preparedStatement.setString(1, payment.getTitolo());
+            preparedStatement.setFloat(2, payment.getAmmontare());
+            preparedStatement.setString(3, payment.getData());
+            preparedStatement.setInt(4, payment.getId_utente());
+            preparedStatement.executeUpdate();
         }
-        return payments;
+        catch (SQLException e)
+        {
+            throw new RuntimeException("Errore durante l'aggiunta del pagamento al database", e);
+        }
     }
 
-    private Payment mapEntity(ResultSet rs) throws SQLException {
-        Payment payment = new Payment();
+    @Override
+    public void clearAllPayments()
+    {
+        String query = "DELETE FROM pagamento";
 
-        payment.setId(rs.getInt("id"));
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query))
+        {
+            preparedStatement.executeUpdate();
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException("Errore durante la cancellazione di tutti i pagamenti", e);
+        }
+    }
+
+    private Payment mapEntity(ResultSet rs) throws SQLException
+    {
+        Payment payment = new Payment();
+        payment.setId(rs.getInt("id_pagamento"));
+        payment.setTitolo(rs.getString("titolo_pagamento"));
         payment.setAmmontare(rs.getShort("ammontare"));
         payment.setData(rs.getString("data"));
         payment.setId_utente(rs.getInt("id_utente"));
-
         return payment;
     }
 }

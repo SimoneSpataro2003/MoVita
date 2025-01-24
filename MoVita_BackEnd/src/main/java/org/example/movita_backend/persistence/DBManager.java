@@ -22,6 +22,7 @@ public class DBManager {
     }
 
     private UserDaoJDBC userDao;
+    private PaymentDaoJDBC paymentDao;
 
     Connection connection = null;
 
@@ -45,6 +46,10 @@ public class DBManager {
     }
 
     public PaymentDAO getPaymentDAO() {
-        return new PaymentDaoJDBC(getConnection());
+        if (paymentDao == null)
+        {
+            paymentDao = new PaymentDaoJDBC();
+        }
+        return paymentDao;
     }
 }
