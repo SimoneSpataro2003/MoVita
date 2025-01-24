@@ -13,6 +13,7 @@ public interface EventDao {
     Event findById(int id);
     Event update(Event event);
 
+    List<Event> findByFilter(String filter)
     String findDescrizione(Event e);
 
     //associazioni

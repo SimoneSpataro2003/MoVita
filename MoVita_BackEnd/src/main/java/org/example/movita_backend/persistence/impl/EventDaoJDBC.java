@@ -108,6 +108,26 @@ public class EventDaoJDBC implements EventDao {
     }
 
     @Override
+    public List<Event> findByFilter(String filter) {
+        String query = "SELECT e.* FROM evento e WHERE nome LIKE ?";
+        List<Event> toRet = new ArrayList<>();
+
+        try(PreparedStatement ps = connection.prepareStatement(query)){
+            ps.setString(1, "%"+filter+"%");
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()){
+                Event e = mapEvent(rs);
+                toRet.add(e);
+            }
+            return toRet;
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
     public String findDescrizione(Event evento) {
         String query = "SELECT descrizione FROM evento WHERE id = ?";
         String toRet = "";

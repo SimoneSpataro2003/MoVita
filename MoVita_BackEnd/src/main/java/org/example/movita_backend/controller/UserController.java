@@ -5,17 +5,20 @@ import org.example.movita_backend.exception.user.AuthenticationException;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.model.Payment;
 import org.example.movita_backend.model.User;
+import org.example.movita_backend.services.impl.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(value = "http://localhost:4200/")
 public class UserController {
+
+    @Autowired
+    AuthService authService;
 
     @GetMapping("/user/friends")
     public ResponseEntity<List<User>> getFriends(HttpServletRequest request) throws AuthenticationException {

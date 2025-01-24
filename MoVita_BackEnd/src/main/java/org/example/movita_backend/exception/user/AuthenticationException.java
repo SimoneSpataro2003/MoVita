@@ -7,3 +7,4 @@ public class AuthenticationException extends ValidationHandler {
         super(message);
     }
 }
+
