@@ -30,24 +30,21 @@ public class UserController {
             throw new AuthenticationException("Non sei autorizzato!");
         }
 
-        return ResponseEntity.ok(user.getFriends());
+        return ResponseEntity.ok(user.getAmici());
     }
 
-    @GetMapping("user/{userId}")
-    public ResponseEntity<User> getUser(@PathVariable int userId) throws AuthenticationException {
-        User user = DBManager.getInstance().getUserDAO().getUserById(userId);
 
+
+    @GetMapping("user/payment/")
+    public ResponseEntity<List<Payment>> getPayment(HttpServletRequest request) throws AuthenticationException  {
+        User user = (User) request.getSession().getAttribute("user");
+
+        // vari controlli di questo tipo...
         if(user == null)
         {
             throw new AuthenticationException("Non sei autorizzato!");
         }
 
-        return ResponseEntity.ok(user);
-    }
-
-    @GetMapping("user/payment/{userId}")
-    public ResponseEntity<List<Payment>> getPaymentByUserId(@PathVariable int userId) {
-        List<Payment> payments = DBManager.getInstance().getPaymentDAO().getPaymentsByUserId(userId);
-        return ResponseEntity.ok(payments);
+        return ResponseEntity.ok(user.getPagamenti());
     }
 }

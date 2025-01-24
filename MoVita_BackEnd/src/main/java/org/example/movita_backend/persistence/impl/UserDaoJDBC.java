@@ -294,7 +294,58 @@ public class UserDaoJDBC implements UserDao {
     }
 
     @Override
-    public List<User> findFriends() {
+    public List<User> findFriends(int id) {
+        String query = "SELECT * FROM utente, amicizia WHERE ? = amicizia.id_utente1" +
+                " AND amicizia.id_utente2 = utente.id";
+        List<User> toRet = new ArrayList<>();
+
+        try(PreparedStatement ps = connection.prepareStatement(query))
+        {
+            ps.setInt(1,id);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                User u = mapUser(rs);
+                toRet.add(u);
+            }
+            return toRet;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException("Couldn't find user.");
+        }
+    }
+
+    @Override
+    public List<User> findUserByUsername(String username) {
+        String query = "SELECT * " +
+                "FROM utente " +
+                "WHERE utente.username LIKE CONCAT('%', ?, '%');";
+        List<User> toRet = new ArrayList<>();
+
+        try(PreparedStatement ps = connection.prepareStatement(query))
+        {
+            ps.setString(1, username);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                User u = mapUser(rs);
+                toRet.add(u);
+            }
+            return toRet;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException("Couldn't find user.");
+        }
+    }
+
+    @Override
+    public List<User> findPayments(int id) {
         return List.of();
     }
 

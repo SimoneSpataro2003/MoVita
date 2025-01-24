@@ -24,5 +24,4 @@ public interface UserDao {
 
     //TODO: ALTRI
     //associazioni
-    List<User> findFriends();
 }
