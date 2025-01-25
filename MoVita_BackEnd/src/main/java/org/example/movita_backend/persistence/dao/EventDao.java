@@ -2,7 +2,6 @@ package org.example.movita_backend.persistence.dao;
 
 import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
-import org.example.movita_backend.model.User;
 
 import java.util.List;
 
@@ -19,5 +18,9 @@ public interface EventDao {
     //associazioni
     List<Category> findCategories(int id);
     //TODO: ALTRI
+
+    int save(Event event);
+    void delete(Event event);
+
 
 }
