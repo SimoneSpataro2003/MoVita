@@ -150,6 +150,7 @@ public class EventDaoJDBC implements EventDao {
     public List<Category> findCategories(int id) {
         //TODO: REALIZZA CATEGORIE
         //TODO: REALIZZA PROXY EVENTO
+        return List.of();
     }
 
     private Event mapEvent(ResultSet rs) throws SQLException {

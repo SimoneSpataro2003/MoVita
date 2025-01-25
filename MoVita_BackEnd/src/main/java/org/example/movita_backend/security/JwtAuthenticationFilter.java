@@ -1,16 +1,15 @@
 package org.example.movita_backend.security;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.example.movita_backend.exception.InvalidTokenException;
 import org.example.movita_backend.services.impl.AuthService;
 import org.example.movita_backend.services.impl.JWTService;
+import org.example.movita_backend.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -22,20 +21,13 @@ import java.io.IOException;
 
 // questo filtro deve essere controllato solo una volta per ogni richiesta
 @Component
-public class JwtFilter extends OncePerRequestFilter {
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private JWTService jwtService;
 
-    //TODO: cambia in UserDetailsService (da creare)
     @Autowired
-    private AuthService userService;
-
-    @Autowired
-    private ITokenInvalidatedService tokenInvalidatedService;
-    @Autowired
-    private AuthService authService;
-
+    private CustomUserDetailsService customUserDetailsService;
 
     /*una qualsiasi http request, se si tratta di un utente autenticato, presenterà un header particolare, formato così:
     Authorization: Bearer <Token>, con <Token> indicante il token generato dal Jwt service.
@@ -54,23 +46,21 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         token = authHeader.substring(7);
-        username = jwtService.getUsernameFromToken(token);
+        username = jwtService.extractUsername(token);
 
         if(org.apache.commons.lang3.StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null){
-            UserDetails utente =
-        }
+            UserDetails utente = customUserDetailsService.loadUserByUsername(username);
 
+            if(jwtService.isTokenValid(token, utente)){
+                SecurityContext securityContext= SecurityContextHolder.createEmptyContext();
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(utente, null, utente.getAuthorities());
 
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                UserDetails utente = authService.(username);
-
-                if (jwtService.validateToken(token, utente)) {
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(utente, null, utente.getAuthorities());
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+                securityContext.setAuthentication(authenticationToken);
+                SecurityContextHolder.setContext(securityContext);
             }
+        }
 
             filterChain.doFilter(request, response);
 

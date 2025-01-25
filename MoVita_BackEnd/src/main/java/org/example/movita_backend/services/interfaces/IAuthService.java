@@ -1,12 +1,17 @@
 package org.example.movita_backend.services.interfaces;
 
 import org.example.movita_backend.model.User;
+import org.example.movita_backend.security.dto.JwtAuthenticationResponse;
+import org.example.movita_backend.security.dto.LoginRequest;
+import org.example.movita_backend.security.dto.RegisterAgencyRequest;
+import org.example.movita_backend.security.dto.RegisterPersonRequest;
 
 public interface IAuthService {
     //registrazioni
-    User registerPerson(String username,String email, String password, String citta, String nome,String cognome);
-    User registerAgency(String username, String email, String password, String citta,String nome, String partitaIva, String indirizzo, String recapito);
+    User registerPerson(RegisterPersonRequest request);
+    User registerAgency(RegisterAgencyRequest request);
 
-    public String login(String username, String password);
+    JwtAuthenticationResponse login(LoginRequest loginRequest);
+
     public void logout(String token);
 }

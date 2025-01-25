@@ -7,6 +7,8 @@ import java.util.List;
 public interface UserDao {
     void createPerson(User user);
     void createAgency(User user);
+    void createAdmin(User u);
+    User findAdmin();
     User findById(int id);
     User findByUsername(String username);
     User findByEmail(String email);
@@ -21,6 +23,11 @@ public interface UserDao {
     User updatePassword(int userId, String newPassword);
     User updateProfileImage(int userId, String imagePath);
     User updateConsigliEventi(int userId);
+
+    List<User> findFriends(int id);
+    List<User> findUserByUsername(String username);
+
+
 
     //TODO: ALTRI
     //associazioni

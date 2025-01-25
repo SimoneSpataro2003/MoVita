@@ -6,15 +6,22 @@ import org.example.movita_backend.exception.user.UsernameAlreadyExists;
 import org.example.movita_backend.model.User;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.UserDao;
+import org.example.movita_backend.security.dto.JwtAuthenticationResponse;
+import org.example.movita_backend.security.dto.LoginRequest;
+import org.example.movita_backend.security.dto.RegisterAgencyRequest;
+import org.example.movita_backend.security.dto.RegisterPersonRequest;
 import org.example.movita_backend.services.interfaces.IAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Service
+import java.util.HashMap;
+
+@Component
 public class AuthService implements IAuthService {
 
     private final UserDao userDao;
@@ -29,6 +36,8 @@ public class AuthService implements IAuthService {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @Autowired
+    private JWTService jwtService;
 
     private void emailAlreadyExists(String email){
         User user = userDao.findByEmail(email);
@@ -53,19 +62,19 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public User registerPerson(String username, String email, String password, String citta, String nome, String cognome) {
-        usernameAlreadyExists(username);
-        emailAlreadyExists(email);
+    public User registerPerson(RegisterPersonRequest registerPersonRequest) {
+        usernameAlreadyExists(registerPersonRequest.getUsername());
+        emailAlreadyExists(registerPersonRequest.getEmail());
 
         User newUser = new User();
 
-        newUser.setUsername(username);
-        newUser.setEmail(email);
-        newUser.setPassword(passwordEncoder.encode(password));
-        newUser.setCitta(citta);
-        newUser.setNome(nome);
+        newUser.setUsername(registerPersonRequest.getUsername());
+        newUser.setEmail(registerPersonRequest.getEmail());
+        newUser.setPassword(passwordEncoder.encode(registerPersonRequest.getPassword()));
+        newUser.setCitta(registerPersonRequest.getCitta());
+        newUser.setNome(registerPersonRequest.getNome());
         newUser.setAzienda(false);
-        newUser.setPersonaCognome(cognome);
+        newUser.setPersonaCognome(registerPersonRequest.getCognome());
         newUser.setPremium(false);
         newUser.setAdmin(false);
         newUser.setMostraConsigliEventi(true);
@@ -76,21 +85,21 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public User registerAgency(String username, String email, String password, String citta, String nome,String partitaIva, String indirizzo, String recapito) {
-        usernameAlreadyExists(username);
-        emailAlreadyExists(email);
+    public User registerAgency(RegisterAgencyRequest registerAgencyRequest) {
+        usernameAlreadyExists(registerAgencyRequest.getUsername());
+        emailAlreadyExists(registerAgencyRequest.getEmail());
 
         User newUser = new User();
 
-        newUser.setUsername(username);
-        newUser.setEmail(email);
-        newUser.setPassword(passwordEncoder.encode(password));
-        newUser.setCitta(citta);
-        newUser.setNome(nome);
+        newUser.setUsername(registerAgencyRequest.getUsername());
+        newUser.setEmail(registerAgencyRequest.getEmail());
+        newUser.setPassword(passwordEncoder.encode(registerAgencyRequest.getPassword()));
+        newUser.setCitta(registerAgencyRequest.getCitta());
+        newUser.setNome(registerAgencyRequest.getNome());
         newUser.setAzienda(true);
-        newUser.setAziendaPartitaIva(partitaIva);
-        newUser.setAziendaIndirizzo(indirizzo);
-        newUser.setAziendaRecapito(recapito);
+        newUser.setAziendaPartitaIva(registerAgencyRequest.getPartitaIva());
+        newUser.setAziendaIndirizzo(registerAgencyRequest.getIndirizzo());
+        newUser.setAziendaRecapito(registerAgencyRequest.getRecapito());
         newUser.setPremium(false);
         newUser.setAdmin(false);
         newUser.setMostraConsigliEventi(true);
@@ -101,13 +110,22 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public String login(String username, String password) {
-        usernameAlreadyExists(username);
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,password));
+    public JwtAuthenticationResponse login(LoginRequest loginRequest) {
+        userDoesNotExists(loginRequest.getUsername());
+        System.out.println("ok");
 
-        if(authentication.isAuthenticated()){
-            return jwtService.generateToken(username);
-        }
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),loginRequest.getPassword()));
+
+        User user = userDao.findByUsername(loginRequest.getUsername());
+
+        var token =  jwtService.generateToken(user);
+        var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
+
+        JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
+        jwtAuthenticationResponse.setToken(token);
+        jwtAuthenticationResponse.setRefreshToken(refreshToken);
+
+        return jwtAuthenticationResponse;
     }
 
     @Override

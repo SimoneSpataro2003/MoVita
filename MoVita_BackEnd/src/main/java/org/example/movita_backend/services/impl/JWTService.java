@@ -16,10 +16,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class JWTService implements JWTService{
+public class JWTService{
 
     private String secretKey;
-    private int expiration;
+    private int tokenExpiration;
 
     public JWTService() {
         try {
@@ -31,23 +31,33 @@ public class JWTService implements JWTService{
             throw new RuntimeException(e);
         }
 
-        expiration = 1000 * 60 * 60 * 24; //valido per un giorno.
+        tokenExpiration = 1000 * 60 * 60; //valido per un'ora
     }
 
-    private String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails) {
 
         Map<String, Object> claims = new HashMap<>();
 
         return Jwts.builder().
-                claims().
-                add(claims).
+                claims().add(claims).
                 subject(userDetails.getUsername()).
                 issuedAt(new Date(System.currentTimeMillis())).
-                expiration(new Date(System.currentTimeMillis() + expiration))
+                expiration(new Date(System.currentTimeMillis() + tokenExpiration))
                 .and()
                 .signWith(getKey())
                 .compact();
 
+    }
+
+    public String generateRefreshToken(HashMap<String, Object> extraClaims, UserDetails userDetails) {
+        return Jwts.builder().
+                claims().add(extraClaims).
+                subject(userDetails.getUsername()).
+                issuedAt(new Date(System.currentTimeMillis())).
+                expiration(new Date(System.currentTimeMillis() + 604800000)) //<-- sette giorni
+                .and()
+                .signWith(getKey())
+                .compact();
     }
 
     //decodifico la chiave segreta generata nel costruttore.
@@ -76,12 +86,8 @@ public class JWTService implements JWTService{
         return exctractClaim(token, Claims::getExpiration);
     }
 
-    public String getUsernameFromToken(String token) {
-        return exctractClaim(token, Claims::getSubject);
-    }
-
-    public boolean validateToken(String token, UserDetails utente) {
-        String username = getUsernameFromToken(token);
+    public boolean isTokenValid(String token, UserDetails utente) {
+        final String username = extractUsername(token);
         return username.equals(utente.getUsername()) && !isTokenExpired(token);
     }
 

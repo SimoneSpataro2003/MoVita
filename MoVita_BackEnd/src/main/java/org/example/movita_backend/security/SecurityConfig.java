@@ -3,6 +3,7 @@ package org.example.movita_backend.security;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.movita_backend.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,23 +37,22 @@ import java.util.List;
 public class SecurityConfig {
 
     @Autowired
-    private JwtFilter jwtFilter;
+    private JwtAuthenticationFilter jwtFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/api/auth/register").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasAnyAuthority(Role.ADMIN.name())
+                        .requestMatchers("/api/user/**").hasAnyAuthority(Role.USER.name())
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)) // 401 per le richieste non autorizzate
-                        .accessDeniedHandler(new CustomAccessDeniedHandler()) // restituisce 403
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
@@ -68,20 +68,6 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
-    }
-
-    // questa classe serve per gestire le richieste http rifiutate dalla security filter chain
-    private static class CustomAccessDeniedHandler implements AccessDeniedHandler {
-
-        @Override
-        public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-            System.err.println(
-                    "For user:'"+SecurityUtility.getCurrentUser().getUsername()+"' " +
-                            "for resource:'"+request.getRequestURI()+"'  error:"+accessDeniedException.getMessage());
-
-            response.getWriter().write("Access denied. You do not have permission to access this resource.");
-            response.setStatus(HttpStatus.FORBIDDEN.value());
-        }
     }
 
     @Bean

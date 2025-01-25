@@ -110,7 +110,6 @@ public class UserProxy extends User {
         u.setCitta(rs.getString("citta"));
         u.setAzienda(rs.getBoolean("azienda"));
         u.setPersonaCognome(rs.getString("persona_cognome"));
-        u.setPersonaUsername(rs.getString("persona_username"));
         u.setAziendaPartitaIva(rs.getString("azienda_p_iva"));
         u.setAziendaIndirizzo(rs.getString("azienda_indirizzo"));
         u.setAziendaRecapito(rs.getString("azienda_recapito"));

@@ -73,6 +73,48 @@ public class UserDaoJDBC implements UserDao {
     }
 
     @Override
+    public void createAdmin(User user) {
+        String query = "INSERT INTO utente " +
+                "(username, email,password,nome,citta,azienda,premium,admin,mostra_consigli_eventi)" +
+                "VALUES " +
+                "(?,?,?,?,?,?,?,?,?)";
+
+        try(PreparedStatement ps = connection.prepareStatement(query)){
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getEmail());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getNome());
+            ps.setString(5, user.getCitta());
+            ps.setBoolean(6, user.isAzienda());
+            ps.setBoolean(7, user.isPremium());
+            ps.setBoolean(8, user.isAdmin());
+            ps.setBoolean(9, user.isMostraConsigliEventi());
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Couldn't save user.");
+        }
+    }
+
+    @Override
+    public User findAdmin() {
+        String query = "SELECT * FROM utente WHERE admin = true";
+
+        try(PreparedStatement ps = connection.prepareStatement(query)){
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()){
+                return mapUser(rs);
+            }
+            return null;
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("Couldn't find user.");
+        }
+    }
+
+    @Override
     public User findById(int id) {
         String query = "SELECT * FROM utente WHERE id = ?";
 
@@ -293,6 +335,7 @@ public class UserDaoJDBC implements UserDao {
         return findById(userId);
     }
 
+    //FIXED: Realizzato metodo nell'interfaccia apposita.
     @Override
     public List<User> findFriends(int id) {
         String query = "SELECT * FROM utente, amicizia WHERE ? = amicizia.id_utente1" +
@@ -314,20 +357,21 @@ public class UserDaoJDBC implements UserDao {
         catch (Exception e)
         {
             e.printStackTrace();
-            throw new RuntimeException("Couldn't find user.");
+            throw new RuntimeException("Couldn't find users.");
         }
     }
 
+    //FIXED: Realizzato metodo nell'interfaccia apposita.
     @Override
     public List<User> findUserByUsername(String username) {
         String query = "SELECT * " +
                 "FROM utente " +
-                "WHERE utente.username LIKE CONCAT('%', ?, '%');";
+                "WHERE utente.username LIKE ?";
         List<User> toRet = new ArrayList<>();
 
         try(PreparedStatement ps = connection.prepareStatement(query))
         {
-            ps.setString(1, username);
+            ps.setString(1, "%"+username+"%");
             ResultSet rs = ps.executeQuery();
 
             while(rs.next())
@@ -342,11 +386,6 @@ public class UserDaoJDBC implements UserDao {
             e.printStackTrace();
             throw new RuntimeException("Couldn't find user.");
         }
-    }
-
-    @Override
-    public List<User> findPayments(int id) {
-        return List.of();
     }
 
     private User mapUser(ResultSet rs) throws SQLException {

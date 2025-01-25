@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class SecurityUtility {
 
-
     public static UserDetails getCurrentUser() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
