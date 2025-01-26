@@ -27,6 +27,8 @@ public interface UserDao {
     List<User> findFriends(int id);
     List<User> findUserByUsername(String username);
 
+    void makeFriendships(int UserId1, int UserId2);
+    void deleteFriendships(int UserId1, int UserId2);
 
 
     //TODO: ALTRI

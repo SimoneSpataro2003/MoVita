@@ -388,6 +388,43 @@ public class UserDaoJDBC implements UserDao {
         }
     }
 
+    @Override
+    public void makeFriendships(int UserId1, int UserId2)
+    {
+        String query = "INSERT INTO amicizia " +
+                "(amico1, amico2)" +
+                "VALUES " +
+                "(?,?)";
+
+        try(PreparedStatement ps = connection.prepareStatement(query))
+        {
+            ps.setInt(1, UserId1);
+            ps.setInt(2, UserId2);;
+
+            ps.executeUpdate();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException("Couldn't make friendship.");
+        }
+    }
+
+    @Override
+    public void deleteFriendships(int UserId1, int UserId2) {
+        String query = "DELETE FROM amicizia WHERE amico1 = ? AND amico = ?";
+
+        try(PreparedStatement ps = connection.prepareStatement(query)){
+            ps.setInt(1, UserId1);
+            ps.setInt(2, UserId2);
+
+            ps.executeUpdate();
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException("Couldn't delete friendship user.");
+        }
+    }
+
     private User mapUser(ResultSet rs) throws SQLException {
         User u = new User();
 

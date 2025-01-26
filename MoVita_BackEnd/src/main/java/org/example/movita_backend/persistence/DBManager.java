@@ -1,9 +1,7 @@
 package org.example.movita_backend.persistence;
 
-import org.example.movita_backend.persistence.dao.EventDao;
 import org.example.movita_backend.persistence.dao.PaymentDAO;
 import org.example.movita_backend.persistence.dao.UserDao;
-import org.example.movita_backend.persistence.impl.EventDaoJDBC;
 import org.example.movita_backend.persistence.impl.PaymentDaoJDBC;
 import org.example.movita_backend.persistence.impl.UserDaoJDBC;
 
