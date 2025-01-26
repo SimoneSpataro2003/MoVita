@@ -37,7 +37,7 @@ public class Payment {
         this.titolo = titolo;
     }
 
-    public int getAmmontare() {
+    public long getAmmontare() {
         return ammontare;
     }
 

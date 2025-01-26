@@ -1,9 +1,9 @@
 package org.example.movita_backend.persistence.impl;
 
-import org.example.movita_backend.model.User;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.PaymentDAO;
 import org.example.movita_backend.model.Payment;
+import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,7 +11,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+@Repository
 public class PaymentDaoJDBC implements PaymentDAO
 {
     private final Connection connection;
@@ -36,21 +38,6 @@ public class PaymentDaoJDBC implements PaymentDAO
         catch (SQLException e)
         {
             throw new RuntimeException("Errore durante l'aggiunta del pagamento al database", e);
-        }
-    }
-
-    @Override
-    public void clearAllPayments()
-    {
-        String query = "DELETE FROM pagamento";
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query))
-        {
-            preparedStatement.executeUpdate();
-        }
-        catch (SQLException e)
-        {
-            throw new RuntimeException("Errore durante la cancellazione di tutti i pagamenti", e);
         }
     }
 
