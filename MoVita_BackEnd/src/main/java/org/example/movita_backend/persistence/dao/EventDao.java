@@ -20,7 +20,7 @@ public interface EventDao {
     //TODO: ALTRI
 
     int save(Event event);
-    void delete(Event event);
+    void delete(int eventId);
 
 
 }

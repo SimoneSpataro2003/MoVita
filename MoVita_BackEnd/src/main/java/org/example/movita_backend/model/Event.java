@@ -25,7 +25,7 @@ public class Event {
 
     // Relations
     protected List<Category> categorie;
-    //protected List<Evento> partecipanti; <---?? Non solo List<Evento>, ma anche altre informazioni!
+    //protected List<User> partecipanti; <---?? Non solo List<Evento>, ma anche altre informazioni!
 
     //protected List<???> recensori; <--- Stesso problema qui
 }

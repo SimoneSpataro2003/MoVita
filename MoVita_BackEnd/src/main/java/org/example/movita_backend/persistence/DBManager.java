@@ -1,7 +1,9 @@
 package org.example.movita_backend.persistence;
 
+import org.example.movita_backend.persistence.dao.EventDao;
 import org.example.movita_backend.persistence.dao.PaymentDAO;
 import org.example.movita_backend.persistence.dao.UserDao;
+import org.example.movita_backend.persistence.impl.EventDaoJDBC;
 import org.example.movita_backend.persistence.impl.PaymentDaoJDBC;
 import org.example.movita_backend.persistence.impl.UserDaoJDBC;
 
@@ -23,6 +25,7 @@ public class DBManager {
 
     private UserDaoJDBC userDao;
     private PaymentDaoJDBC paymentDao;
+    private EventDaoJDBC eventDao;
 
     Connection connection = null;
 
@@ -30,7 +33,7 @@ public class DBManager {
         if (connection == null){
             try {
                 connection = DriverManager.getConnection(
-                        "jdbc:postgresql://localhost:5432/movita_db", "postgres", "221003");
+                        "jdbc:postgresql://localhost:5432/movita", "postgres", "root");
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -43,6 +46,13 @@ public class DBManager {
             userDao = new UserDaoJDBC();
         }
         return userDao;
+    }
+
+    public EventDao getEventDAO(){
+        if(eventDao == null){
+            eventDao = new EventDaoJDBC();
+        }
+        return eventDao;
     }
 
     public PaymentDAO getPaymentDAO() {

@@ -55,12 +55,12 @@ class EventService implements IEventService {
     }
 
     @Override
-    public Event updateEvent(String name, Event event) throws Exception {
-        return null;
+    public Event updateEvent(Event event) throws Exception {
+        return eventDao.update(event);
     }
 
     @Override
-    public void deleteEvent(String event) {
-
+    public void deleteEvent(int event) {
+        eventDao.delete(event);
     }
 }

@@ -207,9 +207,20 @@ public class EventDaoJDBC implements EventDao {
         }
     }
 
-
     @Override
-    public void delete(Event event) {
+    public void delete(int eventId) {
+        String query = "DELETE FROM evento WHERE id = ?";
 
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, eventId);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected == 0) {
+                throw new RuntimeException("No event found with the specified ID.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error occurred while trying to delete the event: " + e.getMessage());
+        }
     }
 }

@@ -10,7 +10,7 @@ public interface IEventService {
     Event findById(int id);
     List<Event> findByFilter(String filter);
     Event createEvent(Event event) throws Exception;
-    Event updateEvent(String name, Event event) throws Exception;
-    void deleteEvent(String event);
+    Event updateEvent(Event event) throws Exception;
+    void deleteEvent(int eventId);
 
 }
