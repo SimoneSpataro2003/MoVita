@@ -1,5 +1,6 @@
 package org.example.movita_backend.controller;
 
+import lombok.Getter;
 import org.apache.coyote.Response;
 import org.example.movita_backend.exception.event.EventNotValid;
 import org.example.movita_backend.model.Event;
@@ -25,27 +26,26 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @GetMapping("/")
     ResponseEntity<Collection<Event>> getAllEvents(){
         Collection<Event> allEvents = this.eventService.findAll();
         return ResponseEntity.ok(allEvents);
     }
 
-    @RequestMapping(value = "/{eventId}", method = RequestMethod.GET)
-    ResponseEntity<Event> getEventById(@PathVariable int eventId){
+    @GetMapping("/id")
+    ResponseEntity<Event> getEventById(@RequestParam(name = "eventId") int eventId){
         Event event = eventService.findById(eventId);
         return ResponseEntity.ok(event);
     }
 
-    @RequestMapping(value = "/{filter}", method = RequestMethod.GET)
-    ResponseEntity<Collection<Event>> getEventById(@PathVariable String filter){
+    @GetMapping("/filter")
+    ResponseEntity<Collection<Event>> getEventByFilter(@RequestParam(name = "filter")  String filter){
         Collection<Event> events = eventService.findByFilter(filter);
         return ResponseEntity.ok(events);
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.POST)
-    ResponseEntity<Event> postCreateNewEvent(@RequestBody  Event event) throws Exception {
-
+    @PostMapping("/")
+    ResponseEntity<Event> postCreateNewEvent(@RequestBody Event event) throws Exception {
         try{
             return  ResponseEntity.ok(
                     this.eventService.createEvent(event)
@@ -56,7 +56,7 @@ public class EventController {
 
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.PUT)
+    @PutMapping("/")
     ResponseEntity<Event> postUpdateEvent(@RequestBody Event event) throws Exception
     {
         return  ResponseEntity.ok(
@@ -64,8 +64,8 @@ public class EventController {
         );
     }
 
-    @RequestMapping(value = "/{idEvent}", method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteEvent(@PathVariable int idEvent)
+    @DeleteMapping("/")
+    ResponseEntity<Void> deleteEvent(@RequestBody int idEvent)
     {
         this.eventService.deleteEvent(idEvent);
         return ResponseEntity.ok().build();
