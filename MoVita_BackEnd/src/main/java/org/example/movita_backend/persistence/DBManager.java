@@ -30,7 +30,7 @@ public class DBManager {
         if (connection == null){
             try {
                 connection = DriverManager.getConnection(
-                        "jdbc:postgresql://localhost:5432/movita_db", "postgres", "221003");
+                        "jdbc:postgresql://localhost:5432/movita_db", "root", "root");
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

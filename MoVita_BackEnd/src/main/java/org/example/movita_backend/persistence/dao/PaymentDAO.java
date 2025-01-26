@@ -7,4 +7,8 @@ import java.util.List;
 public interface PaymentDAO {
     void addPayment(Payment payment);
     void clearAllPayments();
+
+    // Associazioni
+    List<Payment> getAllPayments();
+    List<Payment> getPaymentsById(int id);
 }

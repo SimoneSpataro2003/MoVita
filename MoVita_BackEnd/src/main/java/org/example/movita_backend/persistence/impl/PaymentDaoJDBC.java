@@ -1,5 +1,6 @@
 package org.example.movita_backend.persistence.impl;
 
+import org.example.movita_backend.model.User;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.PaymentDAO;
 import org.example.movita_backend.model.Payment;
@@ -53,7 +54,55 @@ public class PaymentDaoJDBC implements PaymentDAO
         }
     }
 
-    private Payment mapEntity(ResultSet rs) throws SQLException
+    @Override
+    public List<Payment> getAllPayments()
+    {
+        String query = "SELECT * FROM pagamento ORDER BY id_utente";
+        List<Payment> toRet = new ArrayList<>();
+
+        try(PreparedStatement ps = connection.prepareStatement(query))
+        {
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                Payment u = mapPayment(rs);
+                toRet.add(u);
+            }
+            return toRet;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException("Couldn't show all payments", e);
+        }
+    }
+
+    @Override
+    public List<Payment> getPaymentsById(int id) {
+        String query = "SELECT * FROM pagamento WHERE ? = id_utente";
+        List<Payment> toRet = new ArrayList<>();
+
+        try(PreparedStatement ps = connection.prepareStatement(query))
+        {
+            ps.setInt(1,id);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next())
+            {
+                Payment u = mapPayment(rs);
+                toRet.add(u);
+            }
+            return toRet;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new RuntimeException("Couldn't find users.");
+        }
+    }
+
+    private Payment mapPayment(ResultSet rs) throws SQLException
     {
         Payment payment = new Payment();
         payment.setId(rs.getInt("id_pagamento"));
