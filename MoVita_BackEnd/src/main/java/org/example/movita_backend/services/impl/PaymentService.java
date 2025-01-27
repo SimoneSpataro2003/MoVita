@@ -35,7 +35,8 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public List<Payment> getPaymentsById(int userId) {
-        UserProxy userProxy = new UserProxy(userDao.findById(userId));
-        return userProxy.getPayments(userId);
+//        UserProxy userProxy = new UserProxy(userDao.findById(userId));
+//        userProxy.getPayments(userId);
+        return null;
     }
 }
