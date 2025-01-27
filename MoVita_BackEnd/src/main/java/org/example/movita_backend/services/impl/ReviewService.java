@@ -12,6 +12,7 @@ import java.util.List;
 @Service
 class ReviewService implements IReviewService {
 
+    // Memo Giuseppe da provare
     private final ReviewDao reviewDao;
 
     ReviewService(ReviewDao reviewDao){this.reviewDao = reviewDao;}

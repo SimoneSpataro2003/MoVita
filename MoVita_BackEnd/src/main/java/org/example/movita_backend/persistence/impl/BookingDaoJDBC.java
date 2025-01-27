@@ -18,6 +18,7 @@ import java.util.List;
 @Component
 public class BookingDaoJDBC implements BookingDao {
 
+    // Memo Giuseppe da provare
     private final Connection connection;
 
     public BookingDaoJDBC(){

@@ -22,7 +22,7 @@ public class EventController {
     @Autowired
     IEventService eventService;
 
-
+    // Memo Giuseppe da provare
 
     @GetMapping("/get-all-events")
     ResponseEntity<Collection<Event>> getAllEvents(){

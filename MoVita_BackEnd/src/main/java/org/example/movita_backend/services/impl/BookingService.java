@@ -11,6 +11,7 @@ import java.util.List;
 @Service
 class BookingService implements IBookingService {
 
+    // Memo Giuseppe da provare
     private final BookingDao bookingDao;
 
     BookingService(BookingDao bookingDao){this.bookingDao = bookingDao;}

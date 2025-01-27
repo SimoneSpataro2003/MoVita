@@ -23,6 +23,7 @@ public class ReviewDaoJDBC implements ReviewDao {
         this.connection = DBManager.getInstance().getConnection();
     }
 
+    // Memo Giuseppe da provare
 
     @Override
     public List<Review> findAll() {
