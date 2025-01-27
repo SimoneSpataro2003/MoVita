@@ -1,7 +1,9 @@
 package org.example.movita_backend.controller;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.movita_backend.exception.user.AuthenticationException;
 import org.example.movita_backend.exception.user.UserDoesNotExist;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.CacheControl;
@@ -42,7 +44,6 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-
 
     @ExceptionHandler({UsernameNotFoundException.class})
     public ResponseEntity<Object> handleUsernameNotFoundException(UsernameNotFoundException exception) {
@@ -118,5 +119,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
     //TODO handler Event not valid
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleGenericException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Errore generico: " + ex.getMessage());
+    }
 }
 
