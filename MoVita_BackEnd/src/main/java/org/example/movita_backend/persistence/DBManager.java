@@ -1,8 +1,10 @@
 package org.example.movita_backend.persistence;
 
+import org.example.movita_backend.persistence.dao.CategoryDao;
 import org.example.movita_backend.persistence.dao.EventDao;
 import org.example.movita_backend.persistence.dao.PaymentDAO;
 import org.example.movita_backend.persistence.dao.UserDao;
+import org.example.movita_backend.persistence.impl.CategoryDaoJDBC;
 import org.example.movita_backend.persistence.impl.EventDaoJDBC;
 import org.example.movita_backend.persistence.impl.PaymentDaoJDBC;
 import org.example.movita_backend.persistence.impl.UserDaoJDBC;
@@ -26,6 +28,7 @@ public class DBManager {
     private UserDaoJDBC userDao;
     private PaymentDaoJDBC paymentDao;
     private EventDaoJDBC eventDao;
+    private CategoryDao categoryDao;
 
     Connection connection = null;
 
@@ -61,5 +64,12 @@ public class DBManager {
             paymentDao = new PaymentDaoJDBC();
         }
         return paymentDao;
+    }
+
+    public CategoryDao getCategoryDAO() {
+        if(categoryDao == null){
+            categoryDao = new CategoryDaoJDBC();
+        }
+        return categoryDao;
     }
 }

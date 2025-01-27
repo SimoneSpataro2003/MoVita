@@ -6,12 +6,18 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
 @ToString
 public class Category {
+    @Setter
+    @Getter
     protected int id;
+
+    @Setter
+    @Getter
     protected String nome;
+
+    @Setter
+    @Getter
     protected String descrizione;
 
     // Relations
