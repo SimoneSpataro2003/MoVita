@@ -93,7 +93,7 @@ public class BookingDaoJDBC implements BookingDao {
     }
 
     @Override
-    public int save(Booking booking) {
+    public void save(Booking booking) {
         String query = "INSERT INTO partecipazione (id_utente, id_evento, data, annullata) " +
                 "VALUES (?, ?, ?, ?); ";
 
@@ -105,17 +105,9 @@ public class BookingDaoJDBC implements BookingDao {
 
             statement.executeUpdate();
 
-            // Recupera la chiave primaria generata
-            try (ResultSet generatedPrimaryKey = statement.getGeneratedKeys()) {
-                int generatedId = -1;
-                if (generatedPrimaryKey.next()) {
-                    generatedId = generatedPrimaryKey.getInt(1);
-                }
-                return generatedId;
-            }
         } catch (Exception e) {
             e.printStackTrace();
-            return -1; // In caso di errore restituisci -1
+
         }
     }
 

@@ -30,19 +30,19 @@ public class EventController {
         return ResponseEntity.ok(allEvents);
     }
 
-    @GetMapping("/id")
+    @GetMapping("/get-event-by-id")
     ResponseEntity<Event> getEventById(@RequestParam(name = "eventId") int eventId){
         Event event = eventService.findById(eventId);
         return ResponseEntity.ok(event);
     }
 
-    @GetMapping("/filter")
+    @GetMapping("/get-event-by-filter")
     ResponseEntity<Collection<Event>> getEventByFilter(@RequestParam(name = "filter")  String filter){
         Collection<Event> events = eventService.findByFilter(filter);
         return ResponseEntity.ok(events);
     }
 
-    @PostMapping("/")
+    @PostMapping("/create-event")
     ResponseEntity<Event> postCreateNewEvent(@RequestBody Event event) throws Exception {
         try{
             return  ResponseEntity.ok(
@@ -54,7 +54,7 @@ public class EventController {
 
     }
 
-    @PutMapping("/")
+    @PutMapping("/update-event")
     ResponseEntity<Event> postUpdateEvent(@RequestBody Event event) throws Exception
     {
         return  ResponseEntity.ok(
@@ -62,7 +62,7 @@ public class EventController {
         );
     }
 
-    @DeleteMapping("/")
+    @DeleteMapping("/delete-event")
     ResponseEntity<Void> deleteEvent(@RequestBody int idEvent)
     {
         this.eventService.deleteEvent(idEvent);

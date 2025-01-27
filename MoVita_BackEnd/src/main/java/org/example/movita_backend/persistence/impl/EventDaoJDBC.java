@@ -164,11 +164,11 @@ public class EventDaoJDBC implements EventDao {
         e.setPrezzo(rs.getFloat("prezzo"));
         e.setCitta(rs.getString("citta"));
         e.setIndirizzo(rs.getString("indirizzo"));
-        e.setNumPartecipanti(rs.getInt("numPartecipanti"));
-        e.setMaxNumPartecipanti(rs.getInt("maxNumPartecipanti"));
-        e.setEtaMinima(rs.getByte("etaMinima"));
+        e.setNumPartecipanti(rs.getInt("num_partecipanti"));
+        e.setMaxNumPartecipanti(rs.getInt("max_num_partecipanti"));
+        e.setEtaMinima(rs.getByte("eta_minima"));
         //e.setDescrizione(rs.getString("descrizione")); //NO: effettuata con un proxy.
-        e.setValutazioneMedia(rs.getFloat("valutazioneMedia"));
+        e.setValutazioneMedia(rs.getFloat("valutazione_media"));
         e.setCreatore(DBManager.getInstance().getUserDAO().findById(rs.getInt("creatore")));
 
         return e;

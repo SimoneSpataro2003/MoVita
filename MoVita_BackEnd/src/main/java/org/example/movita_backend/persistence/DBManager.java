@@ -24,6 +24,7 @@ public class DBManager {
     private EventDaoJDBC eventDao;
     private BookingDaoJDBC bookingDao;
     private CategoryDaoJDBC categoryDao;
+    private ReviewDaoJDBC reviewDao;
 
     Connection connection = null;
 
@@ -64,6 +65,13 @@ public class DBManager {
             bookingDao = new BookingDaoJDBC();
         }
         return bookingDao;
+    }
+
+    public ReviewDao getReviewDAO(){
+        if(reviewDao == null){
+            reviewDao = new ReviewDaoJDBC();
+        }
+        return reviewDao;
     }
 
     public PaymentDAO getPaymentDAO() {
