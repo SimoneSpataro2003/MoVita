@@ -1,16 +1,15 @@
-<div class="container-flex my-5">
-  <h1 class="text-center text-primary mb-4">Eventi Disponibili</h1>
+<div class="container-flex a">
+  <div class="title">
+    <h1 class="text-center text-primary">Eventi Disponibili</h1>
+  </div>
   <div class="row mx-2">
-    <!-- Colonna per le card -->
     <div class="col-6">
-      <div class="event-card-container row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
-        <!-- Loop su eventi -->
+      <div class="event-card-container row row-cols-1 row-cols-sm-1 row-cols-lg-2 row-cols-xxl-3 g-4">
         @for(evento of this.eventi; track evento.id){
           <app-event-card [evento]="evento"></app-event-card>
         }
       </div>
     </div>
-    <!-- Colonna per la mappa -->
     <div class="col-6">
       <app-map></app-map>
     </div>

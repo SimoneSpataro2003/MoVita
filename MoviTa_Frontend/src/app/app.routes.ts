@@ -6,6 +6,7 @@ import {RegistratiComponent} from './pages/registrati/registrati.component';
 import {LoginComponent} from './pages/login/login.component';
 import {AuthLayoutComponent} from './layouts/auth-layout/auth-layout.component';
 import {EventsComponent} from './pages/events/events.component';
+import {DetailsComponent} from './pages/details/details.component';
 
 export const routes: Routes = [
   {
@@ -13,7 +14,8 @@ export const routes: Routes = [
     component: MainLayoutComponent,
     children:[
       {path: '', component:HomeComponent},
-      {path: 'events', component: EventsComponent}
+      {path: 'events', component: EventsComponent},
+      {path: 'event-details', component: DetailsComponent}
     ]
     //canActivate:[authGuard] <-- per evitare accessi se non presente il token
   },

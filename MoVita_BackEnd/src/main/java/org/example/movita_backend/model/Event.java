@@ -25,6 +25,6 @@ public class Event {
 
     // Relations
     protected List<Category> categorie;
-    protected List<Booking> prenotazioni; //<---?? Non solo List<Evento>, ma anche altre informazioni!
-    protected List<Review> recensioni;     //<--- Stesso problema qui
+    protected List<Booking> prenotazioni;
+    protected List<Review> recensioni;
 }

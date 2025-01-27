@@ -8,6 +8,8 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class Category {
+    //FIXME (SIMONE): correggi. Il proxy sovrascrive il metodo getter per definire i dati (vedi il proxy di Evento.)
+
     @Setter
     @Getter
     protected int id;
