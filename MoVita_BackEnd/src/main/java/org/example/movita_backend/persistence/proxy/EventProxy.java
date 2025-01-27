@@ -24,7 +24,9 @@ public class EventProxy extends Event {
         return categorie;
     }
 
-    //public List<User> getPartecipanti(){}
+    public List<User> getPartecipanti(){
+
+    }
 
 
 }

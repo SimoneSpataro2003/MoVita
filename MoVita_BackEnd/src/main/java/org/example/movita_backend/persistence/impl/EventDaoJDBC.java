@@ -1,5 +1,6 @@
 package org.example.movita_backend.persistence.impl;
 
+import org.example.movita_backend.model.Booking;
 import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
 import org.example.movita_backend.persistence.DBManager;

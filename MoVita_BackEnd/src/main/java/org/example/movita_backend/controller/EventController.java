@@ -26,7 +26,7 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/")  //TODO modificare nome /get-event
     ResponseEntity<Collection<Event>> getAllEvents(){
         Collection<Event> allEvents = this.eventService.findAll();
         return ResponseEntity.ok(allEvents);
