@@ -1,15 +1,17 @@
 import { Recensioni } from "./Recensioni";
+import {Utente} from './Utente';
 
 export interface Evento{
-    nome:string;
-    organizzatore:string;
-    immagine:string[];
-    indirizzo:string;
-    capienzaMax:number;
-    etaMinima: number;
-    descrizione:string;
-    prezzo:number;
-    categoria:string;
-    partecipanti:string[];
-    recensioni:Recensioni[];
+    id: number,
+    nome:string,
+    data:string,
+    prezzo:number,
+    citta:string,
+    indirizzo:string,
+    num_partecipanti:number,
+    max_num_partecipanti:number,
+    eta_minima: number,
+    descrizione:string,
+    valutazione_media:string,
+    creatore: Utente,
 }

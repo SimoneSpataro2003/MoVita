@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Utente } from './utente';
+import { Utente } from '../../model/Utente';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RegistratiService {
+export class LoginService {
   url = 'http://localhost:3000/utenti';
 
   constructor() { }
@@ -19,11 +19,7 @@ export class RegistratiService {
     return await data.json() ?? {};
   }
 
-  submitApplication(username: string, eta: number, email: string, password: string, ripetiPassword: string) {
-    if (password == ripetiPassword) {
-      if (eta >= 18) console.log("Utente ", email, "registrato con successo!");
-      else console.log("Devi avere minimo 18 anni!")
-    }
-    else console.log("Le password non coincidono!");
+  submitApplication(email: string, password: string) {
+    console.log("Utente ", email, " loggato con successo!");
   }
 }

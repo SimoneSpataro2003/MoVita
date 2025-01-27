@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { RegistratiService } from '../../registrati.service';
+import { RegistratiService } from '../../services/register/registrati.service';
 
 @Component({
   selector: 'app-registrati',
