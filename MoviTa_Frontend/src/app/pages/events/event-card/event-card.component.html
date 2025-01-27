@@ -1,0 +1,41 @@
+<a class="text-decoration-none">
+  <div class="card h-100 rounded-4 card-cliccabile">
+    <div class="card-body">
+      <img src="img/home_create.jpg" class="card-img mb-3 rounded-4 immagine" alt="Immagine evento {{evento.nome}}">
+      <div class="mx-2">
+        <h5 class="card-title text-primary"> {{ evento.nome }}</h5>
+
+        <!-- Data evento -->
+        <div class="d-flex align-items-center mb-1">
+          <span class="bi bi-calendar-fill me-2"></span>
+          <time class="card-text">{{ evento.data }}</time>
+        </div>
+
+        <!-- Partecipanti -->
+        <div class="d-flex align-items-center mb-1">
+          <span class="bi bi-person-fill me-2"></span>
+          <p class="card-text mb-0">{{ evento.num_partecipanti }} / {{ evento.max_num_partecipanti }}</p>
+        </div>
+
+        <!-- Città e Indirizzo -->
+        <div class="d-flex align-items-center mb-1">
+          <span class="bi bi-geo-alt-fill me-2 text-secondary"></span>
+          <address class="card-text text-secondary mb-0">{{ evento.citta }}, {{ evento.indirizzo }}</address>
+        </div>
+
+        <!-- Valutazione e Prezzo -->
+        <div class="d-flex justify-content-between">
+          <div class="d-flex align-items-center">
+            <span class="bi bi-star-fill text-warning me-2"></span>
+            <p class="card-text mb-0">{{ evento.valutazione_media }}</p>
+          </div>
+          @if(this.evento.prezzo == 0) {
+            <p class="card-text text-secondary fw-bold">Gratis</p>
+          } @else {
+            <p class="card-text text-secondary fw-bold">€{{ evento.prezzo }}</p>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</a>

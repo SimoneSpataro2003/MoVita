@@ -1,0 +1,21 @@
+.card-cliccabile{
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+  border: 3px solid #badcf5;
+}
+
+.card-cliccabile:hover,
+.card-cliccabile:focus {
+  border: 3px solid #2a8dd5;
+  box-shadow: 0 0 10px #144466; /* Effetto ombra */
+  cursor: pointer;
+}
+
+.card-cliccabile:active {
+  border: 3px solid #144466; /* Bordo blu più scuro per effetto attivo */
+}
+
+.immagine{
+  height: 200px;
+  object-fit: cover;
+  width: 100%;
+}

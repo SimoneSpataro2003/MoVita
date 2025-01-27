@@ -18,7 +18,7 @@ import { RouterModule } from '@angular/router';
           <!-- Search Bar -->
           <div class="col-6">
             <div class="input-group">
-              <input class="form-control text-center pl-3 h-input" type="search" placeholder="Search" aria-label="Search">
+              <input class="form-control text-center pl-3 h-input" type="search" placeholder="Filtra per evento, organizzatore o categoria" aria-label="Search">
               <button class="btn btn-outline-success h-buttonoutline underlined" type="submit"><i class="bi bi-search"></i></button>
             </div>
           </div>
@@ -26,7 +26,7 @@ import { RouterModule } from '@angular/router';
           <!-- Login and Register Buttons -->
           <div class="col-3 text-end">
             <button class="btn btn-outline-success h-button" type="submit" routerLink="login">Login</button>
-            <button class="btn btn-primary h-buttonoutline" type="submit" routerLink="registrati">Registrati</button>
+            <button class="btn btn-primary h-buttonoutline" type="submit" routerLink="register">Registrati</button>
           </div>
         </div>
       </div>

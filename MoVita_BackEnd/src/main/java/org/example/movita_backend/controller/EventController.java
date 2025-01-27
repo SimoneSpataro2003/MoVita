@@ -22,11 +22,9 @@ public class EventController {
     @Autowired
     IEventService eventService;
 
-    public EventController(IEventService eventService) {
-        this.eventService = eventService;
-    }
 
-    @GetMapping("/")  //TODO modificare nome /get-event
+
+    @GetMapping("/get-all-events")
     ResponseEntity<Collection<Event>> getAllEvents(){
         Collection<Event> allEvents = this.eventService.findAll();
         return ResponseEntity.ok(allEvents);

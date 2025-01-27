@@ -1,0 +1,6 @@
+.event-card-container {
+  max-height: 700px;
+  overflow-y: auto;  /* Permette lo scroll verticale */
+  padding-right: 10px; /* Padding per evitare che lo scroll tocchi il bordo */
+}
+
