@@ -2,7 +2,9 @@ package org.example.movita_backend.controller;
 
 import org.example.movita_backend.exception.payments.FailureToObtainPayments;
 import org.example.movita_backend.model.Payment;
+import org.example.movita_backend.persistence.proxy.UserProxy;
 import org.example.movita_backend.services.impl.PaymentService;
+import org.example.movita_backend.services.impl.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +16,15 @@ import java.util.List;
 public class PaymentController {
 
     private final PaymentService paymentService;
+    private final UserService userService;
 
-    public PaymentController(PaymentService paymentService) {
+    public PaymentController(PaymentService paymentService, UserService userService) {
         this.paymentService = paymentService;
+        this.userService = userService;
     }
 
     @PostMapping("/create-payment")
-    public ResponseEntity<String> createPaymentIntent(@RequestBody Payment payment) {
+    public ResponseEntity<String> createPayment(@RequestBody Payment payment) {
         try
         {
             paymentService.createCheckoutSession(payment);
@@ -46,16 +50,15 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/get-Payments/{userId}")
-    public ResponseEntity<List<Payment>> getAllPaymentsByUserId(@PathVariable int userId) {
+    @GetMapping("/get-Payments/")
+    public ResponseEntity<List<Payment>> getPayments() {
         try
         {
-            List<Payment> payments = paymentService.getPaymentsById(userId);
+            List<Payment> payments = paymentService.getPayments();
             return ResponseEntity.ok(payments);
         }
         catch (Exception e)
         {
-            System.out.println("Error fetching payments for user " + userId + ": " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

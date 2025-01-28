@@ -1,18 +1,14 @@
 package org.example.movita_backend.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import org.example.movita_backend.exception.user.AuthenticationException;
-import org.example.movita_backend.persistence.DBManager;
-import org.example.movita_backend.model.Payment;
 import org.example.movita_backend.model.User;
-import org.example.movita_backend.services.impl.AuthService;
+import org.example.movita_backend.persistence.proxy.UserProxy;
 import org.example.movita_backend.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -20,36 +16,75 @@ import java.util.Map;
 public class UserController
 {
 
-    //FIXED: NO AUTHSERVICE, MA USERSERVICE!
+    private final UserService userService;
+
     @Autowired
-    UserService userService;
-
-    //FIXME: NO SERVLET, MA @RequestBody!
-    @GetMapping("")
-    public ResponseEntity<List<User>> getFriends(HttpServletRequest request) throws AuthenticationException {
-        User user = (User) request.getSession().getAttribute("user");
-
-        // vari controlli di questo tipo...
-        if(user == null)
-        {
-            throw new AuthenticationException("Non sei autorizzato!");
-        }
-
-        return ResponseEntity.ok(user.getAmici());
+    public UserController(UserService userService)
+    {
+        this.userService = userService;
     }
 
-
-
-    @GetMapping("user/payment/")
-    public ResponseEntity<List<Payment>> getPayment(HttpServletRequest request) throws AuthenticationException  {
-        User user = (User) request.getSession().getAttribute("user");
-
-        // vari controlli di questo tipo...
-        if(user == null)
+    @PostMapping("/make-friendship/{userId1}/{userId2}")
+    public ResponseEntity<String> createFriendship(@PathVariable int userId1, @PathVariable int userId2)
+    {
+        try
         {
-            throw new AuthenticationException("Non sei autorizzato!");
+            userService.makeFriendship(userId1, userId2);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Friendship created successfully.");
         }
+        catch (Exception e)
+        {
+            System.err.println("Error creating friendship: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while creating the friendship.");
+        }
+    }
 
-        return ResponseEntity.ok(user.getPagamenti());
+    @PostMapping("/delete-friendship/{userId1}/{userId2}")
+    public ResponseEntity<Void> deleteFriendship(@PathVariable int userId1, @PathVariable int userId2)
+    {
+        try
+        {
+            userService.deleteFriendship(userId1, userId2);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error deleting friendship: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/find-friends/")
+    public ResponseEntity<List<User>> getFriendsById()
+    {
+        try
+        {
+            List<User> friends = userService.getFriends();
+            return ResponseEntity.status(HttpStatus.OK).body(friends);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error finding friends: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/search-friends/{filter}")
+    public ResponseEntity<List<User>> findAmiciByFilter(@PathVariable String filter)
+    {
+        try
+        {
+            List<User> friends = userService.searchUsers(filter);
+            return ResponseEntity.status(HttpStatus.OK).body(friends);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error finding friends: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 }
