@@ -3,6 +3,12 @@
   border: 3px solid #badcf5;
 }
 
+.card {
+  word-wrap: break-word; /* Permette la divisione delle parole lunghe */
+  overflow-wrap: break-word; /* Supporta il wrapping per parole lunghe */
+  white-space: normal; /* Permette al testo di andare a capo */
+}
+
 .card-cliccabile:hover,
 .card-cliccabile:focus {
   border: 3px solid #2a8dd5;
@@ -18,4 +24,8 @@
   height: 200px;
   object-fit: cover;
   width: 100%;
+}
+
+.valutazione{
+  background-color: rgba(0,0,0,0.6);
 }
