@@ -13,7 +13,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/user")
 @CrossOrigin(origins = "http://localhost:4200")
-public class UserController {
+public class UserController
+{
 
     private final UserService userService;
     private final UserProxy userProxy;
