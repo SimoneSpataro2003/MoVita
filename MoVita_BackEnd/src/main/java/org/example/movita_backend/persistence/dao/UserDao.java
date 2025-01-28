@@ -25,10 +25,10 @@ public interface UserDao {
     User updateConsigliEventi(int userId);
 
     List<User> findFriends(int id);
-    List<User> findUserByUsername(String username);
+    List<User> findAmiciByFilter(String username);
 
-    void makeFriendships(int UserId1, int UserId2);
-    void deleteFriendships(int UserId1, int UserId2);
+    void makeFriendship(int UserId1, int UserId2);
+    void deleteFriendship(int UserId1, int UserId2);
 
 
     //TODO: ALTRI
