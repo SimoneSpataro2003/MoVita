@@ -1,17 +1,42 @@
-<div class="container-flex a">
-  <div class="title">
-    <h1 class="text-center text-primary">Eventi Disponibili</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-12 text-center">
+      <h1 class="text-primary">Eventi Disponibili</h1>
+    </div>
   </div>
-  <div class="row mx-2">
-    <div class="col-6">
-      <div class="event-card-container row row-cols-1 row-cols-sm-1 row-cols-lg-2 row-cols-xxl-3 g-4">
+  <div class="row">
+    <div class="accordion mb-4" id="accordionExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+            VALORI DEI FILTRI.
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3 flex-nowrap" style="overflow-x: auto; white-space: nowrap;">
+        <!-- Loop sugli eventi -->
         @for(evento of this.eventi; track evento.id){
-          <app-event-card [evento]="evento"></app-event-card>
+          <div class="col" style="display: inline-block; float: none;">
+            <app-event-card [evento]="evento" class="h-100"></app-event-card>
+          </div>
         }
       </div>
     </div>
-    <div class="col-6">
-      <app-map></app-map>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div>
+        <app-map class="w-100"></app-map>
+      </div>
     </div>
   </div>
 </div>
