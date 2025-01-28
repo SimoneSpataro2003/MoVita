@@ -31,7 +31,7 @@ public class JWTService{
             throw new RuntimeException(e);
         }
 
-        tokenExpiration = 1000 * 60 * 60; //valido per un'ora
+        tokenExpiration = 1000 * 60 * 60 * 24 * 7; //valido per una settimana
     }
 
     public String generateToken(UserDetails userDetails) {
@@ -47,17 +47,6 @@ public class JWTService{
                 .signWith(getKey())
                 .compact();
 
-    }
-
-    public String generateRefreshToken(HashMap<String, Object> extraClaims, UserDetails userDetails) {
-        return Jwts.builder().
-                claims().add(extraClaims).
-                subject(userDetails.getUsername()).
-                issuedAt(new Date(System.currentTimeMillis())).
-                expiration(new Date(System.currentTimeMillis() + 604800000)) //<-- sette giorni
-                .and()
-                .signWith(getKey())
-                .compact();
     }
 
     //decodifico la chiave segreta generata nel costruttore.
