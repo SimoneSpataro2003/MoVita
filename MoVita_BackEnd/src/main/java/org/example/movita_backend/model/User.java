@@ -46,7 +46,6 @@ public class User implements UserDetails {
     protected List<User> utentiCercati;
     protected List<Payment> pagamenti;
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(getRuolo()));

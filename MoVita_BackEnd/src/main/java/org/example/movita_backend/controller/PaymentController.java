@@ -20,8 +20,7 @@ public class PaymentController {
     }
 
     @PostMapping("/create-payment")
-    public ResponseEntity<String> createPaymentIntent(@RequestBody Payment payment)
-    {
+    public ResponseEntity<String> createPaymentIntent(@RequestBody Payment payment) {
         try
         {
             paymentService.createCheckoutSession(payment);
@@ -47,9 +46,8 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/get-payments/{userId}")
-    public ResponseEntity<List<Payment>> getAllPaymentsByUserId(@PathVariable int userId)
-    {
+    @GetMapping("/get-Payments/{userId}")
+    public ResponseEntity<List<Payment>> getAllPaymentsByUserId(@PathVariable int userId) {
         try
         {
             List<Payment> payments = paymentService.getPaymentsById(userId);

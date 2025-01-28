@@ -6,7 +6,6 @@ import org.example.movita_backend.exception.user.UsernameAlreadyExists;
 import org.example.movita_backend.model.User;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.UserDao;
-import org.example.movita_backend.security.dto.JwtAuthenticationResponse;
 import org.example.movita_backend.security.dto.LoginRequest;
 import org.example.movita_backend.security.dto.RegisterAgencyRequest;
 import org.example.movita_backend.security.dto.RegisterPersonRequest;
@@ -17,9 +16,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
 
 @Component
 public class AuthService implements IAuthService {
@@ -110,7 +106,7 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public JwtAuthenticationResponse login(LoginRequest loginRequest) {
+    public String login(LoginRequest loginRequest) {
         userDoesNotExists(loginRequest.getUsername());
         System.out.println("ok");
 
@@ -118,14 +114,7 @@ public class AuthService implements IAuthService {
 
         User user = userDao.findByUsername(loginRequest.getUsername());
 
-        var token =  jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(new HashMap<>(), user);
-
-        JwtAuthenticationResponse jwtAuthenticationResponse = new JwtAuthenticationResponse();
-        jwtAuthenticationResponse.setToken(token);
-        jwtAuthenticationResponse.setRefreshToken(refreshToken);
-
-        return jwtAuthenticationResponse;
+        return jwtService.generateToken(user);
     }
 
     @Override

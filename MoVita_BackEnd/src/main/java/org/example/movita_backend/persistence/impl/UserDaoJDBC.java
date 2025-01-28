@@ -365,7 +365,7 @@ public class UserDaoJDBC implements UserDao {
 
     //FIXED: Realizzato metodo nell'interfaccia apposita.
     @Override
-    public List<User> findAmiciByFilter(String username) {
+    public List<User> findUserByUsername(String username) {
         String query = "SELECT * " +
                 "FROM utente " +
                 "WHERE utente.username LIKE ?";
@@ -391,10 +391,10 @@ public class UserDaoJDBC implements UserDao {
     }
 
     @Override
-    public void makeFriendship(int UserId1, int UserId2)
+    public void makeFriendships(int UserId1, int UserId2)
     {
         String query = "INSERT INTO amicizia " +
-                "(id_utente1, id_utente2)" +
+                "(amico1, amico2)" +
                 "VALUES " +
                 "(?,?)";
 
@@ -413,8 +413,8 @@ public class UserDaoJDBC implements UserDao {
     }
 
     @Override
-    public void deleteFriendship(int UserId1, int UserId2) {
-        String query = "DELETE FROM amicizia WHERE id_utente1 = ? AND id_utente2 = ?";
+    public void deleteFriendships(int UserId1, int UserId2) {
+        String query = "DELETE FROM amicizia WHERE amico1 = ? AND amico = ?";
 
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ps.setInt(1, UserId1);
