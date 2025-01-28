@@ -17,6 +17,7 @@ public class UserService implements IUserService{
 
     public UserService() {
         this.userDao = DBManager.getInstance().getUserDAO();
+        this.userProxy = new UserProxy();
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.example.movita_backend.controller;
 
 import org.example.movita_backend.model.User;
-import org.example.movita_backend.persistence.proxy.UserProxy;
 import org.example.movita_backend.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

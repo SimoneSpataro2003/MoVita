@@ -16,11 +16,9 @@ import java.util.List;
 public class PaymentController {
 
     private final PaymentService paymentService;
-    private final UserService userService;
 
-    public PaymentController(PaymentService paymentService, UserService userService) {
+    public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
-        this.userService = userService;
     }
 
     @PostMapping("/create-payment")
