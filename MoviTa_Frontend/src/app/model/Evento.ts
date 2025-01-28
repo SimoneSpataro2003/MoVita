@@ -10,14 +10,14 @@ export interface Evento{
   prezzo:number,
   citta:string,
   indirizzo:string,
-  num_partecipanti:number,
-  max_num_partecipanti:number,
-  eta_minima: number,
+  numPartecipanti:number,
+  maxNumPartecipanti:number,
+  etaMinima: number,
   descrizione:string,
-  valutazione_media:string,
-  id_creatore: number,
+  valutazioneMedia:string,
+  creatore: Utente;
 
   categorie: Categoria[],
-  partecipazioni: Partecipazione[],
+  prenotazioni: Partecipazione[],
   recensioni: Recensione[]
 }
