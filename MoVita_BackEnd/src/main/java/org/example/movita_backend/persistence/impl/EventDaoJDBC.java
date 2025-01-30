@@ -6,7 +6,7 @@ import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.ResultSetMapper;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.EventDao;
-import org.example.movita_backend.persistence.proxy.EventProxy;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 

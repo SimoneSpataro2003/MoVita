@@ -17,7 +17,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.example.movita_backend.model.ResultSetMapper.mapBooking;
 
 @Component
 public class BookingDaoJDBC implements BookingDao {
