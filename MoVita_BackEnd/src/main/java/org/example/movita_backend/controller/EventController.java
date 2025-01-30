@@ -52,24 +52,6 @@ public class EventController {
         return ResponseEntity.ok(events);
     }
 
-    @GetMapping("/get-event-booking")
-    ResponseEntity<Collection<Booking>> getEventBooking(@RequestParam(name = "eventId") int eventId){
-        Collection<Booking> bookings = bookingService.findByEvent(eventId);
-        return ResponseEntity.ok(bookings);
-    }
-
-    @GetMapping("/get-event-review")
-    ResponseEntity<Collection<Review>> getEventReview(@RequestParam(name = "eventId") int eventId){
-        Collection<Review> reviews = reviewService.findByEvent(eventId);
-        return ResponseEntity.ok(reviews);
-    }
-
-//    @GetMapping("/get-event-categories")      TODO SIMONE
-//    ResponseEntity<Collection<Category>> getEventCategory(@RequestParam(name = "eventId") int eventId){
-//        Collection<Category> category = ...;
-//        return ResponseEntity.ok(category);
-//    }
-
     @PostMapping("/create-event")
     ResponseEntity<Event> postCreateNewEvent(@RequestBody Event event) throws Exception {
         try{
