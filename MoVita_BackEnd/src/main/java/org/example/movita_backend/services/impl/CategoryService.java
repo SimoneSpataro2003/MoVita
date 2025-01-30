@@ -3,8 +3,11 @@ package org.example.movita_backend.services.impl;
 import org.example.movita_backend.exception.category.CategoryNotFoundExeption;
 import org.example.movita_backend.exception.category.EmptyCategoryListExeption;
 import org.example.movita_backend.model.Category;
+import org.example.movita_backend.model.Event;
+import org.example.movita_backend.model.User;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.CategoryDao;
+import org.example.movita_backend.persistence.proxy.CategoryProxy;
 import org.example.movita_backend.services.interfaces.ICategoryService;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +35,15 @@ public class CategoryService implements ICategoryService {
         List<Category> list = categoryDao.findByName(name);
         if (!list.isEmpty()) return list;
         else throw new CategoryNotFoundExeption("categories not found");
+    }
+
+    public List<User> getUsersByCategory(int categoryId) {
+        CategoryProxy categoryProxy = new CategoryProxy(DBManager.getInstance().getCategoryDAO().findById(categoryId));
+        return categoryProxy.getUtentiInteressati();
+    }
+
+    public List<Event> getEventsByCategory(int categoryId) {
+        CategoryProxy categoryProxy = new CategoryProxy(DBManager.getInstance().getCategoryDAO().findById(categoryId));
+        return categoryProxy.getEventi();
     }
 }
