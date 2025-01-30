@@ -6,6 +6,7 @@ import org.example.movita_backend.model.User;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.BookingDao;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
@@ -20,6 +21,7 @@ public class BookingDaoJDBC implements BookingDao {
 
     // Memo Giuseppe da provare
     private final Connection connection;
+
 
     public BookingDaoJDBC(){
         this.connection = DBManager.getInstance().getConnection();
@@ -51,6 +53,25 @@ public class BookingDaoJDBC implements BookingDao {
 
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ps.setInt(1, event.getId());
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Booking booking = mapBooking(rs);
+                valuteToReturn.add(booking);
+            }
+            return valuteToReturn;
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Booking> findByUser(User user) {
+        String query = "SELECT * FROM partecipazione WHERE id_utente=?";
+        List<Booking> valuteToReturn = new ArrayList<>();
+
+        try(PreparedStatement ps = connection.prepareStatement(query)){
+            ps.setInt(1, user.getId());
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 Booking booking = mapBooking(rs);

@@ -52,6 +52,12 @@ public class EventController {
         return ResponseEntity.ok(events);
     }
 
+    @GetMapping("/get-event-by-user")
+    ResponseEntity<Collection<Booking>> getEventByUser(@RequestParam(name = "user")  int user){
+        Collection<Booking> events = bookingService.findByUser(user);
+        return ResponseEntity.ok(events);
+    }
+
     @PostMapping("/create-event")
     ResponseEntity<Event> postCreateNewEvent(@RequestBody Event event) throws Exception {
         try{

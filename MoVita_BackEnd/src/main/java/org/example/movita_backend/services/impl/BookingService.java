@@ -33,6 +33,11 @@ class BookingService implements IBookingService {
     }
 
     @Override
+    public List<Booking> findByUser(int id_utente) {
+        return bookingDao.findByUser(DBManager.getInstance().getUserDAO().findById(id_utente));
+    }
+
+    @Override
     public Booking createBooking(Booking booking) throws Exception {
         bookingDao.save(booking);
         return bookingDao.findById(booking.getUtente(),booking.getEvento());
