@@ -36,14 +36,14 @@ public class CategoryController {
     }
 
     @GetMapping("/get-users-by-category")
-    ResponseEntity<Collection<User>> findUsers(@RequestParam(name = "userId") int userId) {
-        Collection<User> users = this.categoryService.getUsersByCategory(userId);
+    ResponseEntity<Collection<User>> findUsers(@RequestParam(name = "categoryId") int categoryId) {
+        Collection<User> users = this.categoryService.getUsersByCategory(categoryId);
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/get-events-by-category")
-    ResponseEntity<Collection<Event>> findEvents(@RequestParam(name = "eventId") int eventId) {
-        Collection<Event> events = this.categoryService.getEventsByCategory(eventId);
+    ResponseEntity<Collection<Event>> findEvents(@RequestParam(name = "categoryId") int categoryId) {
+        Collection<Event> events = this.categoryService.getEventsByCategory(categoryId);
         return ResponseEntity.ok(events);
     }
 }

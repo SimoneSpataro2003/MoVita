@@ -26,7 +26,7 @@ public class ResultSetMapper {
     }
 
     public static Event mapEvent(ResultSet rs) throws SQLException {
-        Event e = new EventProxy();
+        Event e = new Event();
 
         e.setId(rs.getInt("id"));
         e.setNome(rs.getString("nome"));
