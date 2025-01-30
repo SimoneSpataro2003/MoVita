@@ -14,4 +14,9 @@ export class EventService {
   public getAllEvents():Observable<Evento[]>{
     return this.authHttp.get(this.URL +'/get-all-events');
   }
+
+  public getEventById(id: number):Observable<Evento>{
+    return this.authHttp.get(this.URL +'/get-event-by-id');
+  }
+
 }
