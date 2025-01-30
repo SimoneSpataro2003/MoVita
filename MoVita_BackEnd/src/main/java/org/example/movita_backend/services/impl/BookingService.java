@@ -1,6 +1,7 @@
 package org.example.movita_backend.services.impl;
 
 import org.example.movita_backend.model.Booking;
+import org.example.movita_backend.model.Event;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.BookingDao;
 import org.example.movita_backend.persistence.dao.EventDao;
@@ -24,6 +25,11 @@ class BookingService implements IBookingService {
     @Override
     public Booking findById(int id_utente,int id_evento) {
         return bookingDao.findById(DBManager.getInstance().getUserDAO().findById(id_utente),DBManager.getInstance().getEventDAO().findById(id_evento));
+    }
+
+    @Override
+    public List<Booking> findByEvent(int id_evento){
+        return bookingDao.findByEvent(DBManager.getInstance().getEventDAO().findById(id_evento));
     }
 
     @Override

@@ -28,6 +28,11 @@ class ReviewService implements IReviewService {
     }
 
     @Override
+    public List<Review>  findByEvent(int id_evento){
+        return reviewDao.findByEvent(DBManager.getInstance().getEventDAO().findById(id_evento));
+    }
+
+    @Override
     public Review createReview(Review review) throws Exception {
         reviewDao.save(review);
         return reviewDao.findById(review.getUtente(), review.getEvento());
@@ -38,5 +43,4 @@ class ReviewService implements IReviewService {
         reviewDao.save(review);
         return reviewDao.findById(review.getUtente(), review.getEvento());
     }
-    //delete recensione
 }

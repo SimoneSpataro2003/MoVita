@@ -23,6 +23,7 @@ public class Category {
     protected String descrizione;
 
     // Relations
+    //TODO (SIMONE): PROXY CATEGORIA
     protected List<User> utentiInteressati;
     protected List<Event> eventi;
 }

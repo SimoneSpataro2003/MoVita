@@ -14,9 +14,9 @@ public interface EventDao {
 
     List<Event> findByFilter(String filter);
     String findDescrizione(Event e);
-    List<Category> findCategories(int id);
-    //associazioni
 
+    //associazioni
+    List<Category> findCategories(Event event);
     //TODO: ALTRI
 
     int save(Event event);

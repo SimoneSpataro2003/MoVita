@@ -9,6 +9,7 @@ public interface IReviewService {
 
     List<Review> findAll();
     Review findById(int id_utente, int id_evento);
+    List<Review>  findByEvent(int id_evento);
     Review createReview(Review review) throws Exception;
     Review updateReview(Review review) throws Exception;
 

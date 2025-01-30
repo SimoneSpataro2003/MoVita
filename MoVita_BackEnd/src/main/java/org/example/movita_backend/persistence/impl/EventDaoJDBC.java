@@ -5,6 +5,7 @@ import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.EventDao;
+import org.example.movita_backend.persistence.proxy.EventProxy;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -149,14 +150,34 @@ public class EventDaoJDBC implements EventDao {
     }
 
     @Override
-    public List<Category> findCategories(int id) {
-        //TODO: REALIZZA CATEGORIE
-        //TODO: REALIZZA PROXY EVENTO
-        return List.of();
+    public List<Category> findCategories(Event event) {
+        List<Category> categorie = new ArrayList<>();
+        String query = "SELECT c.nome FROM categoria c " +
+                "JOIN evento_categoria ec ON c.id = ec.id_categoria " +
+                "WHERE ec.id_evento = ?";
+
+        try(PreparedStatement ps = connection.prepareStatement(query)){
+            ps.setInt(1, event.getId());
+            ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    Category category = new Category();
+                    category.setId(rs.getInt(1));
+                    category.setNome(rs.getString(2));
+                    category.setDescrizione(rs.getString(3));
+                    categorie.add(category);
+                }
+            return categorie;
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
+
+
     private Event mapEvent(ResultSet rs) throws SQLException {
-        Event e = new Event();
+        Event e = new EventProxy();
 
         e.setId(rs.getInt("id"));
         e.setNome(rs.getString("nome"));

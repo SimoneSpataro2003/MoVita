@@ -3,9 +3,13 @@ package org.example.movita_backend.controller;
 import lombok.Getter;
 import org.apache.coyote.Response;
 import org.example.movita_backend.exception.event.EventNotValid;
+import org.example.movita_backend.model.Booking;
 import org.example.movita_backend.model.Event;
+import org.example.movita_backend.model.Review;
 import org.example.movita_backend.services.impl.UserService;
+import org.example.movita_backend.services.interfaces.IBookingService;
 import org.example.movita_backend.services.interfaces.IEventService;
+import org.example.movita_backend.services.interfaces.IReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +25,12 @@ public class EventController {
 
     @Autowired
     IEventService eventService;
+
+    @Autowired
+    IBookingService bookingService;
+
+    @Autowired
+    IReviewService reviewService;
 
     // Memo Giuseppe da provare
 
