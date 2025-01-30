@@ -1,8 +1,13 @@
 package org.example.movita_backend.services.impl;
 
 import org.example.movita_backend.exception.event.EventNotValid;
+import org.example.movita_backend.model.Booking;
+import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
+import org.example.movita_backend.model.Review;
+import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.EventDao;
+import org.example.movita_backend.persistence.proxy.EventProxy;
 import org.example.movita_backend.services.interfaces.IEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +38,25 @@ class EventService implements IEventService {
         return eventDao.findByFilter(filter);
     }
 
+    public List<Category> findCategories(int id_evento){
+        EventProxy eventProxy = new EventProxy(DBManager.getInstance().getEventDAO().findById(id_evento));
+        return eventProxy.getCategorie();
+    }
+    public List<Booking> findPrenotazioni(int id_evento){
+        EventProxy eventProxy = new EventProxy(DBManager.getInstance().getEventDAO().findById(id_evento));
+        return eventProxy.getPrenotazioni();
+    }
+    public String findDescrizione(int id_evento){
+        EventProxy eventProxy = new EventProxy(DBManager.getInstance().getEventDAO().findById(id_evento));
+        return eventProxy.getDescrizione();
+    }
+
+    public List<Review> findRecensioni(int id_evento){
+        EventProxy eventProxy = new EventProxy(DBManager.getInstance().getEventDAO().findById(id_evento));
+        return eventProxy.getRecensioni();
+    }
+
+
     @Override
     public Event createEvent(Event event) throws Exception {
 
@@ -47,7 +71,7 @@ class EventService implements IEventService {
         }
 
         if(evento.getNome()==null || evento.getNome().isEmpty()){
-            throw new EventNotValid("Event.nome must not be null and not empty");
+            throw new EventNotValid("Event nome must not be null and not empty");
         }
 
         //TODO other checks..

@@ -9,11 +9,30 @@ import java.util.List;
 
 public class EventProxy extends Event {
 
+    public EventProxy(Event event) {
+        this.id = event.getId();
+        this.nome = event.getNome();
+        this.data = event.getData();
+        this.prezzo = event.getPrezzo();
+        this.citta=event.getCitta();
+        this.indirizzo=event.getIndirizzo();
+        this.numPartecipanti=event.getNumPartecipanti();
+        this.maxNumPartecipanti=event.getMaxNumPartecipanti();
+        this.etaMinima=event.getEtaMinima();
+    }
+
     public List<Category> getCategory(){
         if(this.categorie==null){
             this.categorie = DBManager.getInstance().getEventDAO().findCategories(this);
         }
         return categorie;
+    }
+
+    public String getDescrizione(){
+        if(this.descrizione==null){
+            this.descrizione = DBManager.getInstance().getEventDAO().findDescrizione(this);
+        }
+        return descrizione;
     }
 
     public List<Booking> getPrenotazioni(){

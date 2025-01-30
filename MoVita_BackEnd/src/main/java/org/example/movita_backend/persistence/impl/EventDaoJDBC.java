@@ -3,6 +3,7 @@ package org.example.movita_backend.persistence.impl;
 import org.example.movita_backend.model.Booking;
 import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
+import org.example.movita_backend.model.ResultSetMapper;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.EventDao;
 import org.example.movita_backend.persistence.proxy.EventProxy;
@@ -16,6 +17,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+
+
 @Component
 public class EventDaoJDBC implements EventDao {
     private final Connection connection;
@@ -59,7 +63,7 @@ public class EventDaoJDBC implements EventDao {
             ps.setInt(1,id);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                return mapEvent(rs);
+                return ResultSetMapper.mapEvent(rs);
             }
             return null;
         }catch (SQLException e){
@@ -76,7 +80,7 @@ public class EventDaoJDBC implements EventDao {
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Event e = mapEvent(rs);
+                Event e = ResultSetMapper.mapEvent(rs);
                 toRet.add(e);
             }
             return toRet;
@@ -120,7 +124,7 @@ public class EventDaoJDBC implements EventDao {
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-                Event e = mapEvent(rs);
+                Event e = ResultSetMapper.mapEvent(rs);
                 toRet.add(e);
             }
             return toRet;
@@ -172,27 +176,6 @@ public class EventDaoJDBC implements EventDao {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
-    }
-
-
-
-    private Event mapEvent(ResultSet rs) throws SQLException {
-        Event e = new EventProxy();
-
-        e.setId(rs.getInt("id"));
-        e.setNome(rs.getString("nome"));
-        e.setData(rs.getString("data")); // Considera se usare un tipo come LocalDate o Timestamp
-        e.setPrezzo(rs.getFloat("prezzo"));
-        e.setCitta(rs.getString("citta"));
-        e.setIndirizzo(rs.getString("indirizzo"));
-        e.setNumPartecipanti(rs.getInt("num_partecipanti"));
-        e.setMaxNumPartecipanti(rs.getInt("max_num_partecipanti"));
-        e.setEtaMinima(rs.getByte("eta_minima"));
-        //e.setDescrizione(rs.getString("descrizione")); //NO: effettuata con un proxy.
-        e.setValutazioneMedia(rs.getFloat("valutazione_media"));
-        e.setCreatore(DBManager.getInstance().getUserDAO().findById(rs.getInt("creatore")));
-
-        return e;
     }
 
     public int save(Event event) {

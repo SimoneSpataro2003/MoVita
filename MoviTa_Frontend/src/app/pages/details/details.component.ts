@@ -9,7 +9,7 @@ import { EventService } from '../../services/event/event.service';
   standalone: true,
   imports: [CardUtenteComponent, CommonModule],
   templateUrl: './details.component.html',
-  styleUrl: './details.component.css'
+  styleUrl: './details.component.css',
 })
 export class DetailsComponent {
 
@@ -24,10 +24,7 @@ export class DetailsComponent {
       this.eventService.getEventById(id).subscribe({
         next: (data) => this.evento = data,
         error: (err) => console.error('Errore nel recupero dettagli evento')
-      });
-    }
+      });      
+    }   
   } 
-
-
-
 }

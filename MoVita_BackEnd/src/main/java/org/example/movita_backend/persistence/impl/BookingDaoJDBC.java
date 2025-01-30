@@ -2,6 +2,7 @@ package org.example.movita_backend.persistence.impl;
 
 import org.example.movita_backend.model.Booking;
 import org.example.movita_backend.model.Event;
+import org.example.movita_backend.model.ResultSetMapper;
 import org.example.movita_backend.model.User;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.BookingDao;
@@ -15,6 +16,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.example.movita_backend.model.ResultSetMapper.mapBooking;
 
 @Component
 public class BookingDaoJDBC implements BookingDao {
@@ -36,7 +39,7 @@ public class BookingDaoJDBC implements BookingDao {
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Booking booking = mapBooking(rs);
+                Booking booking = ResultSetMapper.mapBooking(rs);
                 valuteToReturn.add(booking);
             }
             return valuteToReturn;
@@ -55,7 +58,7 @@ public class BookingDaoJDBC implements BookingDao {
             ps.setInt(1, event.getId());
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Booking booking = mapBooking(rs);
+                Booking booking = ResultSetMapper.mapBooking(rs);
                 valuteToReturn.add(booking);
             }
             return valuteToReturn;
@@ -74,7 +77,7 @@ public class BookingDaoJDBC implements BookingDao {
             ps.setInt(1, user.getId());
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Booking booking = mapBooking(rs);
+                Booking booking = ResultSetMapper.mapBooking(rs);
                 valuteToReturn.add(booking);
             }
             return valuteToReturn;
@@ -82,15 +85,6 @@ public class BookingDaoJDBC implements BookingDao {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
-    }
-
-    private Booking mapBooking(ResultSet rs) throws SQLException {
-        Booking booking = new Booking();
-        booking.setUtente(DBManager.getInstance().getUserDAO().findById(rs.getInt(1)));
-        booking.setEvento(DBManager.getInstance().getEventDAO().findById(rs.getInt(2)));
-        booking.setData(rs.getString(3));
-        booking.setAnnullata(rs.getBoolean(4));
-        return booking;
     }
 
     @Override
@@ -103,7 +97,7 @@ public class BookingDaoJDBC implements BookingDao {
             ps.setInt(2,evento.getId());
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                return mapBooking(rs);
+                return ResultSetMapper.mapBooking(rs);
             }
             return null;
         }catch (SQLException e){

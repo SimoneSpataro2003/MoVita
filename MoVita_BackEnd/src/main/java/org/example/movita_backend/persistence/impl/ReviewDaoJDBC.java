@@ -1,9 +1,6 @@
 package org.example.movita_backend.persistence.impl;
 
-import org.example.movita_backend.model.Booking;
-import org.example.movita_backend.model.Event;
-import org.example.movita_backend.model.Review;
-import org.example.movita_backend.model.User;
+import org.example.movita_backend.model.*;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.ReviewDao;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,7 +30,7 @@ public class ReviewDaoJDBC implements ReviewDao {
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Review review = mapReview(rs);
+                Review review = ResultSetMapper.mapReview(rs);
                 valuteToReturn.add(review);
             }
             return valuteToReturn;
@@ -43,16 +40,6 @@ public class ReviewDaoJDBC implements ReviewDao {
         }
     }
 
-    private Review mapReview(ResultSet rs) throws SQLException {
-        Review review = new Review();
-        review.setUtente(DBManager.getInstance().getUserDAO().findById(rs.getInt(1)));
-        review.setEvento(DBManager.getInstance().getEventDAO().findById(rs.getInt(2)));
-        review.setTitolo(rs.getString(3));
-        review.setDescrizione(rs.getString(4));
-        review.setValutazione(rs.getByte(5));
-        review.setDate(rs.getDate(6).toString());
-        return review;
-    }
 
     @Override
     public Review findById(User user, Event event) {
@@ -64,7 +51,7 @@ public class ReviewDaoJDBC implements ReviewDao {
             ps.setInt(2,event.getId());
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                return mapReview(rs);
+                return ResultSetMapper.mapReview(rs);
             }
             return null;
         }catch (SQLException e){
@@ -82,7 +69,7 @@ public class ReviewDaoJDBC implements ReviewDao {
             ps.setInt(1,event.getId());
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Review review = mapReview(rs);
+                Review review = ResultSetMapper.mapReview(rs);
                 valuteToReturn.add(review);
             }
             return valuteToReturn;
