@@ -98,7 +98,7 @@ public class CategoryDaoJDBC implements CategoryDao {
     @Override
     public List<Event> findEvents(Category category) {
         List<Event> events = new ArrayList<>();
-        String query = "SELECT e.* FROM evento e, evento_categoria ec WHERE e.id = ec.id_evento AND pc.id_categoria = ?";
+        String query = "SELECT e.* FROM evento e, evento_categoria ec WHERE e.id = ec.id_evento AND ec.id_categoria = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, category.getId());
