@@ -3,9 +3,13 @@ package org.example.movita_backend.controller;
 import lombok.Getter;
 import org.apache.coyote.Response;
 import org.example.movita_backend.exception.event.EventNotValid;
+import org.example.movita_backend.model.Booking;
 import org.example.movita_backend.model.Event;
+import org.example.movita_backend.model.Review;
 import org.example.movita_backend.services.impl.UserService;
+import org.example.movita_backend.services.interfaces.IBookingService;
 import org.example.movita_backend.services.interfaces.IEventService;
+import org.example.movita_backend.services.interfaces.IReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +25,12 @@ public class EventController {
 
     @Autowired
     IEventService eventService;
+
+    @Autowired
+    IBookingService bookingService;
+
+    @Autowired
+    IReviewService reviewService;
 
     // Memo Giuseppe da provare
 
@@ -41,6 +51,24 @@ public class EventController {
         Collection<Event> events = eventService.findByFilter(filter);
         return ResponseEntity.ok(events);
     }
+
+    @GetMapping("/get-event-booking")
+    ResponseEntity<Collection<Booking>> getEventBooking(@RequestParam(name = "eventId") int eventId){
+        Collection<Booking> bookings = bookingService.findByEvent(eventId);
+        return ResponseEntity.ok(bookings);
+    }
+
+    @GetMapping("/get-event-review")
+    ResponseEntity<Collection<Review>> getEventReview(@RequestParam(name = "eventId") int eventId){
+        Collection<Review> reviews = reviewService.findByEvent(eventId);
+        return ResponseEntity.ok(reviews);
+    }
+
+//    @GetMapping("/get-event-categories")      TODO SIMONE
+//    ResponseEntity<Collection<Category>> getEventCategory(@RequestParam(name = "eventId") int eventId){
+//        Collection<Category> category = ...;
+//        return ResponseEntity.ok(category);
+//    }
 
     @PostMapping("/create-event")
     ResponseEntity<Event> postCreateNewEvent(@RequestBody Event event) throws Exception {
