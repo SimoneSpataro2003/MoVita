@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Book;
 import java.util.Collection;
 import java.util.List;
 
@@ -75,6 +76,14 @@ public class EventController {
     {
         return  ResponseEntity.ok(
                 this.eventService.updateEvent(event)
+        );
+    }
+
+    @PostMapping("/book-event")
+    ResponseEntity<Booking> postBookEvent(@RequestBody Booking booking) throws Exception
+    {
+        return  ResponseEntity.ok(
+                this.bookingService.createBooking(booking)
         );
     }
 
