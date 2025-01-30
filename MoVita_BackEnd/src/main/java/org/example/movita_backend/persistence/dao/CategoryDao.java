@@ -12,6 +12,6 @@ public interface CategoryDao {
     List<Category> findByName(String keyword);
 
     //associazioni
-    List<Category> findCategoriesOfUser(User user);
-    List<Category> findCategoriesOfEvent(Event event);
+    List<User> findUsers(Category category);
+    List<Event> findEvents(Category category);
 }

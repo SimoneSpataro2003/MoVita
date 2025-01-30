@@ -2,6 +2,7 @@ package org.example.movita_backend.persistence.impl;
 
 import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
+import org.example.movita_backend.model.ResultSetMapper;
 import org.example.movita_backend.model.User;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.CategoryDao;
@@ -9,6 +10,8 @@ import org.example.movita_backend.persistence.dao.CategoryDao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.example.movita_backend.model.ResultSetMapper.*;
 
 public class CategoryDaoJDBC implements CategoryDao {
     private final Connection connection;
@@ -74,17 +77,17 @@ public class CategoryDaoJDBC implements CategoryDao {
     }
 
     @Override
-    public List<Category> findCategoriesOfUser(User user) {
-        List<Category> categories = new ArrayList<>();
-        String query = "SELECT * FROM categoria c, persona_categoria pc WHERE c.id = pc.id_categoria AND pc.id_persona = ?";
+    public List<User> findUsers(Category category) {
+        List<User> interestedUsers = new ArrayList<>();
+        String query = "SELECT u.* FROM utente u, persona_categoria pc WHERE u.id = pc.id_persona AND pc.id_categoria = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, user.getId());
+            ps.setInt(1, category.getId());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                categories.add(mapCategory(rs));
+                interestedUsers.add(mapUser(rs));
             }
-            return categories;
+            return interestedUsers;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -93,31 +96,21 @@ public class CategoryDaoJDBC implements CategoryDao {
     }
 
     @Override
-    public List<Category> findCategoriesOfEvent(Event event) {
-        List<Category> categories = new ArrayList<>();
-        String query = "SELECT * FROM categoria c, evento_categoria ec WHERE c.id = ec.id_categoria AND ec.id_evento = ?";
+    public List<Event> findEvents(Category category) {
+        List<Event> events = new ArrayList<>();
+        String query = "SELECT e.* FROM evento e, evento_categoria ec WHERE e.id = ec.id_evento AND pc.id_categoria = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, event.getId());
+            ps.setInt(1, category.getId());
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                categories.add(mapCategory(rs));
+                events.add(mapEvent(rs));
             }
-            return categories;
+            return events;
 
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Couldn't find categories", e);
         }
     }
-
-
-    private Category mapCategory(ResultSet rs) throws SQLException {
-        Category category = new Category();
-        category.setId(rs.getInt("id"));
-        category.setNome(rs.getString("nome"));
-        category.setDescrizione(rs.getString("descrizione"));
-        return category;
-    }
-
 }

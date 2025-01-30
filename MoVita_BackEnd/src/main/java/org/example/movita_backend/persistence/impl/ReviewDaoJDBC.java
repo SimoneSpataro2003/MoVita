@@ -128,7 +128,6 @@ public class ReviewDaoJDBC implements ReviewDao {
             statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
-
         }
     }
 

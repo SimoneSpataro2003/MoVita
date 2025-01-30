@@ -7,23 +7,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Getter
+@Setter
 public class Category {
     //FIXME (SIMONE): correggi. Il proxy sovrascrive il metodo getter per definire i dati (vedi il proxy di Evento.)
 
-    @Setter
-    @Getter
     protected int id;
 
-    @Setter
-    @Getter
     protected String nome;
 
-    @Setter
-    @Getter
     protected String descrizione;
 
-    // Relations
-    //TODO (SIMONE): PROXY CATEGORIA
+    // Relation
     protected List<User> utentiInteressati;
     protected List<Event> eventi;
 }
