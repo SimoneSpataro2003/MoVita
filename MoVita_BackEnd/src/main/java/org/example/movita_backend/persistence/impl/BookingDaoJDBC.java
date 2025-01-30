@@ -21,11 +21,10 @@ public class BookingDaoJDBC implements BookingDao {
 
     // Memo Giuseppe da provare
     private final Connection connection;
-    private final InMemoryUserDetailsManager inMemoryUserDetailsManager;
 
-    public BookingDaoJDBC(InMemoryUserDetailsManager inMemoryUserDetailsManager){
+
+    public BookingDaoJDBC(){
         this.connection = DBManager.getInstance().getConnection();
-        this.inMemoryUserDetailsManager = inMemoryUserDetailsManager;
     }
 
 
