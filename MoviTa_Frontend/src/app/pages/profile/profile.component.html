@@ -1,0 +1,12 @@
+@if (user)
+{
+  <div>
+    <h1>Profile dell'utente: {{ user.nome }}</h1>
+    <p>Email: {{ user.email }}</p>
+    <p>Indirizzo: {{ user.citta }}</p>
+  </div>
+}
+@else
+{
+  <p>Caricamento...</p>
+}

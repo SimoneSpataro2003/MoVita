@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -10,4 +10,9 @@ import { RouterModule } from '@angular/router';
 })
 export class HeaderComponent {
 
+  constructor(private router: Router) {}
+
+    goToProfile(userId: number) {
+    this.router.navigate(['/profile', userId]);
+  }
 }

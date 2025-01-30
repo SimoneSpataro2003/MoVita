@@ -1,5 +1,6 @@
 package org.example.movita_backend.persistence.proxy;
 
+import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.Payment;
 import org.example.movita_backend.model.User;
 import org.example.movita_backend.persistence.DBManager;
@@ -69,6 +70,13 @@ public class UserProxy extends User {
             this.utentiCercati = DBManager.getInstance().getUserDAO().findUserByUsername(filter);
         }
         return super.utentiCercati;
+    }
+
+    public List<Event> getCreatedEvents() {
+        if(super.eventiCreati == null) {
+            this.eventiCreati = DBManager.getInstance().getUserDAO().getCreatedEventsByUserId(this.getId());
+        }
+        return super.eventiCreati;
     }
 
     private User mapUser(ResultSet rs) throws SQLException {

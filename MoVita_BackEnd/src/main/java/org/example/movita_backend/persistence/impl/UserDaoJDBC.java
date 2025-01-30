@@ -1,5 +1,7 @@
 package org.example.movita_backend.persistence.impl;
 
+import org.example.movita_backend.model.Event;
+import org.example.movita_backend.model.ResultSetMapper;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.UserDao;
 import org.example.movita_backend.model.User;
@@ -394,7 +396,7 @@ public class UserDaoJDBC implements UserDao {
     public void makeFriendships(int UserId1, int UserId2)
     {
         String query = "INSERT INTO amicizia " +
-                "(amico1, amico2)" +
+                "(id_utente1, id_utente2)" +
                 "VALUES " +
                 "(?,?)";
 
@@ -414,7 +416,7 @@ public class UserDaoJDBC implements UserDao {
 
     @Override
     public void deleteFriendships(int UserId1, int UserId2) {
-        String query = "DELETE FROM amicizia WHERE amico1 = ? AND amico = ?";
+        String query = "DELETE FROM amicizia WHERE id_utente1 = ? AND id_utente2 = ?";
 
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ps.setInt(1, UserId1);
@@ -425,6 +427,46 @@ public class UserDaoJDBC implements UserDao {
             e.printStackTrace();
             throw new RuntimeException("Couldn't delete friendship user.");
         }
+    }
+
+    @Override
+    public int countFriends(int userId) {
+        String query = "SELECT COUNT(*) FROM amicizia WHERE id_utente1 = ? OR id_utente2 = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            ps.setInt(2, userId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Couldn't count friendships.");
+        }
+
+        return 0;
+    }
+
+    public List<Event> getCreatedEventsByUserId(int userId) {
+        String query = "SELECT * FROM evento WHERE evento.creatore = ?";
+        List<Event> toRet = new ArrayList<>();
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, userId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    toRet.add(ResultSetMapper.mapEvent(rs));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Couldn't get created events.");
+        }
+        return toRet;
     }
 
     private User mapUser(ResultSet rs) throws SQLException {
