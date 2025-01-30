@@ -10,5 +10,5 @@ import { CommonModule } from '@angular/common';
 })
 export class CardUtenteComponent {
   @Input() image!:string;
-  @Input() username!:number;
+  @Input() username!:string;
 }

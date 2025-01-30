@@ -2,7 +2,7 @@
 
     <div class="row mb-3 ">
         <section class="col-10 border p-4">
-            <h1>{{eventi[0].nome}}</h1>
+            <h1>{{evento?.nome}}</h1>
         </section>
         <section class="col-2 border p-3 justify-content-center align-items-center ">
 
@@ -12,7 +12,7 @@
     <div class="row">
         <div class=" border col-md-8 p-0">
             <section class="border p-3 m-3">
-                {{eventi[0].creatore}}
+                {{evento?.creatore}}
             </section>
 
             <section class="border p-3 m-3">
@@ -27,9 +27,9 @@
         <div class="border col-md-4 mb-3 ">
             <section class="border p-3 mb-3">
                 <ul>
-                    <li>Capienza: {{eventi[0].maxNumPartecipanti}}</li>
+                    <li>Capienza: {{evento?.maxNumPartecipanti}}</li>
                     <li>Eta minima: AGGIUNGERE AD INTERFACCIA</li>
-                    <li>Prezzo: {{eventi[0].prezzo}}</li>
+                    <li>Prezzo: {{evento?.prezzo}}</li>
                 </ul>
             </section>
             <section class="border p-3">
@@ -43,7 +43,7 @@
             <h2>Descrizione</h2>
 
             <div class="border p-3 m-3">
-                <p>{{eventi[0].descrizione}}</p>
+                <p>{{evento?.descrizione}}</p>
             </div>
 
         </article>
@@ -54,7 +54,7 @@
 
 
             Riutilizzabile
-            <app-card-utente *ngFor="let prenototazione of eventi[0].prenotazioni" [username]="prenototazione.utente.id"></app-card-utente>
+            <app-card-utente *ngFor="let prenototazione of evento?.prenotazioni" [username]="prenototazione.utente.username"></app-card-utente>
 
         </div>
     </section>
