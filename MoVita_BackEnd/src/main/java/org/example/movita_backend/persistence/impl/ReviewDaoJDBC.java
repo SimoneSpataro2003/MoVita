@@ -56,7 +56,7 @@ public class ReviewDaoJDBC implements ReviewDao {
 
     @Override
     public Review findById(User user, Event event) {
-        String query = "SELECT * FROM recensioni WHERE id_utente = ? and id_evento = ?";
+        String query = "SELECT * FROM recensione WHERE id_utente = ? and id_evento = ?";
         List<Event> valuteToReturn = new ArrayList<>();
 
         try(PreparedStatement ps = connection.prepareStatement(query)){
@@ -74,8 +74,27 @@ public class ReviewDaoJDBC implements ReviewDao {
     }
 
     @Override
+    public List<Review> findByEvent(Event event) {
+        String query = "SELECT * FROM recensione WHERE id_evento = ?";
+        List<Review> valuteToReturn = new ArrayList<>();
+
+        try(PreparedStatement ps = connection.prepareStatement(query)){
+            ps.setInt(1,event.getId());
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Review review = mapReview(rs);
+                valuteToReturn.add(review);
+            }
+            return valuteToReturn;
+        }catch (SQLException e){
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    @Override
     public Review update(Review review) {
-        String query = "UPDATE recensioni SET " +
+        String query = "UPDATE recensione SET " +
                 "id_utente=?,id_evento=?,titolo=?,descrizione=?,valutazione=?,data=?"+
                 "WHERE id_utente = ? and id_evento = ?";
 

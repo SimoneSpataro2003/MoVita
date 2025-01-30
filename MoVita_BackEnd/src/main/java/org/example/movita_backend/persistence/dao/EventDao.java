@@ -16,7 +16,7 @@ public interface EventDao {
     String findDescrizione(Event e);
 
     //associazioni
-    List<Category> findCategories(int id);
+    List<Category> findCategories(Event event);
     //TODO: ALTRI
 
     int save(Event event);

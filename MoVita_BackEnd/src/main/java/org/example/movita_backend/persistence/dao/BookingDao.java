@@ -9,6 +9,7 @@ import java.util.List;
 public interface BookingDao {
 
     List<Booking> findAll();
+    List<Booking> findByEvent(Event event);
     Booking findById(User user,Event event);
     Booking update(Booking booking);
     void save(Booking booking);

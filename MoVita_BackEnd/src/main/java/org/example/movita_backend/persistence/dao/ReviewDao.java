@@ -12,6 +12,7 @@ public interface ReviewDao {
 
     List<Review> findAll();
     Review findById(User user, Event event);
+    List<Review> findByEvent(Event event);
     Review update(Review booking);
     void save(Review booking);
 
