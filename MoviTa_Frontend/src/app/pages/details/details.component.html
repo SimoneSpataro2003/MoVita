@@ -54,7 +54,7 @@
 
 
             Riutilizzabile
-            <app-card-utente *ngFor="let utente of eventi[0].prenotazioni" [username]="utente.id_utente"></app-card-utente>
+            <app-card-utente *ngFor="let prenototazione of eventi[0].prenotazioni" [username]="prenototazione.utente.id"></app-card-utente>
 
         </div>
     </section>

@@ -23,7 +23,7 @@ public class CategoryDaoJDBC implements CategoryDao {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                categories.add(convertResultSetToCategory(rs));
+                categories.add(mapCategory(rs));
             }
 
         } catch (SQLException e) {
@@ -41,10 +41,10 @@ public class CategoryDaoJDBC implements CategoryDao {
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, idCategoria);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    category = convertResultSetToCategory(rs);
-                }
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                category = mapCategory(rs);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -57,24 +57,62 @@ public class CategoryDaoJDBC implements CategoryDao {
     @Override
     public List<Category> findByName(String nomeCategoria) {
         List<Category> categories = new ArrayList<>();
-        String query = "SELECT * FROM categoria WHERE nome = ?";
+        String query = "SELECT * FROM categoria WHERE nome LIKE ?";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setString(1, "%" + nomeCategoria + "%");
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    categories.add(convertResultSetToCategory(rs));
-                }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                categories.add(mapCategory(rs));
             }
+            return categories;
+
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException("Couldn't find that category", e);
         }
-
-        return categories;
     }
 
-    private Category convertResultSetToCategory(ResultSet rs) throws SQLException {
+    @Override
+    public List<Category> findCategoriesOfUser(User user) {
+        List<Category> categories = new ArrayList<>();
+        String query = "SELECT * FROM categoria c, persona_categoria pc WHERE c.id = pc.id_categoria AND pc.id_persona = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, user.getId());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                categories.add(mapCategory(rs));
+            }
+            return categories;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Couldn't find categories", e);
+        }
+    }
+
+    @Override
+    public List<Category> findCategoriesOfEvent(Event event) {
+        List<Category> categories = new ArrayList<>();
+        String query = "SELECT * FROM categoria c, evento_categoria ec WHERE c.id = ec.id_categoria AND ec.id_evento = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, event.getId());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                categories.add(mapCategory(rs));
+            }
+            return categories;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Couldn't find categories", e);
+        }
+    }
+
+
+    private Category mapCategory(ResultSet rs) throws SQLException {
         Category category = new Category();
         category.setId(rs.getInt("id"));
         category.setNome(rs.getString("nome"));
@@ -82,13 +120,4 @@ public class CategoryDaoJDBC implements CategoryDao {
         return category;
     }
 
-    @Override
-    public User findInterestedUser(int id) {
-        return null;
-    }
-
-    @Override
-    public List<Event> findEvents(int id) {
-        return List.of();
-    }
 }
