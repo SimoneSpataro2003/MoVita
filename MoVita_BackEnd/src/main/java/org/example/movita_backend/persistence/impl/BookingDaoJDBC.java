@@ -135,7 +135,7 @@ public class BookingDaoJDBC implements BookingDao {
             statement.setInt(1, booking.getUtente().getId());
             statement.setInt(2, booking.getEvento().getId());
             statement.setTimestamp(3, java.sql.Timestamp.valueOf(booking.getData()));
-            statement.setString(4, booking.getData());
+            statement.setBoolean(4, booking.getAnnullata());
 
             statement.executeUpdate();
 
