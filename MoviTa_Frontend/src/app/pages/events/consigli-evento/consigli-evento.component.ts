@@ -18,10 +18,10 @@ import {NgClass} from '@angular/common';
 export class ConsigliEventoComponent implements OnInit,Loadable{
   @Input() thisModal!: NgbModalRef;
   categorie !: Categoria[];
-  categorieScelte = new Array<Categoria>();
+  categorieScelte = new Array<number>();
   loaded: boolean = false;
 
-  constructor(private categoriyService:CategoryService) {
+  constructor(private categoryService:CategoryService) {
 
   }
 
@@ -30,11 +30,25 @@ export class ConsigliEventoComponent implements OnInit,Loadable{
   }
 
   showAllCategories(){
-    this.categoriyService.findAll().subscribe({
+    this.categoryService.findAll().subscribe({
       next: (categorie: Categoria[]) =>{
         this.categorie = categorie;
         //console.log(eventi);
         this.loaded = true;
+      },
+      error:(err) =>{
+        //TODO: mostra errore con una finestra popup!
+        console.log(err)
+      }
+    })
+  }
+
+  insertUserCategories() {
+    //TODO: devi prendere il profilo dell'utente dai cookie!
+    this.categoryService.insertUserCategories(3,this.categorieScelte).subscribe({
+      next: () =>{
+        //TODO: mostra succecco con una finestra popup!
+        console.log("fatto!")
       },
       error:(err) =>{
         //TODO: mostra errore con una finestra popup!
@@ -52,16 +66,15 @@ export class ConsigliEventoComponent implements OnInit,Loadable{
   }
 
   select(categoria: Categoria) {
-    const index = this.categorieScelte.indexOf(categoria);
+    const index = this.categorieScelte.indexOf(categoria.id);
     if (index !== -1) {
       this.categorieScelte.splice(index, 1);  // Rimuove 1 elemento all'indice trovato
     }else{
-      this.categorieScelte.push(categoria);
+      this.categorieScelte.push(categoria.id);
     }
   }
 
   isSelected(categoria:Categoria){
-    return this.categorieScelte.includes(categoria);
+    return this.categorieScelte.includes(categoria.id);
   }
-
 }

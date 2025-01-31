@@ -156,7 +156,7 @@ public class EventDaoJDBC implements EventDao {
     @Override
     public List<Category> findCategories(Event event) {
         List<Category> categorie = new ArrayList<>();
-        String query = "SELECT c.nome FROM categoria c " +
+        String query = "SELECT c.* FROM categoria c " +
                 "JOIN evento_categoria ec ON c.id = ec.id_categoria " +
                 "WHERE ec.id_evento = ?";
 

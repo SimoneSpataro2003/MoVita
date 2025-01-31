@@ -21,7 +21,9 @@ public class EventProxy extends Event {
         this.etaMinima=event.getEtaMinima();
     }
 
-    public List<Category> getCategory(){
+    //FIXME(GIUSEPPE): sovrascrivi i getter corretti (usa @Override per maggiore sicurezza)
+    @Override
+    public List<Category> getCategorie(){
         if(this.categorie==null){
             this.categorie = DBManager.getInstance().getEventDAO().findCategories(this);
         }

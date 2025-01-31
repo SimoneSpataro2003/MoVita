@@ -33,6 +33,13 @@ export class CategoryService {
     return this.authHttp.get(this.URL +`/find-events-by-category/${categoryId}`);
   }
 
+  insertUserCategories(utente_id:number, categorie_id: number[]){
+    const body = {utente_id: utente_id, categorie_id: categorie_id}
+    return this.authHttp.post(this.URL+'/insert-user-categories',body);
+  }
 
-
+  insertEventCategories(evento_id:number, categorie_id: number[]){
+    const body = {evento_id: evento_id, categorie_id: categorie_id}
+    return this.authHttp.post(this.URL+'/insert-user-categories',body);
+  }
 }
