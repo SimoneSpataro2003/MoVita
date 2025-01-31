@@ -42,19 +42,19 @@ public class EventController {
         return ResponseEntity.ok(allEvents);
     }
 
-    @GetMapping("/get-event-by-id/eventId")
+    @GetMapping("/get-event-by-id/{eventId}")
     ResponseEntity<Event> getEventById(@PathVariable int eventId){
         Event event = eventService.findById(eventId);
         return ResponseEntity.ok(event);
     }
 
-    @GetMapping("/get-event-by-filter/filter")
+    @GetMapping("/get-event-by-filter/{filter}")
     ResponseEntity<Collection<Event>> getEventByFilter(@PathVariable String filter){
         Collection<Event> events = eventService.findByFilter(filter);
         return ResponseEntity.ok(events);
     }
 
-    @GetMapping("/get-event-by-user/user")
+    @GetMapping("/get-event-by-user/{user}")
     ResponseEntity<Collection<Booking>> getEventByUser(@PathVariable int user){
         Collection<Booking> events = bookingService.findByUser(user);
         return ResponseEntity.ok(events);
