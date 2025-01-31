@@ -17,14 +17,13 @@ export class EventService {
   }
 
   public getEventById(id: number):Observable<Evento>{
-    return this.authHttp.get(this.URL +`/get-event-by-id/${id}`);
+    return this.authHttp.get(this.URL +'/get-event-by-id');
   }
-
+  
   public getPartecipazioniByEvent(id: number):Observable<Partecipazione[]>{
     return this.authHttp.get(this.URL +`/get-booking-by-event/${id}`);
   }
 
- 
   public getCategories(evento_id:number){
     return this.authHttp.get(this.URL +`/get-categories/${evento_id}`);
   }
