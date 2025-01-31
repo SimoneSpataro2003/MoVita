@@ -53,10 +53,16 @@ public class EventController {
         return ResponseEntity.ok(events);
     }
 
-    @GetMapping("/get-event-by-user/{user}")
-    ResponseEntity<Collection<Booking>> getEventByUser(@PathVariable int user){
-        Collection<Booking> events = bookingService.findByUser(user);
-        return ResponseEntity.ok(events);
+    @GetMapping("/get-booking-by-user/{user}")
+    ResponseEntity<Collection<Booking>> getBookingByUser(@PathVariable int user){
+        Collection<Booking> bookings = bookingService.findByUser(user);
+        return ResponseEntity.ok(bookings);
+    }
+
+    @GetMapping("/get-booking-by-event/{event}")
+    ResponseEntity<Collection<Booking>> getBookingByEvent(@PathVariable int event){
+        Collection<Booking> bookings = bookingService.findByEvent(event);
+        return ResponseEntity.ok(bookings);
     }
 
     @PostMapping("/create-event")

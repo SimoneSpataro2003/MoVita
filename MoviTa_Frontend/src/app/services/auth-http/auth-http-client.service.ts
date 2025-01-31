@@ -14,7 +14,7 @@ export class AuthHttpClientService{
   private headers: HttpHeaders;
   constructor(private http: HttpClient){
     //TODO: ottieni il cookie attraverso localStorage o ngx-cookie(da installare!)
-    this.token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNb2x0bzEyIiwiaWF0IjoxNzM4MjUwNDY0LCJleHAiOjE3Mzg4NTUyNjR9.31udB4fxvlHcZXkJ6PrF347wmjR-lP89xuLrXhrFAA0';
+    this.token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJnaWdnaSIsImlhdCI6MTczODM0NTgyMCwiZXhwIjoxNzM4OTUwNjIwfQ.poPLiripGLLVnwHSQxfVWZoYB7Z6L9xg5NgRVPoGcT8';
     this.headers = new HttpHeaders();
 
     //una volta ottenuto il cookie, costruisco il mio header.

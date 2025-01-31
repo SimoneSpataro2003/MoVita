@@ -15,7 +15,7 @@ export const routes: Routes = [
     children:[
       {path: '', component:HomeComponent},
       {path: 'events', component: EventsComponent},
-      {path: 'event-details', component: DetailsComponent},
+      {path: 'event-details/:id', component: DetailsComponent},
       { path: 'profile/:id', component: ProfileComponent }
     ]
     //canActivate:[authGuard] <-- per evitare accessi se non presente il token

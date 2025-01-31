@@ -1,67 +1,77 @@
 <main class="container">
 
-    <div class="row mb-3 ">
-        <section class="col-10 border p-4">
+    <div class="sticky-top content-area shadow border-0 rounded-4 bg-white row m-3 ">
+        <section class="col-10   p-4">
             <h1>{{evento?.nome}}</h1>
         </section>
-        <section class="col-2 border p-3 justify-content-center align-items-center ">
-
-            <button type="button" class="btn btn-primary">Partecipa</button>
-        </section>
+        <section class="col-2 p-3 d-flex justify-content-center  align-items-center">
+            <button type="button" class="btn btn-lg btn-primary">Partecipa</button>
+          </section>
     </div>
+
     <div class="row">
-        <div class=" border col-md-8 p-0">
-            <section class="border p-3 m-3">
-                {{evento?.creatore}}
+        <div class="col-md-8 p-0">
+            <section class="shadow border-0 rounded-4 bg-white   p-3 m-3">
+                <img src="https://placehold.co/50x50"class="img-fluid rounded-circle ">
+                {{evento?.creatore?.username}}
             </section>
 
-            <section class="border p-3 m-3">
+            <section class="shadow border-0 rounded-4 bg-white   p-3 m-3">
                 <div class="container ">
-                    <img src="img/home_create.jpg" class="img-thumbnail" alt="...">
+                    <img src="img/home_create.jpg" class="img-fluid" alt="...">
 
                 </div>
             </section>
 
         </div>
 
-        <div class="border col-md-4 mb-3 ">
-            <section class="border p-3 mb-3">
-                <ul>
-                    <li>Capienza: {{evento?.maxNumPartecipanti}}</li>
-                    <li>Eta minima: AGGIUNGERE AD INTERFACCIA</li>
-                    <li>Prezzo: {{evento?.prezzo}}</li>
-                </ul>
+        <div class="col-md-4 mb-3 ">
+            <section class="shadow rounded-4  p-3 mb-3">          
+                <ul class="bg-transparent rounded-4 bg-white list-group">    
+                    <li class="bg-transparent border-0 list-group-item">Data: {{evento?.data}}</li>
+                    <li class="bg-transparent border-0 list-group-item">Indirizzo: {{evento?.indirizzo}}</li>
+                    <li class="bg-transparent border-0 list-group-item">Citta: {{evento?.citta}}</li>
+                    <li class="bg-transparent border-0 list-group-item"># Partecipanti: {{evento?.numPartecipanti}}</li>
+                    <li class="bg-transparent border-0 list-group-item">Prezzo: {{evento?.prezzo}}</li>                
+                    <li class="bg-transparent border-0 list-group-item">Capienza: {{evento?.maxNumPartecipanti}}</li>
+                    <li class="bg-transparent border-0 list-group-item">Eta minima: {{evento?.etaMinima}}</li>
+                    <li class="bg-transparent border-0 list-group-item">Valutazione: {{evento?.prezzo}}</li>
+                  </ul>
             </section>
-            <section class="border p-3">
+            <section class="  p-3">
                 Mappa
-                <img src="..." class="img-thumbnail" alt="...">
+                <img  src="..." class=" img-thumbnail" alt="...">
             </section>
         </div>
     </div>
     <section class="row">
-        <article class=" border col-md-8 p-3">
+        <article class="shadow rounded-4  col-md-8 p-3 m-3">
             <h2>Descrizione</h2>
 
-            <div class="border p-3 m-3">
+            <div class="  p-3 m-3">
                 <p>{{evento?.descrizione}}</p>
             </div>
 
         </article>
     </section>
     <section class="row">
-        <div class=" border col-md-8 p-3">
+        <div class="shadow rounded-4 col-md-8 p-3 m-3">
             <h2>Partecipanti</h2>
-
-
-            Riutilizzabile
-            <app-card-utente *ngFor="let prenototazione of evento?.prenotazioni" [username]="prenototazione.utente.username"></app-card-utente>
-
+            <div class="row">
+                @for (item of partecipazioni; track item.utente.username) {
+                    <div class="col-md-3">
+                        <app-card-utente [username]="item.utente.username"></app-card-utente>   
+                    </div>
+                                 
+                    } @empty {
+                    There are no items.
+                }
+            </div>
         </div>
     </section>
     <section class="row">
-        <div class=" border col-md-8 p-3">
-            <h2>Eventi Simili</h2>
-            Riutilizzabile
+        <div class="shadow rounded-4 col-md-8 p-3 m-3">
+            <h2>Eventi Simili</h2>       
             <div class="card" style="width: 18rem;">
                 <img src="..." class="card-img-top" alt="...">
                 <div class="card-body">
@@ -75,7 +85,7 @@
         </div>
     </section>
     <section class="row">
-        <div class=" border col-md-8 p-3">
+        <div class="shadow rounded-4 col-md-8 p-3 m-3">
             <h2>Recensioni </h2>
 
             <article>
