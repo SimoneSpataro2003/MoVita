@@ -11,5 +11,4 @@ import {Evento} from '../../../model/Evento';
 export class EventCardComponent {
   @Input() evento!: Evento
 
-
 }

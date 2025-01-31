@@ -1,5 +1,6 @@
 package org.example.movita_backend.persistence.dao;
 
+import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.User;
 
 import java.util.List;
@@ -27,8 +28,11 @@ public interface UserDao {
     List<User> findFriends(int id);
     List<User> findUserByUsername(String username);
 
+    int countFriends(int userId);
     void makeFriendships(int UserId1, int UserId2);
     void deleteFriendships(int UserId1, int UserId2);
+
+    List<Event> getCreatedEventsByUserId(int userId);
 
 
     //TODO: ALTRI

@@ -23,6 +23,22 @@ public class UserController
         this.userService = userService;
     }
 
+    @GetMapping("/get-user/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable int userId)
+    {
+        try
+        {
+            System.out.println("ciao");
+            User user = userService.getUserById(userId);
+            System.out.println(user.getUsername());
+            return ResponseEntity.ok(user);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/make-friendship/{userId1}/{userId2}")
     public ResponseEntity<String> createFriendship(@PathVariable int userId1, @PathVariable int userId2)
     {
@@ -83,6 +99,21 @@ public class UserController
         {
             System.err.println("Error finding friends: " + e.getMessage());
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/count-friends/{userId}")
+    public ResponseEntity<Integer> countFriendships(@PathVariable int userId)
+    {
+        try
+        {
+            int count = userService.countFriendships(userId);
+            return ResponseEntity.status(HttpStatus.OK).body(count);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error counting friendships: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

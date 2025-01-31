@@ -3,9 +3,10 @@ package org.example.movita_backend.persistence.impl;
 import org.example.movita_backend.model.Booking;
 import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
+import org.example.movita_backend.model.ResultSetMapper;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.EventDao;
-import org.example.movita_backend.persistence.proxy.EventProxy;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.example.movita_backend.model.ResultSetMapper.mapEvent;
+
 
 @Component
 public class EventDaoJDBC implements EventDao {
@@ -62,7 +63,7 @@ public class EventDaoJDBC implements EventDao {
             ps.setInt(1,id);
             ResultSet rs = ps.executeQuery();
             if(rs.next()){
-                return mapEvent(rs);
+                return ResultSetMapper.mapEvent(rs);
             }
             return null;
         }catch (SQLException e){
@@ -79,7 +80,7 @@ public class EventDaoJDBC implements EventDao {
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Event e = mapEvent(rs);
+                Event e = ResultSetMapper.mapEvent(rs);
                 toRet.add(e);
             }
             return toRet;
@@ -123,7 +124,7 @@ public class EventDaoJDBC implements EventDao {
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-                Event e = mapEvent(rs);
+                Event e = ResultSetMapper.mapEvent(rs);
                 toRet.add(e);
             }
             return toRet;
@@ -177,6 +178,7 @@ public class EventDaoJDBC implements EventDao {
         }
     }
 
+    //FIXME: USA mapEvent
     public int save(Event event) {
 
         String query = "INSERT INTO evento (nome, data, prezzo, citta, indirizzo, num_partecipanti, max_num_partecipanti, eta_minima, descrizione, valutazione_media, creatore) " +

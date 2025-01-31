@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.awt.print.Book;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,20 +41,20 @@ public class EventController {
         return ResponseEntity.ok(allEvents);
     }
 
-    @GetMapping("/get-event-by-id")
-    ResponseEntity<Event> getEventById(@RequestParam(name = "eventId") int eventId){
+    @GetMapping("/get-event-by-id/eventId")
+    ResponseEntity<Event> getEventById(@PathVariable int eventId){
         Event event = eventService.findById(eventId);
         return ResponseEntity.ok(event);
     }
 
-    @GetMapping("/get-event-by-filter")
-    ResponseEntity<Collection<Event>> getEventByFilter(@RequestParam(name = "filter")  String filter){
+    @GetMapping("/get-event-by-filter/filter")
+    ResponseEntity<Collection<Event>> getEventByFilter(@PathVariable String filter){
         Collection<Event> events = eventService.findByFilter(filter);
         return ResponseEntity.ok(events);
     }
 
-    @GetMapping("/get-event-by-user")
-    ResponseEntity<Collection<Booking>> getEventByUser(@RequestParam(name = "user")  int user){
+    @GetMapping("/get-event-by-user/user")
+    ResponseEntity<Collection<Booking>> getEventByUser(@PathVariable int user){
         Collection<Booking> events = bookingService.findByUser(user);
         return ResponseEntity.ok(events);
     }
@@ -75,6 +76,14 @@ public class EventController {
     {
         return  ResponseEntity.ok(
                 this.eventService.updateEvent(event)
+        );
+    }
+
+    @PostMapping("/book-event")
+    ResponseEntity<Booking> postBookEvent(@RequestBody Booking booking) throws Exception
+    {
+        return  ResponseEntity.ok(
+                this.bookingService.createBooking(booking)
         );
     }
 
