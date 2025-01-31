@@ -1,46 +1,60 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { LoginService } from '../../services/login/login.service';
+import {AuthService} from '../../services/auth/auth.service';
+import {CookieService} from 'ngx-cookie-service';
+import {UserService} from '../../services/user/user.service';
+import {Utente} from '../../model/Utente';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  template: `
-  <section class="listing-apply">
-        <h2 class="section-heading">Esegui il login</h2>
-        <form [formGroup]="applyForm" (submit)="submitApplication()">
-          <label for="first-name">Email</label>
-          <input id="first-name" type="text" formControlName="email">
-
-          <label for="last-name">Password</label>
-          <input id="last-name" type="password" formControlName="password">
-
-          <button type="submit" class="primary">Login</button>
-        </form>
-      </section>
-  `,
-  styleUrl: './login.component.css'
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   route: ActivatedRoute = inject(ActivatedRoute);
-  loginService = inject(LoginService);
+  router = inject(Router);
 
   applyForm = new FormGroup({
-    email: new FormControl(''),
+    username: new FormControl(''),
     password: new FormControl('')
   });
 
-  constructor() {
-    //costruttore
+  constructor(private authService: AuthService,
+              private cookieService: CookieService,
+              private userService: UserService){}
+
+  login(){
+    const body = {username: this.applyForm.value.username, password: this.applyForm.value.password};
+    this.authService.login(body).subscribe({
+      next: (body:any) =>{
+        this.cookieService.set('token', body.token);
+        console.log(this.cookieService.get('token'));
+        this.getUser();
+      },
+      error: (any) =>{
+        //TODO: mostra popup di errore
+      }
+    });
   }
 
-  submitApplication() {
-    this.loginService.submitApplication(
-      this.applyForm.value.email ?? '',
-      this.applyForm.value.password ?? '',
-    );
+  getUser(){
+    this.userService.getUserByUsername(this.applyForm.value.username||'').subscribe({
+      next: (utente: Utente) =>{
+        this.cookieService.set('utente', JSON.stringify(utente));
+        const a = JSON.parse(this.cookieService.get('utente'));
+        console.log(a);
+      },
+      error: (any) =>{
+        //TODO: mostra popup di errore
+      }
+    });
+  }
+
+  goHome() {
+    this.router.navigate(['/']);
   }
 }

@@ -26,7 +26,7 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public User findByUsername(String username) {
+    public User getUserByUsername(String username) {
         return userDao.findByUsername(username);
     }
 

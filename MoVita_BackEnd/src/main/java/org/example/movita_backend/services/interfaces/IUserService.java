@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IUserService {
     User getUserById(int userId);
-    User findByUsername(String username);
+    User getUserByUsername(String username);
     void makeFriendship(int userId1, int userId2);
     void deleteFriendship(int userId1, int userId2);
     List<User> searchUsers(String filter);

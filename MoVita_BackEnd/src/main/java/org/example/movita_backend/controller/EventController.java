@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.apache.coyote.Response;
 import org.example.movita_backend.exception.event.EventNotValid;
 import org.example.movita_backend.model.Booking;
+import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.Review;
 import org.example.movita_backend.services.impl.UserService;
@@ -63,6 +64,12 @@ public class EventController {
     ResponseEntity<Collection<Booking>> getBookingByEvent(@PathVariable int event){
         Collection<Booking> bookings = bookingService.findByEvent(event);
         return ResponseEntity.ok(bookings);
+    }
+
+    @GetMapping("/get-categories/{eventId}")
+    ResponseEntity<Collection<Category>> getCategories(@PathVariable int eventId){
+        Collection<Category> categories = eventService.findCategories(eventId);
+        return ResponseEntity.ok(categories);
     }
 
     @PostMapping("/create-event")

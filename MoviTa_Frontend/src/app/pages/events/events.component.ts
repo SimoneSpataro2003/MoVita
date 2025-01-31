@@ -8,6 +8,7 @@ import {Loadable} from '../../model/Loadable';
 import {MapService} from '../../services/map/map.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ConsigliEventoComponent} from './consigli-evento/consigli-evento.component';
+import {Categoria} from '../../model/Categoria';
 
 @Component({
   selector: 'app-events',
@@ -19,7 +20,7 @@ import {ConsigliEventoComponent} from './consigli-evento/consigli-evento.compone
   templateUrl: './events.component.html',
   styleUrl: './events.component.css'
 })
-export class EventsComponent implements OnInit, AfterViewInit, Loadable{
+export class EventsComponent implements OnInit, Loadable{
   loaded: boolean = false;
   eventi: Evento[] = [];
 
@@ -32,10 +33,8 @@ export class EventsComponent implements OnInit, AfterViewInit, Loadable{
 
   ngOnInit(): void {
     this.showAllEvents();
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => this.showConsigliEvento());
+    //TODO: if(utente.mostraConsigliEvento){ this.showConsigliEvento()}
+    this.showConsigliEvento();
   }
 
   showAllEvents(){

@@ -25,4 +25,8 @@ export class EventService {
   }
 
  
+  public getCategories(evento_id:number){
+    return this.authHttp.get(this.URL +`/get-categories/${evento_id}`);
+  }
+
 }

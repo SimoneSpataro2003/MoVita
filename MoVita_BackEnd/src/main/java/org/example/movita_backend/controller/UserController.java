@@ -39,6 +39,20 @@ public class UserController
         }
     }
 
+    @GetMapping("/get-user-by-username/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable String username)
+    {
+        try
+        {
+            User user = userService.getUserByUsername(username);
+            return ResponseEntity.ok(user);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/make-friendship/{userId1}/{userId2}")
     public ResponseEntity<String> createFriendship(@PathVariable int userId1, @PathVariable int userId2)
     {
