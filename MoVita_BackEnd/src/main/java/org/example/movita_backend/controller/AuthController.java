@@ -1,10 +1,9 @@
 package org.example.movita_backend.controller;
 
 import jakarta.validation.Valid;
-import org.example.movita_backend.model.User;
-import org.example.movita_backend.security.dto.LoginRequest;
-import org.example.movita_backend.security.dto.RegisterAgencyRequest;
-import org.example.movita_backend.security.dto.RegisterPersonRequest;
+import org.example.movita_backend.model.dto.LoginRequest;
+import org.example.movita_backend.model.dto.RegisterAgencyRequest;
+import org.example.movita_backend.model.dto.RegisterPersonRequest;
 import org.example.movita_backend.services.impl.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

@@ -7,14 +7,14 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 })
 
 //FIXME:VA BENE?
-export class AuthHttpClientService {
+export class AuthHttpClientService{
 
-  /*NOTA: SE NON E' MEMORIZZATO NESSUN COOKIE? L'auth guard ti riporta direttamente nella pagina di login!*/
+  /*NOTA: SE NON È MEMORIZZATO NESSUN COOKIE? L'auth guard ti riporta direttamente nella pagina di login!*/
   private token: string;
   private headers: HttpHeaders;
   constructor(private http: HttpClient){
     //TODO: ottieni il cookie attraverso localStorage o ngx-cookie(da installare!)
-    this.token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJHb2t1NjciLCJpYXQiOjE3MzgxNjk2OTQsImV4cCI6MTczODc3NDQ5NH0.noQ5_EZk5cEQR8FRVEZ6iQ6Yri9-lySBF55f34BzaT0';
+    this.token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNb2x0bzEyIiwiaWF0IjoxNzM4MjUwNDY0LCJleHAiOjE3Mzg4NTUyNjR9.31udB4fxvlHcZXkJ6PrF347wmjR-lP89xuLrXhrFAA0';
     this.headers = new HttpHeaders();
 
     //una volta ottenuto il cookie, costruisco il mio header.
@@ -23,8 +23,7 @@ export class AuthHttpClientService {
 
   private createHeaders(){
     this.headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.token}`,
-      'Accept': 'application/json'
+      'Authorization': `Bearer ${this.token}`
     });
   }
 

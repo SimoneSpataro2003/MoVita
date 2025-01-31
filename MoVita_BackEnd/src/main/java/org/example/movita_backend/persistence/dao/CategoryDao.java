@@ -11,6 +11,9 @@ public interface CategoryDao {
     Category findById(int id);
     List<Category> findByName(String keyword);
 
+    void insertUserCategories(User user, List<Category> categories);
+    void insertEventCategories(Event event, List<Category> categories);
+
     //associazioni
     List<User> findUsers(Category category);
     List<Event> findEvents(Category category);

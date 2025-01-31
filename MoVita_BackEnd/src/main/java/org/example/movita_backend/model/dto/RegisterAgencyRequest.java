@@ -1,8 +1,7 @@
-package org.example.movita_backend.security.dto;
+package org.example.movita_backend.model.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter

@@ -77,6 +77,100 @@ public class CategoryDaoJDBC implements CategoryDao {
     }
 
     @Override
+    public void insertUserCategories(User user, List<Category> categories) {
+        /*
+         * due query:
+         * 1. elimino tutte le tuple precedentemente inserite per quell'utente
+         * 2. inserisco le nuove tuple.
+         * PERCHE'NON USO UN TRIGGER CHE ELIMINA LE TUPLE?
+         *      - L'utilizzo di un trigger before insert fa sì che venga scaturito ogni volta che
+         *        effettuo una insert. Ma essendo una insert multipla, inserirei sempre e solo
+         *        l'ultimo elemento della lista!
+         * Questa soluzione è più semplice in quanto previene eventuali controlli e modifiche/eliminazioni.
+         * */
+        //USO LE TRANSAZIONI, per garantire atomicità e consistenza:
+        String deleteQuery = "DELETE FROM persona_categoria WHERE id_persona = ?";
+        String insertQuery = "INSERT INTO persona_categoria VALUES (?,?)";
+
+        try {
+            //disabilito il commit automatico
+            connection.setAutoCommit(false);
+
+            try {
+                //1. elimino tutte le tuple
+                PreparedStatement psDelete = connection.prepareStatement(deleteQuery);
+                psDelete.setInt(1, user.getId());
+                psDelete.executeUpdate();
+
+                //2. inserisco quelle nuove
+                PreparedStatement psInsert = connection.prepareStatement(insertQuery);
+                psInsert.setInt(1, user.getId());
+
+                for (Category category : categories) {
+                    psInsert.setInt(2, category.getId());
+                    //batch raggruppa operazioni tra di loro, passandole al DB come se fosse una sola.
+                    psInsert.addBatch();
+                }
+
+                psInsert.executeBatch();
+                connection.commit();
+            } catch (SQLException e) {
+                connection.rollback(); // Ripristina lo stato iniziale in caso di errore
+                e.printStackTrace();
+                throw new RuntimeException("Couldn't insert interested categories of user.", e);
+            } finally {
+                connection.setAutoCommit(true); // Ripristina sempre l'auto-commit
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Database error while handling transaction.", e);
+        }
+    }
+
+    @Override
+    public void insertEventCategories(Event event, List<Category> categories) {
+        /*
+         * Due query, come per user (vedi sopra per chiarimenti):
+         * */
+
+        //USO LE TRANSAZIONI:
+        String deleteQuery = "DELETE FROM evento_categoria WHERE id_evento = ?";
+        String insertQuery = "INSERT INTO evento_categoria VALUES (?,?)";
+
+        try {
+            //disabilito il commit automatico
+            connection.setAutoCommit(false);
+
+            try {
+                //1. elimino tutte le tuple
+                PreparedStatement psDelete = connection.prepareStatement(deleteQuery);
+                psDelete.setInt(1, event.getId());
+                psDelete.executeUpdate();
+
+                //2. inserisco quelle nuove
+                PreparedStatement psInsert = connection.prepareStatement(insertQuery);
+                psInsert.setInt(1, event.getId());
+
+                for (Category category : categories) {
+                    psInsert.setInt(2, category.getId());
+                    //batch raggruppa operazioni tra di loro, passandole al DB come se fosse una sola.
+                    psInsert.addBatch();
+                }
+
+                psInsert.executeBatch();
+                connection.commit();
+            } catch (SQLException e) {
+                connection.rollback(); // Ripristina lo stato iniziale in caso di errore
+                e.printStackTrace();
+                throw new RuntimeException("Couldn't insert categories of event.", e);
+            } finally {
+                connection.setAutoCommit(true); // Ripristina sempre l'auto-commit
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Database error while handling transaction.", e);
+        }
+    }
+
+    @Override
     public List<User> findUsers(Category category) {
         List<User> interestedUsers = new ArrayList<>();
         String query = "SELECT u.* FROM utente u, persona_categoria pc WHERE u.id = pc.id_persona AND pc.id_categoria = ?";

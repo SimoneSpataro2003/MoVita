@@ -5,12 +5,15 @@ import org.example.movita_backend.exception.category.EmptyCategoryListExeption;
 import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.User;
+import org.example.movita_backend.model.dto.EventCategories;
+import org.example.movita_backend.model.dto.UserCategories;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.CategoryDao;
 import org.example.movita_backend.persistence.proxy.CategoryProxy;
 import org.example.movita_backend.services.interfaces.ICategoryService;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -45,5 +48,29 @@ public class CategoryService implements ICategoryService {
     public List<Event> getEventsByCategory(int categoryId) {
         CategoryProxy categoryProxy = new CategoryProxy(DBManager.getInstance().getCategoryDAO().findById(categoryId));
         return categoryProxy.getEventi();
+    }
+
+    @Override
+    public void insertUserCategories(UserCategories userCategories) {
+        User u = DBManager.getInstance().getUserDAO().findById(userCategories.getUtente_id());
+        List<Category> categories = new ArrayList<>();
+
+        for(int categoryId : userCategories.getCategorie_id()){
+            categories.add(getById(categoryId));
+        }
+
+        DBManager.getInstance().getCategoryDAO().insertUserCategories(u,categories);
+    }
+
+    @Override
+    public void insertEventCategories(EventCategories eventCategories) {
+        Event event = DBManager.getInstance().getEventDAO().findById(eventCategories.getEvento_id());
+        List<Category> categories = new ArrayList<>();
+
+        for(int categoryId : eventCategories.getCategorie_id()){
+            categories.add(getById(categoryId));
+        }
+
+        DBManager.getInstance().getCategoryDAO().insertEventCategories(event,categories);
     }
 }

@@ -16,6 +16,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.example.movita_backend.model.ResultSetMapper.mapEvent;
+
 @Component
 public class EventDaoJDBC implements EventDao {
     private final Connection connection;
@@ -172,27 +175,6 @@ public class EventDaoJDBC implements EventDao {
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());
         }
-    }
-
-
-
-    private Event mapEvent(ResultSet rs) throws SQLException {
-        Event e = new EventProxy();
-
-        e.setId(rs.getInt("id"));
-        e.setNome(rs.getString("nome"));
-        e.setData(rs.getString("data")); // Considera se usare un tipo come LocalDate o Timestamp
-        e.setPrezzo(rs.getFloat("prezzo"));
-        e.setCitta(rs.getString("citta"));
-        e.setIndirizzo(rs.getString("indirizzo"));
-        e.setNumPartecipanti(rs.getInt("num_partecipanti"));
-        e.setMaxNumPartecipanti(rs.getInt("max_num_partecipanti"));
-        e.setEtaMinima(rs.getByte("eta_minima"));
-        //e.setDescrizione(rs.getString("descrizione")); //NO: effettuata con un proxy.
-        e.setValutazioneMedia(rs.getFloat("valutazione_media"));
-        e.setCreatore(DBManager.getInstance().getUserDAO().findById(rs.getInt("creatore")));
-
-        return e;
     }
 
     public int save(Event event) {

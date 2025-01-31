@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Evento} from '../../model/Evento';
 import {HttpClient, HttpHandler} from '@angular/common/http';
 import {EventCardComponent} from './event-card/event-card.component';
@@ -6,6 +6,8 @@ import {MapComponent} from './map/map.component';
 import {EventService} from '../../services/event/event.service';
 import {Loadable} from '../../model/Loadable';
 import {MapService} from '../../services/map/map.service';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ConsigliEventoComponent} from './consigli-evento/consigli-evento.component';
 
 @Component({
   selector: 'app-events',
@@ -17,14 +19,23 @@ import {MapService} from '../../services/map/map.service';
   templateUrl: './events.component.html',
   styleUrl: './events.component.css'
 })
-export class EventsComponent implements OnInit, Loadable{
+export class EventsComponent implements OnInit, AfterViewInit, Loadable{
   loaded: boolean = false;
   eventi: Evento[] = [];
 
-  constructor(private eventService: EventService){}
+  /*
+  * eventService: chiamate API al backend
+  * modalService: far comparire finestre modali via typescript.
+  * */
+  constructor(private eventService: EventService,
+              private modalService: NgbModal){}
 
   ngOnInit(): void {
     this.showAllEvents();
+  }
+
+  ngAfterViewInit(): void {
+    setTimeout(() => this.showConsigliEvento());
   }
 
   showAllEvents(){
@@ -41,7 +52,16 @@ export class EventsComponent implements OnInit, Loadable{
     })
   }
 
+  public showConsigliEvento(){
+    if (typeof window !== "undefined") {
+      const modalRef = this.modalService.open(ConsigliEventoComponent, {centered: true, scrollable:true});
+      //passo al modale un riferimento a se stesso, così da potersi chiudere dall'interno.
+      modalRef.componentInstance.thisModal = modalRef;
+    }
+  }
+
   public isLoaded(): boolean {
     return this.loaded;
   }
+
 }
