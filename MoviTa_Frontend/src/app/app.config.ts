@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import {NgbModule, NgbPopover} from '@ng-bootstrap/ng-bootstrap';
 import {HttpClient, HttpHandler, provideHttpClient, withFetch} from '@angular/common/http';
+import {CookieService} from 'ngx-cookie-service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -12,5 +13,5 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideRouter(routes),
     provideClientHydration(),
-    importProvidersFrom(NgbModule,NgbPopover, HttpClient)]
+    importProvidersFrom(NgbModule,NgbPopover,HttpClient, CookieService)]
 };

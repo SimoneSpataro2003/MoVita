@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {CookieService} from 'ngx-cookie-service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +13,9 @@ export class AuthHttpClientService{
   /*NOTA: SE NON È MEMORIZZATO NESSUN COOKIE? L'auth guard ti riporta direttamente nella pagina di login!*/
   private token: string;
   private headers: HttpHeaders;
-  constructor(private http: HttpClient){
+  constructor(private http: HttpClient, private cookieService: CookieService){
     //TODO: ottieni il cookie attraverso localStorage o ngx-cookie(da installare!)
-    this.token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJNb2x0bzEyIiwiaWF0IjoxNzM4MzQxOTkzLCJleHAiOjE3Mzg5NDY3OTN9.wdwmC0omkm97fv1j1EbTYy1fuMJmI4vVWvhabjr1pfc';
+    this.token = cookieService.get('token');
     this.headers = new HttpHeaders();
 
     //una volta ottenuto il cookie, costruisco il mio header.

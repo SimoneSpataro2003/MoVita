@@ -13,7 +13,7 @@
     <div class="card-body">
       <h2 class="text-center mb-3">Registrati</h2>
       @if (tipo == 1) {
-        <form [formGroup]="applyForm" (submit)="submitApplication()">
+        <form [formGroup]="applyForm">
           <div class="mb-2">
             <label for="username" class="form-label">Username</label>
             <input id="username" type="text" class="form-control" formControlName="username">

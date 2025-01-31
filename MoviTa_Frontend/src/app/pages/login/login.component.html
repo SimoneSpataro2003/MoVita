@@ -6,10 +6,10 @@
 
     <div class="card-body">
       <h2 class="text-center mb-3">Esegui il login</h2>
-      <form [formGroup]="applyForm" (submit)="submitApplication()">
+      <form [formGroup]="applyForm" (submit)="login()">
         <div class="mb-2">
-          <label for="email" class="form-label">Email</label>
-          <input id="email" type="email" class="form-control" formControlName="email" required>
+          <label for="username" class="form-label">Email</label>
+          <input id="username" type="text" class="form-control" formControlName="username" required>
         </div>
 
         <div class="mb-2">
