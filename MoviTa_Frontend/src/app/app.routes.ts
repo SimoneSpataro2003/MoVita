@@ -7,6 +7,7 @@ import {AuthLayoutComponent} from './layouts/auth-layout/auth-layout.component';
 import {EventsComponent} from './pages/events/events.component';
 import {DetailsComponent} from './pages/details/details.component';
 import {ProfileComponent} from './pages/profile/profile.component';
+import {PaymentComponent} from './pages/payment/payment.component';
 
 export const routes: Routes = [
   {
@@ -15,8 +16,9 @@ export const routes: Routes = [
     children:[
       {path: '', component:HomeComponent},
       {path: 'events', component: EventsComponent},
-      {path: 'event-details', component: DetailsComponent},
-      { path: 'profile/:id', component: ProfileComponent }
+      {path: 'event-details/:id', component: DetailsComponent},
+      { path: 'profile/:id', component: ProfileComponent },
+      {path: 'payments/:id', component: PaymentComponent }
     ]
     //canActivate:[authGuard] <-- per evitare accessi se non presente il token
   },

@@ -343,12 +343,13 @@ public class UserDaoJDBC implements UserDao {
     @Override
     public List<User> findFriends(int id) {
         String query = "SELECT * FROM utente, amicizia WHERE ? = amicizia.id_utente1" +
-                " AND amicizia.id_utente2 = utente.id";
+                " OR amicizia.id_utente2 = ?";
         List<User> toRet = new ArrayList<>();
 
         try(PreparedStatement ps = connection.prepareStatement(query))
         {
             ps.setInt(1,id);
+            ps.setInt(2,id);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next())

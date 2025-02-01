@@ -6,13 +6,15 @@ import {CategoryService} from '../../../services/category/category.service';
 import {Observable} from 'rxjs';
 import {EventService} from '../../../services/event/event.service';
 import {Loadable} from '../../../model/Loadable';
+import { RouterModule } from '@angular/router';
 import {IconaCategoriaMapper} from '../../../model/IconaCategoriaMapper';
 
 @Component({
   selector: 'app-event-card',
   standalone: true,
   imports: [
-    NgbPopover
+    NgbPopover,
+    RouterModule
   ],
   templateUrl: './event-card.component.html',
   styleUrl: './event-card.component.css'

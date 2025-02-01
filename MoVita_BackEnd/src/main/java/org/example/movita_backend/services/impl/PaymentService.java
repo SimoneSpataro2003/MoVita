@@ -34,7 +34,7 @@ public class PaymentService implements IPaymentService {
     }
 
     @Override
-    public List<Payment> getPayments() {
-        return userProxy.getPayments();
+    public List<Payment> getPayments(int userId) {
+        return userProxy.getPayments(userId);
     }
 }

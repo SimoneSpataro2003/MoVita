@@ -8,5 +8,5 @@ public interface IPaymentService
 {
     void createCheckoutSession(Payment payment);
     List<Payment> getAllPayments();
-    List<Payment> getPayments();
+    List<Payment> getPayments(int userId);
 }

@@ -13,5 +13,5 @@ public interface IUserService {
     List<User> searchUsers(String filter);
     int countFriendships(int userId);
     List<Event> getCreatedEventsByUserId();
-    List<User> getFriends();
+    List<User> getFriends(int userId);
 }

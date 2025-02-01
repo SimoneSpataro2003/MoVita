@@ -51,7 +51,7 @@
 
 
       <div class="mx-2">
-        <h5 class="card-title text-primary">{{ evento.nome }}</h5>
+        <h5 class="card-title text-primary"><a [routerLink]="['/event-details', evento.id]">{{ evento.nome }}</a></h5>
 
         <!-- Data evento -->
         <div class="d-flex align-items-center mb-1">

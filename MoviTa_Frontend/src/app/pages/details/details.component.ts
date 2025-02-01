@@ -3,6 +3,12 @@ import { Evento } from '../../model/Evento';
 import { CardUtenteComponent } from '../../shared/common/card-utente/card-utente.component';
 import { CommonModule } from '@angular/common';
 import { EventService } from '../../services/event/event.service';
+import { ActivatedRoute } from '@angular/router';
+import { Partecipazione } from '../../model/Partecipazione';
+import { CategoryService } from '../../services/category/category.service';
+import { Categoria } from '../../model/Categoria';
+import { CookieService } from 'ngx-cookie-service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-details',
@@ -13,18 +19,115 @@ import { EventService } from '../../services/event/event.service';
 })
 export class DetailsComponent {
 
-  constructor(private eventService: EventService){}
+  evento: Evento | null= null;
+  partecipazioni: Partecipazione[] = [];
+  eventiSimili : Evento[] = [];
+  idEvento = 0;
 
-  evento: Evento | null = null;
+  
+  constructor(private route: ActivatedRoute, private eventService: EventService,  private categoryService: CategoryService, private cookieService: CookieService){ }
+
+  ngOnInit(): void{
+    this.idEvento = Number(this.route.snapshot.paramMap.get('id'));
+    this.mostraDettagliEvento();
+    this.mostraPartecipazioniEvento();
+    this.ottieniCategorieEvento();   
+  }
 
 
-  showEventDetails(): void {
-    const id = Number(1);
-    if (id) {
-      this.eventService.getEventById(id).subscribe({
-        next: (data) => this.evento = data,
-        error: (err) => console.error('Errore nel recupero dettagli evento')
+  mostraDettagliEvento(): void {    
+    if (this.idEvento) {
+      this.eventService.getEventById(this.idEvento).subscribe({
+        next: (data) => {
+          this.evento = data;
+         
+        },
+        error: (err) => {
+          console.error('Errore nel recupero dettagli evento', err);        
+        }
       });      
-    }   
-  } 
+    }  
+  }
+
+  mostraPartecipazioniEvento(): void {    
+    if (this.idEvento) {
+      this.eventService.getPartecipazioniByEvent(this.idEvento).subscribe({
+        next: (data) => {
+          this.partecipazioni = data;
+          console.log(data);
+         
+        },
+        error: (err) => {
+          console.error('Errore nel recupero dettagli evento', err);
+        
+        }
+      });      
+    }  
+  }
+  
+  ottieniCategorieEvento(){
+    let categorie:Categoria[] = [];
+    
+    if (this.idEvento) {
+      this.eventService.getCategories(this.idEvento).subscribe({
+        next: (data) => {
+          categorie = data;
+          console.log("CATEGORIE");
+          console.log(data);  
+          console.log("FINE");
+          this.mostraEventiSimili(categorie);        
+        },
+        error: (err) => {
+          console.error('Errore nel recupero dettagli evento', err);
+        }
+      }); 
+      
+      return categorie;
+    }
+    return categorie; 
+  }
+
+
+  mostraEventiSimili(categorie: Categoria[] ): void { 
+      
+      console.log("CATEGORIE ARRIVATE");     
+      for(let i of categorie) 
+      {
+        if (this.idEvento) {
+          this.categoryService.findEventsByCategory(String(i.id)).subscribe({
+            next: (data) => {
+              const isUnique = (data: Evento[]) => {
+                for (let dataItem of data) {
+                  for(let eventItem of this.eventiSimili ){   
+                    console.log(`${eventItem.id} ${dataItem.id}`)             
+                    if(eventItem.id == dataItem.id)
+                      return false;
+                  }                  
+                }
+                return true;
+              };
+
+              if(isUnique(data))
+              {
+                this.eventiSimili = this.eventiSimili.concat(data);   
+                console.log("Eventi simili")
+                console.log(this.eventiSimili);
+                console.log("Eventi simili")
+                       
+               
+              }              
+            
+            },
+            error: (err) => {
+              console.error('Errore nel recupero dettagli evento', err);
+            
+            }
+          });      
+        }  
+    }
+    
+    
+  }
+
+
 }
