@@ -8,11 +8,11 @@
       <div class="row">
         <div class="col-12">
           @if(this.loaded) {
-            <div class="row row-cols-2 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-5">
+            <div class="row row-cols-2 row-cols-sm-2 row-cols-lg-3">
               @for(categoria of this.categorie; track categoria.id) {
                 <div class="col">
                   <div class="mb-4 text-center">
-                   <button class="bottone-circolare btn btn-primary rounded-circle bi bi-image" (click)="select(categoria)" [ngClass]="{'bottone_selezionato': isSelected(categoria), 'bottone_non_selezionato': !isSelected(categoria)}"></button>
+                   <button class="bottone-circolare btn btn-primary rounded-circle bi fs-2" [class]="IconaCategoriaMapper.getIcon(categoria)" (click)="select(categoria)" [ngClass]="{'bottone_selezionato': isSelected(categoria), 'bottone_non_selezionato': !isSelected(categoria)}"></button>
                    <p class="mt-1 text-center">{{categoria.nome}}</p>
                   </div>
                 </div>

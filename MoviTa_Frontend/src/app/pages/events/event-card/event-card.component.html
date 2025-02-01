@@ -16,12 +16,16 @@
 
           <ng-template #categoriePopover>
           <div class="categorie-popover text-center">
-            <div class="row row-cols-2 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-5">
+            <h5 class="text-primary text-center">Categorie interessate</h5>
+            <p class="text-primary text-center mb-1">{{evento.nome}}</p>
+
+            <div class="row row-cols-3">
               @for(categoria of categorie; track categoria){
                 <div class="col">
                   <div>
-                    <div class="div-circolare btn btn-secondary my-2 p-2 rounded-circle">
-                      {{categoria.nome}}
+                    <div class="bottone-circolare btn btn-secondary my-2 p-2 rounded-circle bi"
+                         [class]="IconaCategoriaMapper.getIcon(categoria)"
+                         data-toggle="tooltip" data-placement="top" title="{{categoria.nome}}">
                     </div>
                   </div>
                 </div>
@@ -29,20 +33,20 @@
             </div>
           </div>
           </ng-template>
-
           <button type="button"
-                  class="bottone-categorie btn btn-success position-absolute bottom-0 end-0 mx-2 mb-4 p-2 rounded-4"
-                  [ngbPopover]="categoriePopover">
-            <!-- TODO: CAMBIA CON L'ICONA CORRISPONDENTE ED UN TOOLTIP-->
-            {{this.categorie[0].nome}}
+                  class="bottone-circolare btn btn-secondary position-absolute bottom-0 end-0 mx-2 mb-4 p-2 rounded-circle bi"
+                  [class]="IconaCategoriaMapper.getIcon(categorie[0])"
+                  [ngbPopover]="categoriePopover"
+                  data-toggle="tooltip" data-placement="top" title="{{categorie[0].nome}}">
+
             @if(categorie.length >1){
-              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">+ {{categorie.length-1}}
+
+              <span class="badge-circolare position-absolute top-0 start-100 translate-middle badge rounded-circle bg-info d-flex align-items-center justify-content-center">+{{categorie.length-1}}
                 <span class="visually-hidden">altre categorie</span>
               </span>
             }
           </button>
         }
-
       </div>
 
 

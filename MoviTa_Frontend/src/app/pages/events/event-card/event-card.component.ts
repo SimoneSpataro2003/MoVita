@@ -6,6 +6,7 @@ import {CategoryService} from '../../../services/category/category.service';
 import {Observable} from 'rxjs';
 import {EventService} from '../../../services/event/event.service';
 import {Loadable} from '../../../model/Loadable';
+import {IconaCategoriaMapper} from '../../../model/IconaCategoriaMapper';
 
 @Component({
   selector: 'app-event-card',
@@ -45,4 +46,6 @@ export class EventCardComponent implements OnInit, Loadable{
   isLoaded(): boolean {
     return this.loaded;
   }
+
+  protected readonly IconaCategoriaMapper = IconaCategoriaMapper;
 }

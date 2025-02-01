@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Evento} from '../../model/Evento';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class MapService {
     this.key = 'AIzaSyCrvavtLwbWlAXUIVMyUH0UBGyObwcD3NI';
   }
 
-  getCoordinates(evento: Evento) {
+  getCoordinates(evento: Evento):Observable<any> {
     const { indirizzo, citta } = evento; // Presumo che Evento abbia proprietà 'via' e 'citta'.
 
     // Combina via e città in un singolo indirizzo
