@@ -21,7 +21,7 @@ public class EventProxy extends Event {
         this.etaMinima=event.getEtaMinima();
     }
 
-    //FIXME(GIUSEPPE): sovrascrivi i getter corretti (usa @Override per maggiore sicurezza)
+
     @Override
     public List<Category> getCategorie(){
         if(this.categorie==null){
@@ -30,6 +30,7 @@ public class EventProxy extends Event {
         return categorie;
     }
 
+    @Override
     public String getDescrizione(){
         if(this.descrizione==null){
             this.descrizione = DBManager.getInstance().getEventDAO().findDescrizione(this);
@@ -37,6 +38,7 @@ public class EventProxy extends Event {
         return descrizione;
     }
 
+    @Override
     public List<Booking> getPrenotazioni(){
         if(this.prenotazioni==null){
             this.prenotazioni= DBManager.getInstance().getBookingDAO().findByEvent(this);
@@ -45,6 +47,7 @@ public class EventProxy extends Event {
 
     }
 
+    @Override
     public List<Review> getRecensioni()
     {
         if(this.recensioni==null){

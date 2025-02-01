@@ -7,6 +7,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Partecipazione } from '../../model/Partecipazione';
 import { CategoryService } from '../../services/category/category.service';
 import { Categoria } from '../../model/Categoria';
+import { CookieService } from 'ngx-cookie-service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-details',
@@ -21,13 +23,17 @@ export class DetailsComponent {
   partecipazioni: Partecipazione[] = [];
   eventiSimili : Evento[] = [];
   idEvento = 0;
+
   
-  constructor(route: ActivatedRoute, private eventService: EventService,  private categoryService: CategoryService){
-    this.idEvento = Number(route.snapshot.paramMap.get('id'));
+  constructor(private route: ActivatedRoute, private eventService: EventService,  private categoryService: CategoryService, private cookieService: CookieService){ }
+
+  ngOnInit(): void{
+    this.idEvento = Number(this.route.snapshot.paramMap.get('id'));
     this.mostraDettagliEvento();
     this.mostraPartecipazioniEvento();
-    //this.mostraEventiSimili(this.evento?.categorie!);
+    this.ottieniCategorieEvento();   
   }
+
 
   mostraDettagliEvento(): void {    
     if (this.idEvento) {
@@ -37,8 +43,7 @@ export class DetailsComponent {
          
         },
         error: (err) => {
-          console.error('Errore nel recupero dettagli evento', err);
-        
+          console.error('Errore nel recupero dettagli evento', err);        
         }
       });      
     }  
@@ -59,24 +64,68 @@ export class DetailsComponent {
       });      
     }  
   }
-
-  mostraEventiSimili(categoria: Categoria[]): void {   
-    for(let i of categoria) 
-    {
-      if (this.idEvento) {
-        this.categoryService.findEventsByCategory(String(i.id)).subscribe({
-          next: (data) => {
-            this.eventiSimili = data;
-            console.log(data);
-           
-          },
-          error: (err) => {
-            console.error('Errore nel recupero dettagli evento', err);
-          
-          }
-        });      
-      }  
+  
+  ottieniCategorieEvento(){
+    let categorie:Categoria[] = [];
+    
+    if (this.idEvento) {
+      this.eventService.getCategories(this.idEvento).subscribe({
+        next: (data) => {
+          categorie = data;
+          console.log("CATEGORIE");
+          console.log(data);  
+          console.log("FINE");
+          this.mostraEventiSimili(categorie);        
+        },
+        error: (err) => {
+          console.error('Errore nel recupero dettagli evento', err);
+        }
+      }); 
+      
+      return categorie;
     }
+    return categorie; 
+  }
+
+
+  mostraEventiSimili(categorie: Categoria[] ): void { 
+      
+      console.log("CATEGORIE ARRIVATE");     
+      for(let i of categorie) 
+      {
+        if (this.idEvento) {
+          this.categoryService.findEventsByCategory(String(i.id)).subscribe({
+            next: (data) => {
+              const isUnique = (data: Evento[]) => {
+                for (let dataItem of data) {
+                  for(let eventItem of this.eventiSimili ){   
+                    console.log(`${eventItem.id} ${dataItem.id}`)             
+                    if(eventItem.id == dataItem.id)
+                      return false;
+                  }                  
+                }
+                return true;
+              };
+
+              if(isUnique(data))
+              {
+                this.eventiSimili = this.eventiSimili.concat(data);   
+                console.log("Eventi simili")
+                console.log(this.eventiSimili);
+                console.log("Eventi simili")
+                       
+               
+              }              
+            
+            },
+            error: (err) => {
+              console.error('Errore nel recupero dettagli evento', err);
+            
+            }
+          });      
+        }  
+    }
+    
     
   }
 
