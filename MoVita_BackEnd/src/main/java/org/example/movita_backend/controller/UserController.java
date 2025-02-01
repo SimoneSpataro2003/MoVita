@@ -28,9 +28,7 @@ public class UserController
     {
         try
         {
-            System.out.println("ciao");
             User user = userService.getUserById(userId);
-            System.out.println(user.getUsername());
             return ResponseEntity.ok(user);
         }
         catch (Exception e)
@@ -85,18 +83,18 @@ public class UserController
         }
     }
 
-    @GetMapping("/find-friends/")
-    public ResponseEntity<List<User>> getFriendsById()
+    @GetMapping("/find-friends/{userId}")
+    public ResponseEntity<List<User>> getFriendsById(@PathVariable int userId)
     {
         try
         {
-            List<User> friends = userService.getFriends();
+            List<User> friends = userService.getFriends(userId);
+            System.out.println(friends);
             return ResponseEntity.status(HttpStatus.OK).body(friends);
         }
         catch (Exception e)
         {
             System.err.println("Error finding friends: " + e.getMessage());
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

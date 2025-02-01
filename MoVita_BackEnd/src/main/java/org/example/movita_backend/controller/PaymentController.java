@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/payment")
 @CrossOrigin(origins = "http://localhost:4200")
 public class PaymentController {
 
@@ -48,16 +49,15 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/get-Payments/")
-    public ResponseEntity<List<Payment>> getPayments() {
+    @GetMapping("/get-payments/{userId}")
+    public ResponseEntity<List<Payment>> getPayments(@PathVariable int userId) {
         try
         {
-            List<Payment> payments = paymentService.getPayments();
+            List<Payment> payments = paymentService.getPayments(userId);
             return ResponseEntity.ok(payments);
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
