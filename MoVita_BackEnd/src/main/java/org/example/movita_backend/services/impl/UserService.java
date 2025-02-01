@@ -54,7 +54,7 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public List<User> getFriends() {
-        return userProxy.getAmici();
+    public List<User> getFriends(int userId) {
+        return userProxy.getAmici(userId);
     }
 }

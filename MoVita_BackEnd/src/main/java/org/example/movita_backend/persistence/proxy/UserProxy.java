@@ -18,31 +18,14 @@ public class UserProxy extends User {
         this.connection = DBManager.getInstance().getConnection();
     }
 
-    @Override
-    public List<User> getAmici() {
+    public List<User> getAmici(int userId) {
         if (super.amici != null) {
             return super.amici;
         }
-
-        String query = "SELECT * FROM amicizia a, utente u WHERE u.id = a.id_utente2 AND id_utente1 = ?";
-        List<User> friends = new ArrayList<>();
-
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setLong(1, this.getId());
-            ResultSet rs = preparedStatement.executeQuery();
-
-            while (rs.next()) {
-                friends.add(mapUser(rs));
-            }
-
-            this.amici = friends;
-            return friends;
-        } catch (SQLException e) {
-            throw new RuntimeException("Errore nel recupero degli amici dal database", e);
-        }
+        return DBManager.getInstance().getUserDAO().findFriends(userId);
     }
 
-    public List<Payment> getPayments() {
+    public List<Payment> getPayments(int userId) {
         if (super.pagamenti != null) {
             return super.pagamenti;
         }
@@ -51,7 +34,7 @@ public class UserProxy extends User {
         List<Payment> payments = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, this.getId());
+            preparedStatement.setInt(1, userId);
             ResultSet rs = preparedStatement.executeQuery();
 
             while (rs.next()) {

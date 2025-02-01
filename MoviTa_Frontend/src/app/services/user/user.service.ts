@@ -17,7 +17,15 @@ export class UserService {
     return this.authHttp.get(`${this.apiUrl}/get-user/${id}`);
   }
 
+  public getFriends(id: number): Observable<Utente[]> {
+    return this.authHttp.get(`${this.apiUrl}/find-friends/${id}`);
+  }
+
   public getUserByUsername(username: string): Observable<Utente> {
     return this.authHttp.get(`${this.apiUrl}/get-user-by-username/${username}`);
+  }
+
+  public getNumberFollowers(id: number): Observable<any> {
+    return this.authHttp.get(`${this.apiUrl}/count-friends/${id}`);
   }
 }
