@@ -1,27 +1,25 @@
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-  <div class="card" style="width: 18rem;">
-    <div class="d-flex justify-content-end p-2">
-      <button type="button" class="btn-close" aria-label="Close" (click)="goHome()"></button>
+<div class="container d-flex flex-column justify-content-center align-items-center min-vh-100" style="gap: 10px;">
+  @if (tipo == 0) {
+    <div class="d-flex justify-content-between align-items-center w-100 px-3" style="max-width: 300px;">
+      <button type="button" class="btn-close ms-auto" aria-label="Close" (click)="goHome()"></button>
     </div>
-
-    <div class="btn-group" role="group" aria-label="Basic example">
-      <button type="button" class="btn btn-primary" (click)="tipo = 1">Utente</button>
-      <button type="button" class="btn btn-primary" (click)="tipo = 2">Azienda</button>
+    <div class="d-flex justify-content-between align-items-center w-100 px-3" style="max-width: 300px;">
+      <h2 class="text-center m-0 flex-grow-1">Registrati come</h2>
     </div>
-
-
-    <div class="card-body">
-      <h2 class="text-center mb-3">Registrati</h2>
-      @if (tipo == 1) {
-        <form [formGroup]="applyForm">
+    <div class="btn-group mb-2" role="group" aria-label="Basic example" *ngIf="!tipo" style="gap: 5px;">
+      <button type="button" class="btn btn-primary" style="width: 100px;" (click)="tipo = 1">Utente</button>
+      <button type="button" class="btn btn-primary" style="width: 100px;" (click)="tipo = 2">Azienda</button>
+    </div>
+  } @else {
+    <div class="d-flex justify-content-between align-items-center w-100 px-3" style="max-width: 300px;">
+      <button type="button" class="btn-close ms-auto" aria-label="Close" (click)="tipo = 0"></button>
+    </div>
+    <div class="card" style="width: 20rem;">
+      <div class="card-body">
+        <form [formGroup]="applyForm" (ngSubmit)="tipo == 1 ? registerUser() : registerAgency()">
           <div class="mb-2">
             <label for="username" class="form-label">Username</label>
             <input id="username" type="text" class="form-control" formControlName="username">
-          </div>
-
-          <div class="mb-2">
-            <label for="eta" class="form-label">Età</label>
-            <input id="eta" type="number" class="form-control" formControlName="eta">
           </div>
 
           <div class="mb-2">
@@ -29,19 +27,40 @@
             <input id="email" type="email" class="form-control" formControlName="email">
           </div>
 
-          <div class="mb-2">
-            <label for="password" class="form-label">Password</label>
-            <input id="password" type="password" class="form-control" formControlName="password">
+          <div class="row mb-2">
+            <div class="col-6">
+              <label for="password" class="form-label">Password</label>
+              <input id="password" type="password" class="form-control" formControlName="password">
+            </div>
+
+            <div class="col-6">
+              <label for="ripetiPassword" class="form-label">Ripeti Password</label>
+              <input id="ripetiPassword" type="password" class="form-control" formControlName="ripetiPassword">
+            </div>
           </div>
 
-          <div class="mb-2">
-            <label for="ripetiPassword" class="form-label">Ripeti Password</label>
-            <input id="ripetiPassword" type="password" class="form-control" formControlName="ripetiPassword">
+          <div *ngIf="tipo == 2">
+            <div class="row mb-2">
+              <div class="col-6">
+                <label for="indirizzo" class="form-label">Indirizzo</label>
+                <input id="indirizzo" type="text" class="form-control" formControlName="indirizzo">
+              </div>
+
+              <div class="col-6">
+                <label for="recapito" class="form-label">Recapito</label>
+                <input id="recapito" type="text" class="form-control" formControlName="recapito">
+              </div>
+            </div>
+
+            <div class="mb-2">
+              <label for="partitaIVA" class="form-label">Partita IVA</label>
+              <input id="partitaIVA" type="text" class="form-control" formControlName="partitaIVA">
+            </div>
           </div>
 
-          <button type="submit" class="btn btn-primary w-100 mt-2">Registrati</button>
+          <button type="submit" class="btn btn-primary w-100 mt-2" (click)="goHome()">Registrati</button>
         </form>
-      }
+      </div>
     </div>
-  </div>
+  }
 </div>

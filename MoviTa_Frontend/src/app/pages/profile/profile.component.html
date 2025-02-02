@@ -12,9 +12,11 @@
           <p><strong>Email:</strong> {{ user.email }}</p>
           <p><strong>Città:</strong> {{ user.citta }}</p>
           <p><strong>Followers: </strong> @if(loadedAmici) {
-            {{ numberAmici }}}</p>
-          <button type="button" class="btn btn-primary">Cerca amici</button>
-          <button type="button" class="btn btn-primary" routerLink="payments/123">Mostra pagamenti</button>
+            {{ numberAmici }}} @else {
+            <p>0</p>
+          }</p>
+          <button type="button" class="btn btn-primary" [routerLink]="['/search-users', 'laura']">Cerca amici</button>
+          <button type="button" class="btn btn-primary" [routerLink]="['/payments', user.id]">Mostra pagamenti</button>
         </div>
       </div>
       <hr>
@@ -27,7 +29,7 @@
               <!-- Loop sugli amici -->
               @for(friendship of this.friendships; track friendship.id){
                 <div class="col" style="display: inline-block; float: none;">
-                  <app-card-friend [utenteAmico] = friendship class="h-50"></app-card-friend>
+                  <app-card-friend [userId] = user.id [utenteAmico] = friendship class="h-50"></app-card-friend>
                 </div>
               }
             }

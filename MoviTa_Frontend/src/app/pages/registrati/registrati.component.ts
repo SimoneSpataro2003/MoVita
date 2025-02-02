@@ -1,7 +1,9 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {AuthService} from '../../services/auth/auth.service';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-registrati',
@@ -11,22 +13,62 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './registrati.component.css'
 })
 export class RegistratiComponent {
-  route: ActivatedRoute = inject(ActivatedRoute);
   router = inject(Router);
-  tipo:number = 0;
+  tipo: number = 0; // Inizializzazione
 
   applyForm = new FormGroup({
     username: new FormControl(''),
-    eta: new FormControl(),
     email: new FormControl(''),
     password: new FormControl(''),
-    ripetiPassword: new FormControl('')
+    ripetiPassword: new FormControl(''),
+    indirizzo: new FormControl(''),
+    recapito: new FormControl(''),
+    partitaIVA: new FormControl(''),
   });
 
-  constructor() {
-    //costruttore
+  constructor(private authService: AuthService,
+              private cookieService: CookieService) {}
+
+  registerUser() {
+    const body = {
+      username: this.applyForm.value.username,
+      email: this.applyForm.value.email,
+      password: this.applyForm.value.password,
+      ripetiPassword: this.applyForm.value.ripetiPassword
+    };
+    this.authService.registerUser(body).subscribe({
+      next: (response: any) => {
+        this.cookieService.set('token', response.token);
+        console.log(this.cookieService.get('token'));
+        this.goHome();
+      },
+      error: (any) => {
+        //TODO: mostra popup di errore
+      }
+    });
   }
-  //TODO: utente e azienda
+
+  registerAgency() {
+    const body = {
+      username: this.applyForm.value.username,
+      email: this.applyForm.value.email,
+      password: this.applyForm.value.password,
+      ripetiPassword: this.applyForm.value.ripetiPassword,
+      indirizzo: this.applyForm.value.indirizzo,
+      recapito: this.applyForm.value.recapito,
+      partitaIVA: this.applyForm.value.partitaIVA
+    };
+    this.authService.registerAgency(body).subscribe({
+      next: (response: any) => {
+        this.cookieService.set('token', response.token);
+        console.log(this.cookieService.get('token'));
+        this.goHome();
+      },
+      error: (any) => {
+        //TODO: mostra popup di errore
+      }
+    });
+  }
 
   goHome() {
     this.router.navigate(['/']);
