@@ -8,12 +8,14 @@ import {NgClass} from '@angular/common';
 import {IconaCategoriaMapper} from "../../../model/IconaCategoriaMapper";
 import {CookieService} from 'ngx-cookie-service';
 import {Utente} from '../../../model/Utente';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-consigli-evento',
   standalone: true,
   imports: [
-    NgClass
+    NgClass,
+    FormsModule
   ],
   templateUrl: './consigli-evento.component.html',
   styleUrl: './consigli-evento.component.css'
@@ -23,6 +25,8 @@ export class ConsigliEventoComponent implements OnInit,Loadable{
   categorie !: Categoria[];
   categorieScelte = new Array<number>();
   loaded: boolean = false;
+  showConsigli: boolean = false;
+
 
   constructor(private categoryService:CategoryService,
               private cookieService: CookieService) {
@@ -57,6 +61,7 @@ export class ConsigliEventoComponent implements OnInit,Loadable{
         let utente: Utente = JSON.parse(this.cookieService.get('utente'));
         utente.mostraConsigliEventi = false;
         this.cookieService.set('utente',JSON.stringify(utente));
+        this.closeModal();
       },
       error:(err) =>{
         //TODO: mostra errore con una finestra popup!
