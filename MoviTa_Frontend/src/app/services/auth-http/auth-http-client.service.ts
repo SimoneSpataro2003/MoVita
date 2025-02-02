@@ -32,6 +32,10 @@ export class AuthHttpClientService{
     return this.http.get(url,{headers: this.headers});
   }
 
+  public getBinaryContent(url: string):Observable<any>{
+    return this.http.get(url,{headers: this.headers, responseType: 'blob'});
+  }
+
   public post(url: string, body:any):Observable<any>{
     return this.http.post(url,body,{headers: this.headers});
   }

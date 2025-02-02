@@ -15,8 +15,9 @@ export interface Evento{
   etaMinima: number,
   descrizione:string,
   valutazioneMedia:string,
-  creatore: Utente;
+  creatore: Utente,
 
+  immagini: string[],
   categorie: Categoria[],
   prenotazioni: Partecipazione[],
   recensioni: Recensione[]

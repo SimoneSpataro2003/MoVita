@@ -2,12 +2,17 @@ package org.example.movita_backend.controller;
 
 import org.example.movita_backend.model.User;
 import org.example.movita_backend.services.impl.UserService;
+import org.example.movita_backend.services.interfaces.IImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -17,10 +22,13 @@ public class UserController
 
     private final UserService userService;
 
+    private final IImageService imageService;
+
     @Autowired
-    public UserController(UserService userService)
+    public UserController(UserService userService, IImageService imageService)
     {
         this.userService = userService;
+        this.imageService = imageService;
     }
 
     @GetMapping("/get-user/{userId}")
@@ -80,6 +88,34 @@ public class UserController
             System.err.println("Error deleting friendship: " + e.getMessage());
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/get-image-user/{userId}")
+    public ResponseEntity<?> getUserImage(@PathVariable int userId)
+    {
+        try
+        {
+             return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + userId + ".jpg\"")
+                .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                .body(imageService.getUserImage(userId));
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The user image doesn't exist");
+        }
+    }
+
+
+    @PostMapping("/set-user-image/{userId}")
+    public ResponseEntity<String> createUserImage(@PathVariable int userId, @RequestBody MultipartFile image)
+    {
+        try {
+            imageService.addUserImage(userId,image);
+            return ResponseEntity.ok("Image uploaded successfully");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
         }
     }
 

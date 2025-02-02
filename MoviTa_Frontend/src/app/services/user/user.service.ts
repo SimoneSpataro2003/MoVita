@@ -28,4 +28,9 @@ export class UserService {
   public getNumberFollowers(id: number): Observable<any> {
     return this.authHttp.get(`${this.apiUrl}/count-friends/${id}`);
   }
+
+  public getImage(id:number):Observable<Blob>{
+    return this.authHttp.getBinaryContent(`${this.apiUrl}/get-image-user/${id}`);
+  }
+
 }

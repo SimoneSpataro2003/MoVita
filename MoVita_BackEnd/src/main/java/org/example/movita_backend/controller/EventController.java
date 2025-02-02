@@ -3,20 +3,22 @@ package org.example.movita_backend.controller;
 import lombok.Getter;
 import org.apache.coyote.Response;
 import org.example.movita_backend.exception.event.EventNotValid;
-import org.example.movita_backend.model.Booking;
-import org.example.movita_backend.model.Category;
-import org.example.movita_backend.model.Event;
-import org.example.movita_backend.model.Review;
+import org.example.movita_backend.model.*;
 import org.example.movita_backend.services.impl.UserService;
 import org.example.movita_backend.services.interfaces.IBookingService;
 import org.example.movita_backend.services.interfaces.IEventService;
+import org.example.movita_backend.services.interfaces.IImageService;
 import org.example.movita_backend.services.interfaces.IReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.print.Book;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,6 +35,9 @@ public class EventController {
 
     @Autowired
     IReviewService reviewService;
+
+    @Autowired
+    IImageService imageService;
 
     // Memo Giuseppe da provare
 
@@ -52,6 +57,36 @@ public class EventController {
     ResponseEntity<Collection<Event>> getEventByFilter(@PathVariable String filter){
         Collection<Event> events = eventService.findByFilter(filter);
         return ResponseEntity.ok(events);
+    }
+    @GetMapping("/get-imageNames-event/{eventId}")
+    public ResponseEntity<Collection<String>> getEventImagesNames(@PathVariable int eventId) {
+        try {
+            Collection<String> images = imageService.getEventImagesNames(eventId);
+
+            if (images.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+
+            return ResponseEntity.ok(images);
+
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+    @GetMapping("/get-image-event/{eventId}/{imageName}")
+    public ResponseEntity<?> getEventImage(@PathVariable int eventId, @PathVariable String imageName){
+        try
+        {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + imageName)
+                    .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                    .body(imageService.getEventImage(eventId,imageName));
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The user image doesn't exist");
+        }
+
     }
 
     @GetMapping("/get-booking-by-user/{user}")
