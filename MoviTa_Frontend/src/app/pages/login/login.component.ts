@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {AuthService} from '../../services/auth/auth.service';
 import {CookieService} from 'ngx-cookie-service';
@@ -15,7 +15,6 @@ import {Utente} from '../../model/Utente';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  route: ActivatedRoute = inject(ActivatedRoute);
   router = inject(Router);
 
   applyForm = new FormGroup({
@@ -28,7 +27,10 @@ export class LoginComponent {
               private userService: UserService){}
 
   login(){
-    const body = {username: this.applyForm.value.username, password: this.applyForm.value.password};
+    const body = {
+      username: this.applyForm.value.username,
+      password: this.applyForm.value.password
+    };
     this.authService.login(body).subscribe({
       next: (body:any) =>{
         this.cookieService.set('token', body.token);

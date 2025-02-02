@@ -2,12 +2,17 @@ package org.example.movita_backend.controller;
 
 import org.example.movita_backend.model.User;
 import org.example.movita_backend.services.impl.UserService;
+import org.example.movita_backend.services.interfaces.IImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -17,10 +22,13 @@ public class UserController
 
     private final UserService userService;
 
+    private final IImageService imageService;
+
     @Autowired
-    public UserController(UserService userService)
+    public UserController(UserService userService, IImageService imageService)
     {
         this.userService = userService;
+        this.imageService = imageService;
     }
 
     @GetMapping("/get-user/{userId}")
@@ -56,13 +64,13 @@ public class UserController
     {
         try
         {
+            System.out.println("aggiungo amicizia " + userId1 + "-" + userId2);
             userService.makeFriendship(userId1, userId2);
             return ResponseEntity.status(HttpStatus.CREATED).body("Friendship created successfully.");
         }
         catch (Exception e)
         {
             System.err.println("Error creating friendship: " + e.getMessage());
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while creating the friendship.");
         }
     }
@@ -72,14 +80,42 @@ public class UserController
     {
         try
         {
+            System.out.println("elimino amicizia " + userId1 + "-" + userId2);
             userService.deleteFriendship(userId1, userId2);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         catch (Exception e)
         {
             System.err.println("Error deleting friendship: " + e.getMessage());
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("/get-image-user/{userId}")
+    public ResponseEntity<?> getUserImage(@PathVariable int userId)
+    {
+        try
+        {
+             return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + userId + ".jpg\"")
+                .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                .body(imageService.getUserImage(userId));
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The user image doesn't exist");
+        }
+    }
+
+
+    @PostMapping("/set-user-image/{userId}")
+    public ResponseEntity<String> createUserImage(@PathVariable int userId, @RequestBody MultipartFile image)
+    {
+        try {
+            imageService.addUserImage(userId,image);
+            return ResponseEntity.ok("Image uploaded successfully");
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
         }
     }
 
@@ -110,7 +146,6 @@ public class UserController
         catch (Exception e)
         {
             System.err.println("Error finding friends: " + e.getMessage());
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -126,6 +161,17 @@ public class UserController
         catch (Exception e)
         {
             System.err.println("Error counting friendships: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/check-friendship/{userId1}/{userId2}")
+    public ResponseEntity<Boolean> checkFriendship(@PathVariable int userId1, @PathVariable int userId2) {
+        try {
+            boolean areFriends = userService.checkFriendship(userId1, userId2);
+            return ResponseEntity.ok(areFriends);
+        } catch (Exception e) {
+            System.err.println("Error checking friendship: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

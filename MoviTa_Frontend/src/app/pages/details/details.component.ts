@@ -9,6 +9,8 @@ import { CategoryService } from '../../services/category/category.service';
 import { Categoria } from '../../model/Categoria';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
+import { UserService } from '../../services/user/user.service';
+
 
 @Component({
   selector: 'app-details',
@@ -23,15 +25,18 @@ export class DetailsComponent {
   partecipazioni: Partecipazione[] = [];
   eventiSimili : Evento[] = [];
   idEvento = 0;
+  immaginiEvento: Blob[] = [];
+  immagineVisibile: string ="";
+  
 
   
-  constructor(private route: ActivatedRoute, private eventService: EventService,  private categoryService: CategoryService, private cookieService: CookieService){ }
+  constructor(private route: ActivatedRoute, private eventService: EventService, private userService: UserService,  private categoryService: CategoryService, private cookieService: CookieService){ }
 
   ngOnInit(): void{
     this.idEvento = Number(this.route.snapshot.paramMap.get('id'));
-    this.mostraDettagliEvento();
+    this.mostraDettagliEvento();        
     this.mostraPartecipazioniEvento();
-    this.ottieniCategorieEvento();   
+    this.ottieniCategorieEvento();     
   }
 
 
@@ -40,7 +45,8 @@ export class DetailsComponent {
       this.eventService.getEventById(this.idEvento).subscribe({
         next: (data) => {
           this.evento = data;
-         
+          this.caricaImmagineCreatoreEvento();
+          this.caricaNomiImmaginiEvento();
         },
         error: (err) => {
           console.error('Errore nel recupero dettagli evento', err);        
@@ -58,7 +64,7 @@ export class DetailsComponent {
          
         },
         error: (err) => {
-          console.error('Errore nel recupero dettagli evento', err);
+          console.error('Errore nel recupero partecipazioni evento', err);
         
         }
       });      
@@ -119,7 +125,7 @@ export class DetailsComponent {
             
             },
             error: (err) => {
-              console.error('Errore nel recupero dettagli evento', err);
+              console.error('Errore nel recupero eventi simili', err);
             
             }
           });      
@@ -127,6 +133,69 @@ export class DetailsComponent {
     }
     
     
+  }
+  caricaImmagineCreatoreEvento():void{
+    if(this.evento?.creatore !== undefined){
+      this.userService.getImage(this.evento?.creatore?.id).subscribe(
+        {
+          next: (data) => {
+            this.evento!.creatore.immagineProfilo = URL.createObjectURL(data); 
+           
+          },
+          error: (err) => {
+            console.error("Errore nel recupero dell'immagine del creatore dell'evento", err);
+          
+          }
+        }
+      );
+    }
+  }
+
+  caricaNomiImmaginiEvento():void{
+    if(this.evento !== undefined && this.evento !== null){
+     
+      this.eventService.getImagesNames(this.evento.id).subscribe(
+        {
+          next: (data) => {
+            this.evento!.immagini = data;
+            this.caricaSingolaImmagineEvento(this.evento!.immagini[0]);
+           
+          },
+          error: (err) => {
+            console.error('Errore nel recupero nome immagine evento', err);
+            
+          }
+        }
+      );
+    }
+    
+  }
+
+  caricaSingolaImmagineEvento(nomeImmagine:string):void{
+    if(this.evento !== undefined && this.evento !== null){
+      this.eventService.getImage(this.evento.id, nomeImmagine).subscribe(
+        {
+          next: (data) => {
+            this.immaginiEvento.push(data);
+            if(this.immagineVisibile==="")
+            {
+              this.immagineVisibile = URL.createObjectURL(this.immaginiEvento[0]);   
+            }
+              
+           
+          },
+          error: (err) => {
+            console.error('Errore nel recupero SINGOLA immagine evento', err);
+            
+          }
+        }
+      );
+
+
+    }
+
+
+
   }
 
 

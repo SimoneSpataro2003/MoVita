@@ -3,7 +3,6 @@ import {ActivatedRoute, RouterLink} from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 import { Utente } from '../../model/Utente';
 import { CommonModule } from '@angular/common';
-import {EventCardComponent} from '../events/event-card/event-card.component';
 import {CardFriendComponent} from './card-friend/card-friend.component'; // Importa CommonModule
 
 @Component({
@@ -11,7 +10,7 @@ import {CardFriendComponent} from './card-friend/card-friend.component'; // Impo
   templateUrl: './profile.component.html',
   standalone: true,
   styleUrls: ['./profile.component.css'],
-  imports: [CommonModule, EventCardComponent, CardFriendComponent, RouterLink] // Aggiungi CommonModule qui
+  imports: [CommonModule, CardFriendComponent, RouterLink] // Aggiungi CommonModule qui
 })
 export class ProfileComponent implements OnInit {
   userId!: number;
@@ -30,7 +29,6 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.userId = parseInt(params.get('id')!, 10);
-      this.getFriends();
       this.getUser();
     });
   }
@@ -41,6 +39,7 @@ export class ProfileComponent implements OnInit {
         console.log(user); // Verifica la struttura della risposta
         this.user = user; // Questo potrebbe dare errore se i tipi non sono compatibili
         this.loaded = true;
+        this.getFriends();
       },
       error:(error) => {
         console.log(error);

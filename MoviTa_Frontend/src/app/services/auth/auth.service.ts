@@ -16,5 +16,11 @@ export class AuthService {
     return this.http.post(this.URL + '/login', body);
   }
 
-  //TODO(Simone) chiama registerPerson e registerAgency!
+  registerUser(body: any): Observable<any>{
+    return this.http.post(this.URL + '/registerUser', body);
+  }
+
+  registerAgency(body: any): Observable<any>{
+    return this.http.post(this.URL + '/registerAgency', body);
+  }
 }

@@ -1,9 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {CardFriendComponent} from "../profile/card-friend/card-friend.component";
 import {Loadable} from '../../model/Loadable';
 import {Pagamento} from '../../model/Pagamento';
 import {ActivatedRoute} from '@angular/router';
-import {UserService} from '../../services/user/user.service';
 import {PaymentService} from '../../services/payment/payment.service';
 import {CardPaymentComponent} from './card-payment/card-payment.component';
 

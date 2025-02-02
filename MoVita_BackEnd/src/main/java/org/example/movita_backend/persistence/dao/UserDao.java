@@ -34,6 +34,8 @@ public interface UserDao {
 
     List<Event> getCreatedEventsByUserId(int userId);
 
+    boolean checkFriendship(int userId1, int userId2);
+
 
     //TODO: ALTRI
     //associazioni

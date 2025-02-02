@@ -20,6 +20,7 @@ public class UserProxy extends User {
 
     public List<User> getAmici(int userId) {
         if (super.amici != null) {
+            System.out.println("Uso il proxy per recuperare gli amici");
             return super.amici;
         }
         return DBManager.getInstance().getUserDAO().findFriends(userId);
