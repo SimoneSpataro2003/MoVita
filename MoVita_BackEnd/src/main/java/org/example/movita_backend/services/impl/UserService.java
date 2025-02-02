@@ -57,4 +57,9 @@ public class UserService implements IUserService{
     public List<User> getFriends(int userId) {
         return userProxy.getAmici(userId);
     }
+
+    @Override
+    public boolean checkFriendship(int userId1, int userId2) {
+        return userDao.checkFriendship(userId1, userId2);
+    }
 }

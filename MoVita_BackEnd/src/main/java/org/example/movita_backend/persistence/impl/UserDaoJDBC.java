@@ -342,26 +342,32 @@ public class UserDaoJDBC implements UserDao {
     //FIXED: Realizzato metodo nell'interfaccia apposita.
     @Override
     public List<User> findFriends(int id) {
-        String query = "SELECT * FROM utente, amicizia WHERE ? = amicizia.id_utente1" +
-                " OR amicizia.id_utente2 = ?";
+        String query = """
+                SELECT DISTINCT u.*
+                FROM utente u
+                JOIN amicizia a ON u.id = a.id_utente1 OR u.id = a.id_utente2
+                WHERE (a.id_utente1 = ? OR a.id_utente2 = ?)
+                  AND u.id != ?
+                  AND a.id_utente1 != a.id_utente2;
+                
+                """;
         List<User> toRet = new ArrayList<>();
 
         try(PreparedStatement ps = connection.prepareStatement(query))
         {
             ps.setInt(1,id);
             ps.setInt(2,id);
+            ps.setInt(3,id);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next())
             {
-                User u = mapUser(rs);
-                toRet.add(u);
+                toRet.add(mapUser(rs));
             }
             return toRet;
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             throw new RuntimeException("Couldn't find users.");
         }
     }
@@ -371,7 +377,7 @@ public class UserDaoJDBC implements UserDao {
     public List<User> findUserByUsername(String username) {
         String query = "SELECT * " +
                 "FROM utente " +
-                "WHERE utente.username LIKE ?";
+                "WHERE utente.username ILIKE ?";
         List<User> toRet = new ArrayList<>();
 
         try(PreparedStatement ps = connection.prepareStatement(query))
@@ -388,7 +394,6 @@ public class UserDaoJDBC implements UserDao {
         }
         catch (Exception e)
         {
-            e.printStackTrace();
             throw new RuntimeException("Couldn't find user.");
         }
     }
@@ -396,43 +401,58 @@ public class UserDaoJDBC implements UserDao {
     @Override
     public void makeFriendships(int UserId1, int UserId2)
     {
-        String query = "INSERT INTO amicizia " +
-                "(id_utente1, id_utente2)" +
-                "VALUES " +
-                "(?,?)";
+        String checkQuery = "SELECT COUNT(*) FROM amicizia WHERE ((id_utente1 = ? AND id_utente2 = ?) OR (id_utente1 = ? AND id_utente2 = ?)) AND (id_utente2 != id_utente1)";
+        String insertQuery = "INSERT INTO amicizia (id_utente1, id_utente2) VALUES (?, ?)";
 
-        try(PreparedStatement ps = connection.prepareStatement(query))
-        {
-            ps.setInt(1, UserId1);
-            ps.setInt(2, UserId2);;
+        try (PreparedStatement psCheck = connection.prepareStatement(checkQuery)) {
+            // Controlla se l'amicizia esiste già
+            psCheck.setInt(1, UserId1);
+            psCheck.setInt(2, UserId2);
+            psCheck.setInt(3, UserId2);
+            psCheck.setInt(4, UserId1);
 
-            ps.executeUpdate();
-        }
-        catch (Exception e)
-        {
+            ResultSet rs = psCheck.executeQuery();
+            if (rs.next() && rs.getInt(1) == 0) {
+                // Se non esiste, inserisci la nuova amicizia
+                try (PreparedStatement psInsert = connection.prepareStatement(insertQuery)) {
+                    psInsert.setInt(1, UserId1);
+                    psInsert.setInt(2, UserId2);
+                    psInsert.executeUpdate();
+                }
+            } else {
+                System.out.println("La relazione di amicizia esiste già.");
+            }
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Couldn't make friendship.");
         }
+
     }
 
     @Override
     public void deleteFriendships(int UserId1, int UserId2) {
-        String query = "DELETE FROM amicizia WHERE id_utente1 = ? AND id_utente2 = ?";
+        String query = "DELETE FROM amicizia WHERE (id_utente1 = ? AND id_utente2 = ?) OR (id_utente2 = ? AND id_utente1 = ?)";
 
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ps.setInt(1, UserId1);
             ps.setInt(2, UserId2);
+            ps.setInt(3, UserId1);
+            ps.setInt(4, UserId2);
 
             ps.executeUpdate();
         }catch (Exception e){
-            e.printStackTrace();
             throw new RuntimeException("Couldn't delete friendship user.");
         }
     }
 
     @Override
     public int countFriends(int userId) {
-        String query = "SELECT COUNT(*) FROM amicizia WHERE id_utente1 = ? OR id_utente2 = ?";
+        String query = """
+                SELECT COUNT(*)
+                FROM amicizia
+                WHERE (id_utente1 = ? OR id_utente2 = ?)
+                  AND (id_utente1 != id_utente2);
+                """;
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, userId);
@@ -444,7 +464,6 @@ public class UserDaoJDBC implements UserDao {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
             throw new RuntimeException("Couldn't count friendships.");
         }
 
@@ -469,6 +488,26 @@ public class UserDaoJDBC implements UserDao {
         }
         return toRet;
     }
+
+    @Override
+    public boolean checkFriendship(int userId1, int userId2) {
+        String query = "SELECT * FROM amicizia WHERE (id_utente1 = ? AND id_utente2 = ?) OR (id_utente1 = ? AND id_utente2 = ?)";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, userId1);
+            ps.setInt(2, userId2);
+            ps.setInt(3, userId2);
+            ps.setInt(4, userId1);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (Exception e) {
+            // Aggiungi l'eccezione originale per il debug
+            throw new RuntimeException("Couldn't check friendship.", e);
+        }
+    }
+
 
     private User mapUser(ResultSet rs) throws SQLException {
         User u = new User();

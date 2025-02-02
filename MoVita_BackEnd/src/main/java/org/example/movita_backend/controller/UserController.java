@@ -56,13 +56,13 @@ public class UserController
     {
         try
         {
+            System.out.println("aggiungo amicizia " + userId1 + "-" + userId2);
             userService.makeFriendship(userId1, userId2);
             return ResponseEntity.status(HttpStatus.CREATED).body("Friendship created successfully.");
         }
         catch (Exception e)
         {
             System.err.println("Error creating friendship: " + e.getMessage());
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while creating the friendship.");
         }
     }
@@ -72,13 +72,13 @@ public class UserController
     {
         try
         {
+            System.out.println("elimino amicizia " + userId1 + "-" + userId2);
             userService.deleteFriendship(userId1, userId2);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
         catch (Exception e)
         {
             System.err.println("Error deleting friendship: " + e.getMessage());
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -110,7 +110,6 @@ public class UserController
         catch (Exception e)
         {
             System.err.println("Error finding friends: " + e.getMessage());
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
@@ -126,6 +125,17 @@ public class UserController
         catch (Exception e)
         {
             System.err.println("Error counting friendships: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/check-friendship/{userId1}/{userId2}")
+    public ResponseEntity<Boolean> checkFriendship(@PathVariable int userId1, @PathVariable int userId2) {
+        try {
+            boolean areFriends = userService.checkFriendship(userId1, userId2);
+            return ResponseEntity.ok(areFriends);
+        } catch (Exception e) {
+            System.err.println("Error checking friendship: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

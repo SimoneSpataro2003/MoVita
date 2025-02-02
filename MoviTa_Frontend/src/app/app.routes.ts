@@ -8,6 +8,7 @@ import {EventsComponent} from './pages/events/events.component';
 import {DetailsComponent} from './pages/details/details.component';
 import {ProfileComponent} from './pages/profile/profile.component';
 import {PaymentComponent} from './pages/payment/payment.component';
+import {SearchFriendsComponent} from './pages/search-friends/search-friends.component';
 
 export const routes: Routes = [
   {
@@ -17,8 +18,9 @@ export const routes: Routes = [
       {path: '', component:HomeComponent},
       {path: 'events', component: EventsComponent},
       {path: 'event-details/:id', component: DetailsComponent},
-      { path: 'profile/:id', component: ProfileComponent },
-      {path: 'payments/:id', component: PaymentComponent }
+      { path:'profile/:id', component: ProfileComponent },
+      {path: 'payments/:id', component: PaymentComponent },
+      {path: 'search-users/:filter', component: SearchFriendsComponent}
     ]
     //canActivate:[authGuard] <-- per evitare accessi se non presente il token
   },
