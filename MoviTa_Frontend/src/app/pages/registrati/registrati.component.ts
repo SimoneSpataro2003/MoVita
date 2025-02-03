@@ -34,13 +34,15 @@ export class RegistratiComponent {
       username: this.applyForm.value.username,
       email: this.applyForm.value.email,
       password: this.applyForm.value.password,
-      ripetiPassword: this.applyForm.value.ripetiPassword
+      //ripetiPassword: this.applyForm.value.ripetiPassword
     };
     this.authService.registerUser(body).subscribe({
       next: (response: any) => {
-        this.cookieService.set('token', response.token);
-        console.log(this.cookieService.get('token'));
-        this.goHome();
+        //FIXME(SIMONE): il token viene restuito solamente al login!
+        //this.cookieService.set('token', response.token);
+        //console.log(this.cookieService.get('token'));
+        //this.goHome();
+        console.log(response);
       },
       error: (any) => {
         //TODO: mostra popup di errore
@@ -60,9 +62,11 @@ export class RegistratiComponent {
     };
     this.authService.registerAgency(body).subscribe({
       next: (response: any) => {
-        this.cookieService.set('token', response.token);
-        console.log(this.cookieService.get('token'));
-        this.goHome();
+        //FIXME(SIMONE): il token viene restuito solamente al login!
+        //this.cookieService.set('token', response.token);
+        //console.log(this.cookieService.get('token'));
+        //this.goHome();
+        console.log(response);
       },
       error: (any) => {
         //TODO: mostra popup di errore

@@ -17,10 +17,10 @@ export class AuthService {
   }
 
   registerUser(body: any): Observable<any>{
-    return this.http.post(this.URL + '/registerUser', body);
+    return this.http.post(this.URL + '/register-person', body);
   }
 
   registerAgency(body: any): Observable<any>{
-    return this.http.post(this.URL + '/registerAgency', body);
+    return this.http.post(this.URL + '/register-agency', body);
   }
 }
