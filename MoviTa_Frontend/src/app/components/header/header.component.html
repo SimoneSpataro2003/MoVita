@@ -16,14 +16,19 @@
         </div>
 
         <!-- Login and Register Buttons -->
-        <div class="col-3 text-end">
-          <button class="btn btn-outline-success h-button" type="submit" routerLink="login">Login</button>
-          <button class="btn btn-primary h-buttonoutline" type="submit" routerLink="register">Registrati</button>
-        </div>
+        @if(this.currentUserId == null)
+        {
+          <div class="col-3 text-end">
+            <button class="btn btn-outline-success h-button" type="submit" routerLink="login">Login</button>
+            <button class="btn btn-primary h-buttonoutline" type="submit" routerLink="register">Registrati</button>
+          </div>
+        } @else {
+          <div class="text-end">
+            <button (click)="goToMyProfile()">Vai al profilo</button>
+          </div>
+        }
 
-        <div class="text-end">
-          <button routerLink="profile/123">Vai al profilo</button>
-        </div>
+
       </div>
     </div>
   </nav>

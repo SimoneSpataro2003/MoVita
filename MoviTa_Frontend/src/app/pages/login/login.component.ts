@@ -39,6 +39,7 @@ export class LoginComponent {
         console.log(this.cookieService.get('token'));
         this.getUser();
         this.loginError = false;
+        this.goHome();
       },
       error: (any) =>{
         this.loginError = true;
