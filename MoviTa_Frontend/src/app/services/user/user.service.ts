@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import {MonoTypeOperatorFunction, Observable, OperatorFunction, TruthyTypesOf} from 'rxjs';
 import { Utente } from '../../model/Utente';
 import {AuthHttpClientService} from '../auth-http/auth-http-client.service';
+import {Evento} from '../../model/Evento';
 
 @Injectable({
   providedIn: 'root'
@@ -38,8 +39,7 @@ export class UserService {
   }
 
   public deleteFriendship(id1: number, id2: number): Observable<any> {
-    const body = {id1: id1, id2: id2}
-    return this.authHttp.post(`${this.apiUrl}/delete-friendship/${id1}/${id2}`, body);
+    return this.authHttp.delete(`${this.apiUrl}/delete-friendship/${id1}/${id2}`);
   }
 
   public addFriendship(id1: number, id2: number): Observable<any> {
@@ -49,5 +49,9 @@ export class UserService {
 
   public findUsersWithFilter(filter: string): Observable<Utente[]> {
     return this.authHttp.get(`${this.apiUrl}/search-friends/${filter}`);
+  }
+
+  public getCreatedEventsById(id:number): Observable<Evento[]> {
+    return this.authHttp.get(`${this.apiUrl}/get-created-events/${id}`);
   }
 }

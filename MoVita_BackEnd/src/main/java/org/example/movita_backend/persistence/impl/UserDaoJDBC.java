@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
@@ -372,31 +373,27 @@ public class UserDaoJDBC implements UserDao {
         }
     }
 
-    //FIXED: Realizzato metodo nell'interfaccia apposita.
     @Override
     public List<User> findUserByUsername(String username) {
-        String query = "SELECT * " +
-                "FROM utente " +
-                "WHERE utente.username ILIKE ?";
+        String query = "SELECT * FROM utente WHERE LOWER(username) LIKE LOWER(?)";
+
         List<User> toRet = new ArrayList<>();
 
-        try(PreparedStatement ps = connection.prepareStatement(query))
-        {
-            ps.setString(1, "%"+username+"%");
-            ResultSet rs = ps.executeQuery();
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, "%" + username + "%");
 
-            while(rs.next())
-            {
-                User u = mapUser(rs);
-                toRet.add(u);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    toRet.add(mapUser(rs));
+                }
             }
-            return toRet;
+        } catch (SQLException e) {
+            throw new RuntimeException("Couldn't find user: " + e.getMessage(), e);
         }
-        catch (Exception e)
-        {
-            throw new RuntimeException("Couldn't find user.");
-        }
+
+        return toRet.isEmpty() ? Collections.emptyList() : toRet;
     }
+
 
     @Override
     public void makeFriendships(int UserId1, int UserId2)
@@ -471,22 +468,24 @@ public class UserDaoJDBC implements UserDao {
     }
 
     public List<Event> getCreatedEventsByUserId(int userId) {
-        String query = "SELECT * FROM evento WHERE evento.creatore = ?";
+        String query = "SELECT e.* FROM evento e WHERE e.creatore = ?";
         List<Event> toRet = new ArrayList<>();
 
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
+        try(PreparedStatement ps = connection.prepareStatement(query))
+        {
             ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
 
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    toRet.add(ResultSetMapper.mapEvent(rs));
-                }
+            while(rs.next())
+            {
+                toRet.add(ResultSetMapper.mapEvent(rs));
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("Couldn't get created events.");
+            return toRet;
         }
-        return toRet;
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     @Override

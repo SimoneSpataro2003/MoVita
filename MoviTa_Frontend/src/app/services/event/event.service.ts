@@ -15,11 +15,11 @@ export class EventService {
   public getAllEvents():Observable<Evento[]>{
     return this.authHttp.get(this.URL +'/get-all-events');
   }
-  
+
   public getEventById(id: number):Observable<Evento>{
     return this.authHttp.get(this.URL +`/get-event-by-id/${id}`);
   }
-  
+
   public getPartecipazioniByEvent(id: number):Observable<Partecipazione[]>{
     return this.authHttp.get(this.URL +`/get-booking-by-event/${id}`);
   }
@@ -37,6 +37,8 @@ export class EventService {
   public getEventDescription(idEvento:number){
     return this.authHttp.get(`${this.URL}/get-event-description/${idEvento}`);
   }
-
-
+  
+  public getBookingById(id:number): Observable<Partecipazione[]> {
+    return this.authHttp.get(this.URL +`/get-booking-by-user/${id}`);
+  }
 }

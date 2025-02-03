@@ -87,6 +87,24 @@ public class BookingDaoJDBC implements BookingDao {
     }
 
     @Override
+    public List<Booking> findEventsById(int id) {
+        String query = "SELECT * FROM partecipazione WHERE id_utente=?";
+        List<Booking> valuteToReturn = new ArrayList<>();
+
+        try(PreparedStatement ps = connection.prepareStatement(query)){
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                valuteToReturn.add(ResultSetMapper.mapBooking(rs));
+            }
+            return valuteToReturn;
+        }catch (SQLException e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+
+    @Override
     public Booking findById(User utente, Event evento) {
         String query = "SELECT * FROM partecipazione WHERE id_utente = ? and id_evento = ?";
         List<Event> valuteToReturn = new ArrayList<>();

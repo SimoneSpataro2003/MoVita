@@ -114,6 +114,8 @@ public class EventDaoJDBC implements EventDao {
         return findById(event.getId());
     }
 
+
+
     @Override
     public List<Event> findByFilter(String filter) {
         String query = "SELECT e.* FROM evento e WHERE nome LIKE ?";
