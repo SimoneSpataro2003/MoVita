@@ -3,7 +3,7 @@ import {ActivatedRoute, RouterLink} from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 import { Utente } from '../../model/Utente';
 import { CommonModule } from '@angular/common';
-import {CardFriendComponent} from './card-friend/card-friend.component';
+import { CardFriendComponent } from '../../shared/common/card-friend/card-friend.component';
 import {EventService} from '../../services/event/event.service';
 import {Partecipazione} from '../../model/Partecipazione';
 import {Evento} from '../../model/Evento';

@@ -28,13 +28,16 @@ export class EventService {
     return this.authHttp.get(this.URL +`/get-categories/${evento_id}`);
   }
   public getImagesNames(id: number):Observable<string[]>{
-    return this.authHttp.get(this.URL +`/get-imageNames-event/${id}`);
+    return this.authHttp.get(this.URL +`/get-image-names-event/${id}`);
   }
 
   public getImage(idEvento:number,nomeImmagine:string):Observable<Blob>{
     return this.authHttp.getBinaryContent(`${this.URL}/get-image-event/${idEvento}/${nomeImmagine}`);
   }
-
+  public getEventDescription(idEvento:number){
+    return this.authHttp.get(`${this.URL}/get-event-description/${idEvento}`);
+  }
+  
   public getBookingById(id:number): Observable<Partecipazione[]> {
     return this.authHttp.get(this.URL +`/get-booking-by-user/${id}`);
   }

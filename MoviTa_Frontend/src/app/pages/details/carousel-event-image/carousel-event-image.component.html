@@ -1,0 +1,29 @@
+<section class="shadow border-0 rounded-4 bg-white   p-3 m-3">
+    <!-- <div class="container ">
+        <img [src]="immaginiEvento[immagineVisibile]" class="img-fluid" alt="...">
+    </div> -->
+    <div id="carouselExampleIndicators" class="carousel slide">
+
+
+          <!-- The slideshow/carousel -->
+          <div class="carousel-inner">
+            @for (immagine of immaginiEvento; track immagine; let i = $index) {
+                <div class="carousel-item {{ i === 0 ? 'active' : '' }}">
+                  <img [src]="immagine" class="d-block w-100"/>
+                </div>
+              }
+          
+          </div>
+        
+      <!-- Left and right controls -->
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+</section>

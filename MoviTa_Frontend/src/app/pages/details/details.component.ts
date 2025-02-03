@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Evento } from '../../model/Evento';
-import { CardUtenteComponent } from '../../shared/common/card-utente/card-utente.component';
 import { CommonModule } from '@angular/common';
 import { EventService } from '../../services/event/event.service';
 import { ActivatedRoute } from '@angular/router';
@@ -10,12 +9,12 @@ import { Categoria } from '../../model/Categoria';
 import { CookieService } from 'ngx-cookie-service';
 import { Observable } from 'rxjs';
 import { UserService } from '../../services/user/user.service';
-
-
+import { CarouselEventImageComponent } from './carousel-event-image/carousel-event-image.component';
+import { PartecipantiEventoComponent } from './partecipanti-evento/partecipanti-evento.component';
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [CardUtenteComponent, CommonModule],
+  imports: [CommonModule, PartecipantiEventoComponent,CarouselEventImageComponent],
   templateUrl: './details.component.html',
   styleUrl: './details.component.css',
 })
@@ -27,7 +26,8 @@ export class DetailsComponent {
   idEvento = 0;
   immaginiEvento: Blob[] = [];
   immagineVisibile: string ="";
-  
+  @ViewChild(CarouselEventImageComponent) carouselImage!: CarouselEventImageComponent;
+
 
   
   constructor(private route: ActivatedRoute, private eventService: EventService, private userService: UserService,  private categoryService: CategoryService, private cookieService: CookieService){ }
@@ -45,14 +45,31 @@ export class DetailsComponent {
       this.eventService.getEventById(this.idEvento).subscribe({
         next: (data) => {
           this.evento = data;
-          this.caricaImmagineCreatoreEvento();
-          this.caricaNomiImmaginiEvento();
+          this.mostraDescrizioneEvento();
+          this.caricaImmagineCreatoreEvento();     
+          this.carouselImage.caricaNomiImmaginiEvento(this.evento); 
         },
         error: (err) => {
           console.error('Errore nel recupero dettagli evento', err);        
         }
       });      
     }  
+  }
+
+  mostraDescrizioneEvento():void{
+    if (this.evento!== null &&  this.evento!== undefined) {
+      this.eventService.getEventDescription(this.idEvento).subscribe(
+        {
+          next: (data) =>{
+            this.evento!.descrizione = data.descrizione;
+          },
+          error: (err) => {
+            console.error('Errore nel recupero descrizione evento', err);
+          
+          }
+        }
+      );
+    }
   }
 
   mostraPartecipazioniEvento(): void {    
@@ -151,52 +168,7 @@ export class DetailsComponent {
     }
   }
 
-  caricaNomiImmaginiEvento():void{
-    if(this.evento !== undefined && this.evento !== null){
-     
-      this.eventService.getImagesNames(this.evento.id).subscribe(
-        {
-          next: (data) => {
-            this.evento!.immagini = data;
-            this.caricaSingolaImmagineEvento(this.evento!.immagini[0]);
-           
-          },
-          error: (err) => {
-            console.error('Errore nel recupero nome immagine evento', err);
-            
-          }
-        }
-      );
-    }
-    
-  }
-
-  caricaSingolaImmagineEvento(nomeImmagine:string):void{
-    if(this.evento !== undefined && this.evento !== null){
-      this.eventService.getImage(this.evento.id, nomeImmagine).subscribe(
-        {
-          next: (data) => {
-            this.immaginiEvento.push(data);
-            if(this.immagineVisibile==="")
-            {
-              this.immagineVisibile = URL.createObjectURL(this.immaginiEvento[0]);   
-            }
-              
-           
-          },
-          error: (err) => {
-            console.error('Errore nel recupero SINGOLA immagine evento', err);
-            
-          }
-        }
-      );
-
-
-    }
-
-
-
-  }
+ 
 
 
 }

@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Loadable} from '../../../model/Loadable';
 import {Utente} from '../../../model/Utente';
 import {UserService} from '../../../services/user/user.service';
-import {ProfileComponent} from '../profile.component';
+import { ProfileComponent } from '../../../pages/profile/profile.component';
 import {RouterLink} from '@angular/router';
 
 @Component({

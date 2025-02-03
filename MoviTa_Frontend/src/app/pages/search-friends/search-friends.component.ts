@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 import { Utente } from '../../model/Utente';
-import { CardFriendComponent } from '../profile/card-friend/card-friend.component';
+import { CardFriendComponent } from '../../shared/common/card-friend/card-friend.component';
 
 @Component({
   selector: 'app-search-friends',

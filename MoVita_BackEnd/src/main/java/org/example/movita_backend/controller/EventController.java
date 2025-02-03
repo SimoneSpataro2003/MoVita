@@ -22,6 +22,7 @@ import java.awt.print.Book;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/event")
@@ -54,12 +55,18 @@ public class EventController {
         return ResponseEntity.ok(event);
     }
 
+    @GetMapping("/get-event-description/{eventId}")
+    ResponseEntity<?> getEventDescription(@PathVariable int eventId){
+        String descrizione = eventService.findDescrizione(eventId);
+        return ResponseEntity.ok(Map.of("descrizione",descrizione));
+    }
+
     @GetMapping("/get-event-by-filter/{filter}")
     ResponseEntity<Collection<Event>> getEventByFilter(@PathVariable String filter){
         Collection<Event> events = eventService.findByFilter(filter);
         return ResponseEntity.ok(events);
     }
-    @GetMapping("/get-imageNames-event/{eventId}")
+    @GetMapping("/get-image-names-event/{eventId}")
     public ResponseEntity<Collection<String>> getEventImagesNames(@PathVariable int eventId) {
         try {
             Collection<String> images = imageService.getEventImagesNames(eventId);
