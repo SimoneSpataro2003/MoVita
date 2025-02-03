@@ -3,7 +3,10 @@ import {ActivatedRoute, RouterLink} from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 import { Utente } from '../../model/Utente';
 import { CommonModule } from '@angular/common';
-import {CardFriendComponent} from './card-friend/card-friend.component'; // Importa CommonModule
+import {CardFriendComponent} from './card-friend/card-friend.component';
+import {EventService} from '../../services/event/event.service';
+import {Partecipazione} from '../../model/Partecipazione';
+import {Evento} from '../../model/Evento';
 
 @Component({
   selector: 'app-profile',
@@ -16,13 +19,16 @@ export class ProfileComponent implements OnInit {
   userId!: number;
   user!: Utente;
   friendships: Utente[] = [];
+  partecipations: Partecipazione[] = [];
+  createdEvents: Event[] = [];
   loaded: boolean = false;
   protected numberAmici: number = 0;
   protected loadedAmici: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private eventService: EventService,
   ) {
   }
 
@@ -30,6 +36,10 @@ export class ProfileComponent implements OnInit {
     this.route.paramMap.subscribe(params => {
       this.userId = parseInt(params.get('id')!, 10);
       this.getUser();
+      this.getFriends();
+      this.getPartecipations()
+      this.getCreatedEvents()
+      this.loaded = true;
     });
   }
 
@@ -38,8 +48,7 @@ export class ProfileComponent implements OnInit {
       next: (user) => {
         console.log(user); // Verifica la struttura della risposta
         this.user = user; // Questo potrebbe dare errore se i tipi non sono compatibili
-        this.loaded = true;
-        this.getFriends();
+
       },
       error:(error) => {
         console.log(error);
@@ -56,6 +65,29 @@ export class ProfileComponent implements OnInit {
         this.numberAmici = this.friendships.length;
       },
       error:(error) => {
+        console.log(error);
+      }
+    })
+  }
+
+  getPartecipations() {
+    this.eventService.getBookingById(this.userId).subscribe({
+      next: (partecipations: Partecipazione[]) => {
+        console.log(partecipations); // Debug per verificare i dati ricevuti
+        // Qui puoi assegnare i dati a una variabile, se necessario
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }
+
+  getCreatedEvents() {
+    this.userService.getCreatedEventsById(this.userId).subscribe({
+      next: (createdEvents : Evento[]) => {
+        console.log(createdEvents);
+      },
+      error: (error) => {
         console.log(error);
       }
     })

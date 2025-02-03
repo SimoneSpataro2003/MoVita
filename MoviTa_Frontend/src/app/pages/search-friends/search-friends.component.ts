@@ -17,18 +17,13 @@ export class SearchFriendsComponent implements OnInit {
   filter: string = "";
   users: Utente[] | undefined;
   loaded = false;
-  trackByUserId: any;
 
   constructor(
-    private route: ActivatedRoute,
     private userService: UserService
   ) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {
-      this.filter = (params.get("filter")!);
-      this.showUsersWithFilter();
-    });
+
   }
 
   isLoaded(): boolean {

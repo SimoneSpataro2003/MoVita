@@ -1,5 +1,6 @@
 package org.example.movita_backend.controller;
 
+import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.User;
 import org.example.movita_backend.services.impl.UserService;
 import org.example.movita_backend.services.interfaces.IImageService;
@@ -119,6 +120,20 @@ public class UserController
         }
     }
 
+    @GetMapping("/get-created-events/{userId}")
+    public ResponseEntity<List<Event>> getCreatedEventById(@PathVariable int userId)
+    {
+        try
+        {
+            List<Event> events = userService.getCreatedEventsByUserId(userId);
+            return ResponseEntity.ok(events);
+        }
+        catch (Exception e)
+        {
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        }
+    }
+
     @GetMapping("/find-friends/{userId}")
     public ResponseEntity<List<User>> getFriendsById(@PathVariable int userId)
     {
@@ -141,6 +156,8 @@ public class UserController
         try
         {
             List<User> friends = userService.searchUsers(filter);
+            System.out.println("filter : " + filter);
+            System.out.println("list friends " + friends);
             return ResponseEntity.status(HttpStatus.OK).body(friends);
         }
         catch (Exception e)

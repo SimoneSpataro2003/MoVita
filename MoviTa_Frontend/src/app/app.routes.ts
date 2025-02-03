@@ -20,7 +20,7 @@ export const routes: Routes = [
       {path: 'event-details/:id', component: DetailsComponent},
       { path:'profile/:id', component: ProfileComponent },
       {path: 'payments/:id', component: PaymentComponent },
-      {path: 'search-users/:filter', component: SearchFriendsComponent}
+      {path: 'search-users', component: SearchFriendsComponent}
     ]
     //canActivate:[authGuard] <-- per evitare accessi se non presente il token
   },

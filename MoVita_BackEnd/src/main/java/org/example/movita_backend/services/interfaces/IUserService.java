@@ -12,7 +12,7 @@ public interface IUserService {
     void deleteFriendship(int userId1, int userId2);
     List<User> searchUsers(String filter);
     int countFriendships(int userId);
-    List<Event> getCreatedEventsByUserId();
+    List<Event> getCreatedEventsByUserId(int userId);
     List<User> getFriends(int userId);
 
     boolean checkFriendship(int userId1, int userId2);
