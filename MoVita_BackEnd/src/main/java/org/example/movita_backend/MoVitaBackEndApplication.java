@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
-public class    MoVitaBackEndApplication implements CommandLineRunner {
+public class MoVitaBackEndApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(MoVitaBackEndApplication.class, args);

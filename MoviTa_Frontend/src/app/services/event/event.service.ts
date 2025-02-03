@@ -41,4 +41,7 @@ export class EventService {
   public getBookingById(id:number): Observable<Partecipazione[]> {
     return this.authHttp.get(this.URL +`/get-booking-by-user/${id}`);
   }
+  public getBookingByEvent(idEvento:number):Observable<Partecipazione[]>{
+    return this.authHttp.get(this.URL +`/get-booking-by-event/${idEvento}`);
+  }
 }
