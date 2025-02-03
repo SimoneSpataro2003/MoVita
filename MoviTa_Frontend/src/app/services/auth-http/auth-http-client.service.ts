@@ -14,7 +14,6 @@ export class AuthHttpClientService{
   private token: string;
   private headers: HttpHeaders;
   constructor(private http: HttpClient, private cookieService: CookieService){
-    //TODO: ottieni il cookie attraverso localStorage o ngx-cookie(da installare!)
     this.token = cookieService.get('token');
     this.headers = new HttpHeaders();
 

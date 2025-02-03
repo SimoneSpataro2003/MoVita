@@ -1,52 +1,79 @@
 <a class="text-decoration-none">
-  <div class="card h-100 rounded-4 card-cliccabile">
+  <div class="card h-100 rounded-4 card-cliccabile" (click)="navigaDettagliEvento(evento.id)">
     <div class="card-body position-relative">
-      <!-- Immagine dell'evento -->
-      <div class="d-flex align-items-center mb-1">
-        <img class="bottone-circolare" alt="imgUtente" ngSrc="...">
-        <p class="card-text mb-0">{{evento.creatore.nome }}</p>
+
+      <!-- Info Creatore -->
+      <div class="d-flex align-items-center justify-content-center text-center">
+        <img class="rounded-circle mx-2" alt="imgUtente" src="img/home_create.jpg" width="50" height="50">
+
+        @if(evento.creatore.premium){
+          <a class="text-secondary mx-2 mb-1 h6"
+             routerLink="/profile/{{evento.creatore.id}}"
+             (click)="$event.stopPropagation()">
+            {{ evento.creatore.nome }} <span class="bi bi-star-fill text-secondary"></span>
+          </a>
+        } @else {
+          <a class="text-secondary mx-2 mb-1 h6"
+             routerLink="/profile/{{evento.creatore.id}}"
+             (click)="$event.stopPropagation()">
+            {{ evento.creatore.nome }}
+          </a>
+        }
       </div>
 
+      @if(checkFriendship()){
+        <p class="mb-2 text-end"> segui già</p>
+      }
+      @else{
+        <p class="mb-2 text-end"> non seguito</p>
+      }
+
+      <hr>
+
+      <!-- Immagine Evento -->
       <div class="position-relative">
         <img src="img/home_create.jpg" class="card-img mb-3 rounded-4 immagine" alt="Immagine evento {{evento.nome}}">
 
+        <!-- Valutazione -->
         <div class="valutazione position-absolute top-0 end-0 mx-2 my-2 p-2 rounded-4 shadow">
-          <span class="bi bi-star-fill text-warning"> </span>
+          <span class="bi bi-star-fill text-warning"></span>
           <span class="text-white"> {{ evento.valutazioneMedia }}</span>
         </div>
 
         @if(isLoaded() && categorie.length >0){
-          <!-- Categorie coinvolte in basso a destra dell'immagine (se presenti!)-->
 
           <ng-template #categoriePopover>
-          <div class="categorie-popover text-center">
-            <h5 class="text-primary text-center">Categorie interessate</h5>
-            <p class="text-primary text-center mb-1">{{evento.nome}}</p>
+            <div class="categorie-popover text-center">
+              <h5 class="text-primary text-center">Categorie interessate</h5>
+              <p class="text-primary text-center mb-1">{{evento.nome}}</p>
 
-            <div class="row row-cols-3">
-              @for(categoria of categorie; track categoria){
-                <div class="col">
-                  <div>
-                    <div class="bottone-circolare btn btn-secondary my-2 p-2 rounded-circle bi"
-                         [class]="IconaCategoriaMapper.getIcon(categoria)"
-                         data-toggle="tooltip" data-placement="top" title="{{categoria.nome}}">
+              <div class="row row-cols-3">
+                @for(categoria of categorie; track categoria){
+                  <div class="col">
+                    <div>
+                      <div class="bottone-circolare btn btn-secondary my-2 p-2 rounded-circle bi"
+                           [class]="IconaCategoriaMapper.getIcon(categoria)"
+                           data-toggle="tooltip" data-placement="top" title="{{categoria.nome}}">
+                      </div>
                     </div>
                   </div>
-                </div>
-              }
+                }
+              </div>
             </div>
-          </div>
           </ng-template>
 
+          <!-- Categorie -->
           <button type="button"
                   class="bottone-circolare btn btn-secondary position-absolute bottom-0 end-0 mx-2 mb-4 p-2 rounded-circle bi"
                   [class]="IconaCategoriaMapper.getIcon(categorie[0])"
                   [ngbPopover]="categoriePopover"
-                  data-toggle="tooltip" data-placement="top" title="{{categorie[0].nome}}">
+                  data-toggle="tooltip" data-placement="top"
+                  title="{{categorie[0].nome}}"
+                  (click)="$event.stopPropagation()">
 
             @if(categorie.length >1){
-
-              <span class="badge-circolare position-absolute top-0 start-100 translate-middle badge rounded-circle bg-info d-flex align-items-center justify-content-center">+{{categorie.length-1}}
+              <span class="badge-circolare position-absolute top-0 start-100 translate-middle badge rounded-circle bg-info d-flex align-items-center justify-content-center">
+                +{{categorie.length-1}}
                 <span class="visually-hidden">altre categorie</span>
               </span>
             }
@@ -54,11 +81,11 @@
         }
       </div>
 
-
+      <!-- Informazioni Evento -->
       <div class="mx-2">
-        <h5 class="card-title text-primary"><a [routerLink]="['/event-details', evento.id]">{{ evento.nome }}</a></h5>
+        <h5 class="card-title text-primary">{{ evento.nome }}</h5>
 
-        <!-- Data evento -->
+        <!-- Data -->
         <div class="d-flex align-items-center mb-1">
           <span class="bi bi-calendar-fill me-2"></span>
           <time class="card-text">{{ evento.data }}</time>
@@ -69,7 +96,6 @@
           <span class="bi bi-person-fill me-2"></span>
           <p class="card-text mb-0">{{ evento.numPartecipanti }} / {{ evento.maxNumPartecipanti }}</p>
         </div>
-
 
         <!-- Città e Indirizzo -->
         <div class="d-flex align-items-center mb-1">

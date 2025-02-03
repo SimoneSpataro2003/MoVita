@@ -6,9 +6,12 @@ import {CategoryService} from '../../../services/category/category.service';
 import {Observable} from 'rxjs';
 import {EventService} from '../../../services/event/event.service';
 import {Loadable} from '../../../model/Loadable';
-import { RouterModule } from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
 import {IconaCategoriaMapper} from '../../../model/IconaCategoriaMapper';
 import {NgOptimizedImage} from '@angular/common';
+import {UserService} from '../../../services/user/user.service';
+import {Utente} from '../../../model/Utente';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-event-card',
@@ -23,14 +26,22 @@ import {NgOptimizedImage} from '@angular/common';
 })
 export class EventCardComponent implements OnInit, Loadable{
   @Input() evento!: Evento
+  utente!: Utente;
   categorie :Categoria[] = [];
   loaded: boolean = false;
+  readonly IconaCategoriaMapper = IconaCategoriaMapper;
+
+
 
   constructor(private categoryService: CategoryService,
-              private eventService: EventService) {
+              private eventService: EventService,
+              private userService: UserService,
+              private cookieService: CookieService,
+              private router: Router) {
   }
 
   ngOnInit() {
+    this.utente = JSON.parse(this.cookieService.get('utente')) ;
     this.showEventCategories();
   }
 
@@ -38,7 +49,7 @@ export class EventCardComponent implements OnInit, Loadable{
     this.eventService.getCategories(this.evento.id).subscribe({
       next: (categorie: Categoria[]) =>{
         this.categorie = categorie;
-        this.loaded = true;
+        this.getFriends();
       },
       error:(err) =>{
         //TODO: mostra errore con una finestra popup!
@@ -47,9 +58,36 @@ export class EventCardComponent implements OnInit, Loadable{
     })
   }
 
+  getFriends() {
+    this.userService.getFriends(this.utente.id).subscribe({
+      next: (friendship : Utente[]) => {
+        this.utente.amici = friendship;
+        this.cookieService.set('utente', JSON.stringify(this.utente));
+        this.loaded = true;
+      },
+      error:(error) => {
+        console.log(error);
+      }
+    })
+  }
+
+  checkFriendship(): boolean {
+    this.userService.checkFriendship(this.utente.id, this.evento.creatore.id).subscribe({
+      next: (result) => {
+        return result;
+      },
+      error: () => {
+        console.error("Errore nel verificare l'amicizia");
+      }
+    });
+    return false;
+  }
+
   isLoaded(): boolean {
     return this.loaded;
   }
 
-  protected readonly IconaCategoriaMapper = IconaCategoriaMapper;
+  navigaDettagliEvento(idEvento:number){
+    this.router.navigate([`/event-details/${idEvento}}`]);
+  }
 }
