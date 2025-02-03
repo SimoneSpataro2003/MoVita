@@ -9,6 +9,8 @@ import {MapService} from '../../services/map/map.service';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ConsigliEventoComponent} from './consigli-evento/consigli-evento.component';
 import {Categoria} from '../../model/Categoria';
+import {CookieService} from 'ngx-cookie-service';
+import {Utente} from '../../model/Utente';
 
 @Component({
   selector: 'app-events',
@@ -23,17 +25,20 @@ import {Categoria} from '../../model/Categoria';
 export class EventsComponent implements OnInit, Loadable{
   loaded: boolean = false;
   eventi: Evento[] = [];
+  utente !: Utente;
 
   /*
   * eventService: chiamate API al backend
   * modalService: far comparire finestre modali via typescript.
   * */
   constructor(private eventService: EventService,
+              private cookieService: CookieService,
               private modalService: NgbModal){}
 
   ngOnInit(): void {
     this.showAllEvents();
-    //TODO: if(utente.mostraConsigliEvento){ this.showConsigliEvento()}
+
+    this.utente = JSON.parse(this.cookieService.get('utente'));
     this.showConsigliEvento();
   }
 
@@ -52,7 +57,8 @@ export class EventsComponent implements OnInit, Loadable{
   }
 
   public showConsigliEvento(){
-    if (typeof window !== "undefined") {
+    //mostro i consigli solamente se il valore di mostraConsigliEventi è true!
+    if (typeof window !== "undefined" && this.utente.mostraConsigliEventi) {
       const modalRef = this.modalService.open(ConsigliEventoComponent, {centered: true, scrollable:true});
       //passo al modale un riferimento a se stesso, così da potersi chiudere dall'interno.
       modalRef.componentInstance.thisModal = modalRef;

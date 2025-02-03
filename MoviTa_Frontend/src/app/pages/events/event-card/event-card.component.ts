@@ -7,13 +7,16 @@ import {Observable} from 'rxjs';
 import {EventService} from '../../../services/event/event.service';
 import {Loadable} from '../../../model/Loadable';
 import { RouterModule } from '@angular/router';
+import {IconaCategoriaMapper} from '../../../model/IconaCategoriaMapper';
+import {NgOptimizedImage} from '@angular/common';
 
 @Component({
   selector: 'app-event-card',
   standalone: true,
   imports: [
     NgbPopover,
-    RouterModule
+    RouterModule,
+    NgOptimizedImage
   ],
   templateUrl: './event-card.component.html',
   styleUrl: './event-card.component.css'
@@ -47,4 +50,6 @@ export class EventCardComponent implements OnInit, Loadable{
   isLoaded(): boolean {
     return this.loaded;
   }
+
+  protected readonly IconaCategoriaMapper = IconaCategoriaMapper;
 }

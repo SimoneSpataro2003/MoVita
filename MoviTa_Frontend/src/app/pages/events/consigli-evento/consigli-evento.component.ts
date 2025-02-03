@@ -5,12 +5,17 @@ import {CategoryService} from '../../../services/category/category.service';
 import {Evento} from '../../../model/Evento';
 import {Loadable} from '../../../model/Loadable';
 import {NgClass} from '@angular/common';
+import {IconaCategoriaMapper} from "../../../model/IconaCategoriaMapper";
+import {CookieService} from 'ngx-cookie-service';
+import {Utente} from '../../../model/Utente';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-consigli-evento',
   standalone: true,
   imports: [
-    NgClass
+    NgClass,
+    FormsModule
   ],
   templateUrl: './consigli-evento.component.html',
   styleUrl: './consigli-evento.component.css'
@@ -20,8 +25,11 @@ export class ConsigliEventoComponent implements OnInit,Loadable{
   categorie !: Categoria[];
   categorieScelte = new Array<number>();
   loaded: boolean = false;
+  showConsigli: boolean = false;
 
-  constructor(private categoryService:CategoryService) {
+
+  constructor(private categoryService:CategoryService,
+              private cookieService: CookieService) {
 
   }
 
@@ -48,7 +56,12 @@ export class ConsigliEventoComponent implements OnInit,Loadable{
     this.categoryService.insertUserCategories(3,this.categorieScelte).subscribe({
       next: () =>{
         //TODO: mostra succecco con una finestra popup!
-        console.log("fatto!")
+        console.log("fatto!");
+        //ho modificato i dati dell'utente: modifico il cookie!
+        let utente: Utente = JSON.parse(this.cookieService.get('utente'));
+        utente.mostraConsigliEventi = false;
+        this.cookieService.set('utente',JSON.stringify(utente));
+        this.closeModal();
       },
       error:(err) =>{
         //TODO: mostra errore con una finestra popup!
@@ -77,4 +90,6 @@ export class ConsigliEventoComponent implements OnInit,Loadable{
   isSelected(categoria:Categoria){
     return this.categorieScelte.includes(categoria.id);
   }
+
+    protected readonly IconaCategoriaMapper = IconaCategoriaMapper;
 }

@@ -21,7 +21,7 @@ export interface Utente {
   admin: boolean,
   dataCreazione: string,
   dataUltimaModifica: string,
-  mostraConsigliEventi: string,
+  mostraConsigliEventi: boolean,
 
   amici: Utente[],
   categorieInteressate: Categoria[],

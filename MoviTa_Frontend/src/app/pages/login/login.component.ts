@@ -32,6 +32,7 @@ export class LoginComponent {
       username: this.applyForm.value.username,
       password: this.applyForm.value.password
     };
+
     this.authService.login(body).subscribe({
       next: (body:any) =>{
         this.cookieService.set('token', body.token);
@@ -50,9 +51,11 @@ export class LoginComponent {
   getUser(){
     this.userService.getUserByUsername(this.applyForm.value.username||'').subscribe({
       next: (utente: Utente) =>{
+        console.log(utente);
         this.cookieService.set('utente', JSON.stringify(utente));
         const a = JSON.parse(this.cookieService.get('utente'));
         console.log(a);
+        this.goHome();
       },
       error: (any) =>{
         this.loginError = true;
