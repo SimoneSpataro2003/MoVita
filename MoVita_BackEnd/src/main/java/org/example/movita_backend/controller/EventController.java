@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.apache.coyote.Response;
 import org.example.movita_backend.exception.event.EventNotValid;
 import org.example.movita_backend.model.*;
+import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.services.impl.UserService;
 import org.example.movita_backend.services.interfaces.IBookingService;
 import org.example.movita_backend.services.interfaces.IEventService;
@@ -93,6 +94,19 @@ public class EventController {
     ResponseEntity<Collection<Booking>> getBookingByUser(@PathVariable int user){
         Collection<Booking> bookings = bookingService.findByUser(user);
         return ResponseEntity.ok(bookings);
+    }
+
+    @GetMapping("/get-booking/{userId}")
+    ResponseEntity<List<Booking>> getBookingById(@PathVariable int userId){
+        try
+        {
+            List<Booking> partecipations = bookingService.findBookingById(userId);
+            return ResponseEntity.ok(partecipations);
+        }
+        catch (Exception e)
+        {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        }
     }
 
     @GetMapping("/get-booking-by-event/{event}")

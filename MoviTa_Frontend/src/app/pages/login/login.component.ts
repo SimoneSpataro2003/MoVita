@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth/auth.service';
 import {CookieService} from 'ngx-cookie-service';
 import {UserService} from '../../services/user/user.service';
@@ -16,10 +16,11 @@ import {Utente} from '../../model/Utente';
 })
 export class LoginComponent {
   router = inject(Router);
+  loginError: boolean = false;
 
   applyForm = new FormGroup({
-    username: new FormControl(''),
-    password: new FormControl('')
+    username: new FormControl('', {validators: [Validators.required]}),
+    password: new FormControl('', {validators: [Validators.required]})
   });
 
   constructor(private authService: AuthService,
@@ -37,9 +38,12 @@ export class LoginComponent {
         this.cookieService.set('token', body.token);
         console.log(this.cookieService.get('token'));
         this.getUser();
+        this.loginError = false;
+        this.goHome();
       },
       error: (any) =>{
-        //TODO: mostra popup di errore
+        this.loginError = true;
+        this.applyForm.reset();
       }
     });
   }
@@ -54,7 +58,7 @@ export class LoginComponent {
         this.goHome();
       },
       error: (any) =>{
-        //TODO: mostra popup di errore
+        this.loginError = true;
       }
     });
   }

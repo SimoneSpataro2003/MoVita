@@ -51,14 +51,16 @@ public class UserProxy extends User {
 
     public List<User> searchFriendsWithFilter(String filter) {
         if (super.utentiCercati == null) {
+            System.out.println("Uso il proxy per recuperare gli amici con il filtro");
             this.utentiCercati = DBManager.getInstance().getUserDAO().findUserByUsername(filter);
         }
+        System.out.println("Non uso il proxy per recuperare gli amici con il filtro");
         return super.utentiCercati;
     }
 
-    public List<Event> getCreatedEvents() {
+    public List<Event> getCreatedEvents(int userId) {
         if(super.eventiCreati == null) {
-            this.eventiCreati = DBManager.getInstance().getUserDAO().getCreatedEventsByUserId(this.getId());
+            this.eventiCreati = DBManager.getInstance().getUserDAO().getCreatedEventsByUserId(userId);
         }
         return super.eventiCreati;
     }

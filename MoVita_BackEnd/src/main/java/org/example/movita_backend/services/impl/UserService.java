@@ -44,13 +44,13 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public List<Event> getCreatedEventsByUserId() {
-        return userProxy.getCreatedEvents();
+    public List<Event> getCreatedEventsByUserId(int userId) {
+        return userProxy.getCreatedEvents(userId);
     }
 
     @Override
     public List<User> searchUsers(String filter) {
-        return userProxy.searchFriendsWithFilter(filter);
+        return userDao.findUserByUsername(filter);
     }
 
     @Override

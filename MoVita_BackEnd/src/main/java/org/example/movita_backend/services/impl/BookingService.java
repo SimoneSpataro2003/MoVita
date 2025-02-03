@@ -48,4 +48,9 @@ class BookingService implements IBookingService {
         bookingDao.save(booking);
         return bookingDao.findById(booking.getUtente(),booking.getEvento());
     }
+
+    @Override
+    public List<Booking> findBookingById(int id_utente) {
+        return bookingDao.findEventsById(id_utente);
+    }
 }

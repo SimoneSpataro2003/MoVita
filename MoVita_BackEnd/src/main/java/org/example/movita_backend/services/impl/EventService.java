@@ -51,11 +51,10 @@ class EventService implements IEventService {
         return eventProxy.getDescrizione();
     }
 
-    public List<Review> findRecensioni(int id_evento){
+    public List<Review> findRecensioni(int id_evento) {
         EventProxy eventProxy = new EventProxy(DBManager.getInstance().getEventDAO().findById(id_evento));
         return eventProxy.getRecensioni();
     }
-
 
     @Override
     public Event createEvent(Event event) throws Exception {

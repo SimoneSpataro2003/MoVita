@@ -13,6 +13,6 @@ public interface IBookingService {
     List<Booking> findByUser(int id_utente);
     Booking createBooking(Booking booking) throws Exception;
     Booking updateBooking(Booking booking) throws Exception;
-
+    List<Booking> findBookingById(int id_utente);
 
 }

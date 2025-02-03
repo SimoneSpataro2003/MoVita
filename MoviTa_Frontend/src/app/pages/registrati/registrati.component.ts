@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth/auth.service';
 import {CookieService} from 'ngx-cookie-service';
 
@@ -17,10 +17,10 @@ export class RegistratiComponent {
   tipo: number = 0; // Inizializzazione
 
   applyForm = new FormGroup({
-    username: new FormControl(''),
-    email: new FormControl(''),
-    password: new FormControl(''),
-    ripetiPassword: new FormControl(''),
+    username: new FormControl('', {validators: [Validators.required]}),
+    email: new FormControl('', {validators: [Validators.required]}),
+    password: new FormControl('', {validators: [Validators.required]}),
+    ripetiPassword: new FormControl('', {validators: [Validators.required]}),
     indirizzo: new FormControl(''),
     recapito: new FormControl(''),
     partitaIVA: new FormControl(''),

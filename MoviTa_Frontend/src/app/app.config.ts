@@ -10,7 +10,7 @@ import {CookieService} from 'ngx-cookie-service';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideHttpClient(),
+    provideHttpClient(withFetch()),
     provideRouter(routes),
     provideClientHydration(),
     importProvidersFrom(NgbModule,NgbPopover,HttpClient, CookieService)]

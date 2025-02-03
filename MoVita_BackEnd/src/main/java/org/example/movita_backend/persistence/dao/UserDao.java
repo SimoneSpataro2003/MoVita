@@ -33,7 +33,6 @@ public interface UserDao {
     void deleteFriendships(int UserId1, int UserId2);
 
     List<Event> getCreatedEventsByUserId(int userId);
-
     boolean checkFriendship(int userId1, int userId2);
 
 
