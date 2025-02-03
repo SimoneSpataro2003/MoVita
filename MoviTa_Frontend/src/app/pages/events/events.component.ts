@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {Evento} from '../../model/Evento';
 import {HttpClient, HttpHandler} from '@angular/common/http';
-import {EventCardComponent} from './event-card/event-card.component';
+import { EventCardComponent } from '../../shared/common/event-card/event-card.component';
 import {MapComponent} from './map/map.component';
 import {EventService} from '../../services/event/event.service';
 import {Loadable} from '../../model/Loadable';
