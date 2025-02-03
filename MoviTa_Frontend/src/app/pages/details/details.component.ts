@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
 import { Evento } from '../../model/Evento';
-import { CardUtenteComponent } from '../../shared/common/card-utente/card-utente.component';
 import { CommonModule } from '@angular/common';
 import { EventService } from '../../services/event/event.service';
 import { ActivatedRoute } from '@angular/router';
@@ -15,7 +14,7 @@ import { PartecipantiEventoComponent } from './partecipanti-evento/partecipanti-
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [CardUtenteComponent, CommonModule, PartecipantiEventoComponent,CarouselEventImageComponent],
+  imports: [CommonModule, PartecipantiEventoComponent,CarouselEventImageComponent],
   templateUrl: './details.component.html',
   styleUrl: './details.component.css',
 })
