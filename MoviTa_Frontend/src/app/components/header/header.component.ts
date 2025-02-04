@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {Router, RouterModule} from '@angular/router';
 import {Utente} from '../../model/Utente';
 import {CookieService} from 'ngx-cookie-service';
@@ -10,14 +10,15 @@ import {CookieService} from 'ngx-cookie-service';
   styleUrl: './header.component.css',
   templateUrl: './header.component.html'
 })
-export class HeaderComponent {
-  protected currentUserId!: number;
-  constructor(private router: Router,
-              private cookieService: CookieService) {}
+export class HeaderComponent{
+  currentUserId!: number;
 
-    goToMyProfile() {
-      let utente: Utente = JSON.parse(this.cookieService.get('utente'));
-      this.currentUserId = utente.id;
-      this.router.navigate(['/profile', this.currentUserId]);
+  constructor(private router: Router,
+              protected cookieService: CookieService) {}
+
+  goToMyProfile() {
+    let utente: Utente = JSON.parse(this.cookieService.get('utente'));
+    this.currentUserId = utente.id;
+    this.router.navigate(['/profile', this.currentUserId]);
   }
 }

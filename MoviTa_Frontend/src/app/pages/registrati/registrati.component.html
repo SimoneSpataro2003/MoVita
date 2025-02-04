@@ -62,7 +62,7 @@
               </div>
 
               <div class="col-6">
-                <label for="recapito" class="form-label">Recapito</label>
+                <label for="recapito" class="form-label">N.telefono</label>
                 <input id="recapito" type="text" class="form-control" formControlName="recapito" (click)="registerError = false">
               </div>
             </div>
@@ -75,7 +75,7 @@
 
           @if (registerError) {
             <div class="alert alert-danger text-center">
-              Credenziali non complete. Riprova.
+              Credenziali non valide. Riprova.
             </div>
           }
 

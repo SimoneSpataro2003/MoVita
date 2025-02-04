@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth/auth.service';
-import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-registrati',
@@ -34,46 +33,44 @@ export class RegistratiComponent {
 
   registerUser() {
     const body = {
+      nome: this.applyForm.value.nome,
+      cognome: this.applyForm.value.cognome,
       username: this.applyForm.value.username,
       email: this.applyForm.value.email,
       password: this.applyForm.value.password,
-      citta: this.applyForm.value.citta,
-      nome: this.applyForm.value.nome,
-      cognome: this.applyForm.value.cognome,
+      citta: this.applyForm.value.citta
     };
     this.authService.registerUser(body).subscribe({
       next: (response: any) => {
-        this.registerError = false;
         this.goLogin();
         console.log(response);
       },
       error: (any) => {
         this.registerError = true;
-        this.applyForm.reset();
+        //this.applyForm.reset();
       }
     });
   }
 
   registerAgency() {
     const body = {
+      nome: this.applyForm.value.nome,
       username: this.applyForm.value.username,
       email: this.applyForm.value.email,
       password: this.applyForm.value.password,
       citta: this.applyForm.value.citta,
-      nome: this.applyForm.value.nome,
-      partitaIVA: this.applyForm.value.partitaIVA,
       indirizzo: this.applyForm.value.indirizzo,
-      recapito: this.applyForm.value.recapito
+      recapito: this.applyForm.value.recapito,
+      partitaIVA: this.applyForm.value.partitaIVA
     };
     this.authService.registerAgency(body).subscribe({
       next: (response: any) => {
-        this.registerError = false;
         this.goLogin();
         console.log(response);
       },
       error: (any) => {
         this.registerError = true;
-        this.applyForm.reset();
+        //this.applyForm.reset();
       }
     });
   }
