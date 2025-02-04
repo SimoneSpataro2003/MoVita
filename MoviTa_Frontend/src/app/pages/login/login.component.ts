@@ -37,8 +37,8 @@ export class LoginComponent {
       next: (body:any) =>{
         this.cookieService.set('token', body.token);
         console.log(this.cookieService.get('token'));
-        this.getUser();
         this.loginError = false;
+        this.getUser();
       },
       error: (any) =>{
         this.loginError = true;

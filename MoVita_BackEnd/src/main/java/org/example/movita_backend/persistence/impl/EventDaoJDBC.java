@@ -4,6 +4,7 @@ import org.example.movita_backend.model.Booking;
 import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.ResultSetMapper;
+import org.example.movita_backend.model.dto.EventFilter;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.EventDao;
 
@@ -117,19 +118,52 @@ public class EventDaoJDBC implements EventDao {
 
 
     @Override
-    public List<Event> findByFilter(String filter) {
-        String query = "SELECT e.* FROM evento e WHERE nome LIKE ?";
-        List<Event> toRet = new ArrayList<>();
+    public List<Event> findByFilter(EventFilter filter) {
+        StringBuilder query = new StringBuilder("SELECT * FROM evento e WHERE 1=1 ");
+        List<Object> parameters = new ArrayList<>();
 
-        try(PreparedStatement ps = connection.prepareStatement(query)){
-            ps.setString(1, "%"+filter+"%");
-            ResultSet rs = ps.executeQuery();
+        if (filter.getCreatore_id() > 0) {
+            query.append(" AND e.creatore LIKE ? ");
+            parameters.add("%"+filter.getCreatore_id()+"%");
+        }
+        if (filter.getCitta() != null && !filter.getCitta().isEmpty()) {
+            query.append(" AND e.citta LIKE ? ");
+            parameters.add("%"+filter.getCitta()+"%");
+        }
+        if (filter.getEtaMinima() > 0) {
+            query.append(" AND e.eta_minima >= ? ");
+            parameters.add(filter.getEtaMinima());
+        }
+        if (filter.getPrezzoMassimo() > 0) {
+            query.append(" AND e.prezzo <= ? ");
+            parameters.add(filter.getPrezzoMassimo());
+        }
+        if (filter.getValutazioneMedia() > 0) {
+            query.append(" AND e.valutazione_media >= ? ");
+            parameters.add(filter.getValutazioneMedia());
+        }
+        if (filter.isAlmenoMetaPartecipanti()) {
+            query.append(" AND e.num_partecipanti >= e.max_num_partecipanti / 2 ");
+        }
+        if (filter.getCategorie_id() != null && !filter.getCategorie_id().isEmpty()) {
+            //questa stringa mette un punto interrogativo nella query per ogni id_categoria presente.
+            String inClause = String.join(",", filter.getCategorie_id().stream().map(id -> "?").toArray(String[]::new));
+            query.append(" AND e.id IN (SELECT ec.id_evento as id FROM evento_categoria ec WHERE ec.id_categoria IN (" + inClause + ")) ");
+            parameters.addAll(filter.getCategorie_id());
+        }
 
-            while(rs.next()){
-                Event e = ResultSetMapper.mapEvent(rs);
-                toRet.add(e);
+        try (PreparedStatement stmt = connection.prepareStatement(query.toString())) {
+            for (int i = 0; i < parameters.size(); i++) {
+                stmt.setObject(i + 1, parameters.get(i));
             }
-            return toRet;
+
+            ResultSet rs = stmt.executeQuery();
+            List<Event> eventi = new ArrayList<>();
+
+            while (rs.next()) {
+                eventi.add(ResultSetMapper.mapEvent(rs));
+            }
+            return eventi;
         }catch (SQLException e){
             e.printStackTrace();
             throw new RuntimeException(e.getMessage());

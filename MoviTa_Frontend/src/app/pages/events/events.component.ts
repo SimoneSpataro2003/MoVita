@@ -11,13 +11,15 @@ import {ConsigliEventoComponent} from './consigli-evento/consigli-evento.compone
 import {Categoria} from '../../model/Categoria';
 import {CookieService} from 'ngx-cookie-service';
 import {Utente} from '../../model/Utente';
+import {EventFiltersComponent} from './event-filters/event-filters.component';
 
 @Component({
   selector: 'app-events',
   standalone: true,
   imports: [
     EventCardComponent,
-    MapComponent
+    MapComponent,
+    EventFiltersComponent
   ],
   templateUrl: './events.component.html',
   styleUrl: './events.component.css'

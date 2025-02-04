@@ -4,6 +4,7 @@ import org.example.movita_backend.model.Booking;
 import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.Review;
+import org.example.movita_backend.model.dto.EventFilter;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.proxy.EventProxy;
 
@@ -13,7 +14,7 @@ public interface IEventService {
 
     List<Event> findAll();
     Event findById(int id);
-    List<Event> findByFilter(String filter);
+    List<Event> findByFilter(EventFilter eventFilter);
     List<Category> findCategories(int id_evento);
     List<Booking> findPrenotazioni(int id_evento);
     List<Review> findRecensioni(int id_evento);

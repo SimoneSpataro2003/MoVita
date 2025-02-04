@@ -10,8 +10,6 @@ import java.util.List;
 @Getter
 @Setter
 public class Category {
-    //FIXME (SIMONE): correggi. Il proxy sovrascrive il metodo getter per definire i dati (vedi il proxy di Evento.)
-
     protected int id;
 
     protected String nome;

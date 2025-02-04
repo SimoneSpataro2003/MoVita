@@ -5,47 +5,9 @@
         <h1 class="text-primary">Eventi Disponibili</h1>
       </div>
     </div>
-    <div class="row">
-      <div class="accordion mb-4" id="accordion">
-        <!-- Filtro Completo -->
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingOne">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-              Filtri: (qui verrà visualizzata una riga di sintesi sui filtri)
-            </button>
-          </h2>
-          <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordion">
-            <div class="accordion-body">
-              <!-- Filtro per Nome -->
-              <div class="mb-3">
-                <label for="nomeFiltro" class="form-label">Cerca per Nome</label>
-                <input type="text" id="nomeFiltro" class="form-control" placeholder="Cerca per nome">
-              </div>
-
-              <!-- Filtro per Città -->
-              <div class="mb-3">
-                <label for="cittaFiltro" class="form-label">Cerca per Città</label>
-                <input type="text" id="cittaFiltro" class="form-control" placeholder="Cerca per città">
-              </div>
-
-              <!-- Filtro per Prezzo -->
-              <div class="mb-3">
-                <label for="prezzoFiltro" class="form-label">Prezzo (max)</label>
-                <input type="range" id="prezzoFiltro" class="form-range" min="0" max="1000" step="10">
-                <div class="d-flex justify-content-between">
-                  <span>0€</span>
-                </div>
-              </div>
-
-              <!-- Filtro per Età Minima -->
-              <div class="mb-3">
-                <label for="etaMinimaFiltro" class="form-label">Età Minima</label>
-                <input type="number" id="etaMinimaFiltro" class="form-control" min="0" max="100">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class="row mb-4">
+      <app-event-filters>
+      </app-event-filters>
     </div>
     <div class="row mb-4">
       <div class="col-12">

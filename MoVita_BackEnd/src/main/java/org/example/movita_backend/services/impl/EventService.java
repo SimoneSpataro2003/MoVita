@@ -5,6 +5,7 @@ import org.example.movita_backend.model.Booking;
 import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.Review;
+import org.example.movita_backend.model.dto.EventFilter;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.EventDao;
 import org.example.movita_backend.persistence.proxy.EventProxy;
@@ -34,8 +35,8 @@ class EventService implements IEventService {
     }
 
     @Override
-    public List<Event> findByFilter(String filter) {
-        return eventDao.findByFilter(filter);
+    public List<Event> findByFilter(EventFilter eventFilter) {
+        return eventDao.findByFilter(eventFilter);
     }
 
     public List<Category> findCategories(int id_evento){
