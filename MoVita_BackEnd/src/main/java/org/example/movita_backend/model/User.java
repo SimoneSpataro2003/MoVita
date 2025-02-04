@@ -39,9 +39,8 @@ public class User implements UserDetails {
     // Relations
     protected List<User> amici;
     protected List<Category> categorieInteressate;
-    //private List<???> eventiPartecipati;
-    //private List<???> eventiRecensiti;
-    //FIXME: eventiCercati e utentiCercati richiedono due tabelle apposite nel db!
+    private List<Booking> eventiPartecipati;
+    private List<Review> eventiRecensiti;
     protected List<Event> eventiCreati;
     protected List<User> utentiCercati;
     protected List<Payment> pagamenti;

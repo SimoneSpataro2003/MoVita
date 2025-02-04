@@ -20,6 +20,10 @@ export class EventService {
     return this.authHttp.get(this.URL +`/get-event-by-id/${id}`);
   }
 
+  public getEventsByFilter(filter:any):Observable<Evento[]>{
+    return this.authHttp.post(this.URL +`/get-events-by-filter`,filter);
+  }
+
   public getPartecipazioniByEvent(id: number):Observable<Partecipazione[]>{
     return this.authHttp.get(this.URL +`/get-booking-by-event/${id}`);
   }
@@ -37,7 +41,7 @@ export class EventService {
   public getEventDescription(idEvento:number){
     return this.authHttp.get(`${this.URL}/get-event-description/${idEvento}`);
   }
-  
+
   public getBookingById(id:number): Observable<Partecipazione[]> {
     return this.authHttp.get(this.URL +`/get-booking-by-user/${id}`);
   }

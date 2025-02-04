@@ -1,32 +1,47 @@
 @if(isLoaded()){
   <div class="container">
     <div class="row">
-      <div class="col-12 text-center">
+      <div class="col-12 text-center mt-3">
         <h1 class="text-primary">Eventi Disponibili</h1>
+        <p class="text-secondary">Visualizza gli eventi più attinenti a te. Filtra per ciò che vuoi!</p>
       </div>
     </div>
     <div class="row mb-4">
-      <app-event-filters>
+      <app-event-filters (ottieniEventi)="showEvents($event)">
       </app-event-filters>
     </div>
-    <div class="row mb-4">
-      <div class="col-12">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3 flex-nowrap" style="overflow-x: auto; white-space: nowrap;">
-          <!-- Loop sugli eventi -->
-          @for(evento of this.eventi; track evento.id){
-            <div class="col" style="display: inline-block; float: none;">
-              <app-event-card [evento]="evento" class="h-100"></app-event-card>
-            </div>
-          }
+    @if(eventi.length >0){
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-xxl-4 g-3 flex-nowrap" style="overflow-x: auto; white-space: nowrap;">
+            <!-- Loop sugli eventi -->
+            @for(evento of this.eventi; track evento.id){
+              <div class="col" style="display: inline-block; float: none;">
+                <app-event-card [evento]="evento" class="h-100"></app-event-card>
+              </div>
+            }
+          </div>
         </div>
       </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <div>
-          <app-map [eventi] ="this.eventi" class="w-100"></app-map>
+      <div class="row">
+        <div class="col-12">
+          <h3 class="text-secondary text-center">Mappa degli eventi</h3>
+          <div>
+            <app-map [eventi] ="this.eventi" class="w-100"></app-map>
+          </div>
         </div>
       </div>
-    </div>
+    }@else{
+      <div class="row">
+        <div class="d-flex flex-column col-6 justify-content-center align-items-center text-center">
+          <h3 class="text-danger mt-3">Non trovo nessun evento :(</h3>
+          <p class="text-muted">Prova a modificare i filtri di ricerca, o creane uno tu!</p>
+        </div>
+        <div class="col-6 text-center">
+          <img src="img/noEvents.jpg" alt="Nessun evento trovato" class="immagine img-fluid">
+        </div>
+      </div>
+
+    }
   </div>
 }

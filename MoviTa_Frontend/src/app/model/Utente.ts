@@ -1,6 +1,8 @@
 import {Categoria} from './Categoria';
 import {Partecipazione} from './Partecipazione';
 import {Recensione} from './Recensione';
+import {Evento} from './Evento';
+import {Pagamento} from './Pagamento';
 
 export interface Utente {
   id: number,
@@ -27,6 +29,9 @@ export interface Utente {
   categorieInteressate: Categoria[],
   eventiPartecipati: Partecipazione[],
   eventiRecensiti: Recensione[]
+  eventiCreati: Evento[];
+  utentiCercati: Utente[];
+  pagamenti: Pagamento[];
   /*
   eventiCercati: ???,
   utentiCercati: ???,

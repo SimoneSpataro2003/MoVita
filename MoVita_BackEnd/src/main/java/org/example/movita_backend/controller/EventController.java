@@ -62,8 +62,8 @@ public class EventController {
         return ResponseEntity.ok(Map.of("descrizione",descrizione));
     }
 
-    @PostMapping("/get-event-by-filter")
-    ResponseEntity<Collection<Event>> getEventByFilter(@RequestBody EventFilter eventFilter){
+    @PostMapping("/get-events-by-filter")
+    ResponseEntity<Collection<Event>> getEventsByFilter(@RequestBody EventFilter eventFilter){
         Collection<Event> events = eventService.findByFilter(eventFilter);
         return ResponseEntity.ok(events);
     }

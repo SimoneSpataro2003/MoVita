@@ -37,7 +37,6 @@ export class LoginComponent {
       next: (body:any) =>{
         this.cookieService.set('token', body.token);
         console.log(this.cookieService.get('token'));
-        this.loginError = false;
         this.getUser();
       },
       error: (any) =>{
@@ -48,6 +47,7 @@ export class LoginComponent {
   }
 
   getUser(){
+    console.log(this.applyForm.value.username);
     this.userService.getUserByUsername(this.applyForm.value.username||'').subscribe({
       next: (utente: Utente) =>{
         console.log(utente);
