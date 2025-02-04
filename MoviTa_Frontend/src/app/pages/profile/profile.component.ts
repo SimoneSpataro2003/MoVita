@@ -151,6 +151,7 @@ export class ProfileComponent implements OnInit {
     this.userService.checkFriendship(this.currentUserId, this.userId).subscribe({
       next: (result) => {
         this.alreadyFollow = result;
+        console.log(this.userId + " : " +result)
       },
       error: () => {
         console.error("Errore nel verificare l'amicizia");

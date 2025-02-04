@@ -21,9 +21,7 @@
               <span class="badge bg-secondary"><i class="bi bi-star-fill"></i></span>
             }
           </p>
-          <div [hidden]="user.azienda">
-            <h4>{{ user.personaCognome }}</h4>
-          </div>
+
           <div [hidden]="!user.premium || user.azienda">
 
           </div>
