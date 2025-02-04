@@ -68,14 +68,16 @@
             </div>
 
             <div class="mb-2">
-              <label for="partitaIVA" class="form-label">Partita IVA</label>
-              <input id="partitaIVA" type="text" class="form-control" formControlName="partitaIVA">
+              <label for="partitaIva" class="form-label">Partita Iva</label>
+              <input id="partitaIva" type="text" class="form-control" formControlName="partitaIva">
             </div>
           }
 
-          <div class="alert alert-danger text-center">
-            Credenziali non valide. Riprova.
-          </div>
+          @if (registerError) {
+            <div class="alert alert-danger text-center">
+              Credenziali non valide. Riprova.
+            </div>
+          }
 
           <button type="submit" class="btn btn-primary w-100 mt-2">Registrati</button>
         </form>

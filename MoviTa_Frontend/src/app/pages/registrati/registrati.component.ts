@@ -14,6 +14,7 @@ import {AuthService} from '../../services/auth/auth.service';
 export class RegistratiComponent {
   router = inject(Router);
   tipo: number = 0;
+  registerError: boolean = false;
 
   applyForm = new FormGroup({
     nome: new FormControl(''),
@@ -25,7 +26,7 @@ export class RegistratiComponent {
     citta: new FormControl(''),
     indirizzo: new FormControl(''),
     recapito: new FormControl(''),
-    partitaIVA: new FormControl(''),
+    partitaIva: new FormControl(''),
   });
 
   constructor(private authService: AuthService) {}
@@ -43,10 +44,12 @@ export class RegistratiComponent {
       next: (response: any) => {
         this.goLogin();
         console.log(response);
+        this.registerError = false;
       },
       error: (any) => {
         //TODO: errore
         //this.applyForm.reset();
+        this.registerError = true;
       }
     });
   }
@@ -60,7 +63,7 @@ export class RegistratiComponent {
       citta: this.applyForm.value.citta,
       indirizzo: this.applyForm.value.indirizzo,
       recapito: this.applyForm.value.recapito,
-      partitaIVA: this.applyForm.value.partitaIVA
+      partitaIva: this.applyForm.value.partitaIva
     };
     this.authService.registerAgency(body).subscribe({
       next: (response: any) => {
@@ -70,6 +73,7 @@ export class RegistratiComponent {
       error: (any) => {
         //TODO: errore
         //this.applyForm.reset();
+        this.registerError = true;
       }
     });
   }
