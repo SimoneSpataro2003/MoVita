@@ -5,7 +5,13 @@
             <h1>{{evento?.nome}}</h1>
         </section>
         <section class="col-2 p-3 d-flex justify-content-center  align-items-center">
-            <button type="button" class="btn btn-lg btn-primary">Partecipa</button>
+            @if(!this.prenotato)
+            {
+                <button type="button" class="btn btn-lg btn-primary" (click)="partecipa()">Partecipa</button>
+            }
+            @else{
+                <button type="button" class="btn btn-outline-success">Prenotato</button>            
+            }            
         </section>
     </div>
 
@@ -42,10 +48,7 @@
                       </svg>Valutazione: {{evento?.valutazioneMedia}}</li>
                 </ul>
             </section>
-            <section class="p-3">
-                Mappa
-                <img src="#" class=" img-thumbnail" >
-            </section>
+           
         </div>
     </div>
     <section class="row">
@@ -57,11 +60,9 @@
         </article>
     </section>
     <section class="shadow rounded-4 col-md-8 p-3 m-3">
-        <h2>Partecipanti</h2>
-        <div class="row p-0">
-            <app-partecipanti-evento class="m-0 p-0" [idEvento]="idEvento"></app-partecipanti-evento>
-    
-        </div>
+        <h2>Partecipanti</h2>       
+        <app-partecipanti-evento class="p-0" [idEvento]="idEvento"></app-partecipanti-evento>    
+        
     </section>
     <section>
         <div class="shadow rounded-4 col-md-8 p-3 m-3">
@@ -72,12 +73,7 @@
     <section class="row">
         <div class="shadow rounded-4 col-md-8 p-3 m-3">
             <h2>Recensioni </h2>
-            <article>
-                Riutilizzabile
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus nesciunt hic incidunt fugit sapiente
-                    magni unde corrupti. Repellat nostrum minima placeat incidunt iusto repudiandae hic accusantium
-                    asperiores, assumenda porro ipsam!</p>
-            </article>
+            <app-recensione [idEvento]="idEvento"></app-recensione>
         </div>
     </section>
 

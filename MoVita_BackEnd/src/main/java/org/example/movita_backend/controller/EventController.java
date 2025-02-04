@@ -4,7 +4,9 @@ import lombok.Getter;
 import org.apache.coyote.Response;
 import org.example.movita_backend.exception.event.EventNotValid;
 import org.example.movita_backend.model.*;
+import org.example.movita_backend.model.dto.BookingEvent;
 import org.example.movita_backend.model.dto.EventFilter;
+import org.example.movita_backend.model.dto.ReviewEvent;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.services.impl.UserService;
 import org.example.movita_backend.services.interfaces.IBookingService;
@@ -130,6 +132,18 @@ public class EventController {
         return ResponseEntity.ok(categories);
     }
 
+    @GetMapping("/get-event-review/{eventId}")
+    ResponseEntity<Collection<Review>> getEventReview(@PathVariable int eventId){
+        Collection<Review> reviews = reviewService.findByEvent(eventId);
+        return ResponseEntity.ok(reviews);
+    }
+
+    @PostMapping("/create-event-review")
+    ResponseEntity<Review> createEventReview(@RequestBody ReviewEvent review){
+        return  ResponseEntity.ok(
+                this.reviewService.createReview(review));
+    }
+
     @PostMapping("/create-event")
     ResponseEntity<Event> postCreateNewEvent(@RequestBody Event event) throws Exception {
         try{
@@ -151,7 +165,7 @@ public class EventController {
     }
 
     @PostMapping("/book-event")
-    ResponseEntity<Booking> postBookEvent(@RequestBody Booking booking) throws Exception
+    ResponseEntity<Booking> postBookEvent(@RequestBody BookingEvent booking) throws Exception
     {
         return  ResponseEntity.ok(
                 this.bookingService.createBooking(booking)

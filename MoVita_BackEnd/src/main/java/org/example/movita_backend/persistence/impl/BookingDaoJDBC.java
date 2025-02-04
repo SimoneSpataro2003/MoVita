@@ -4,6 +4,7 @@ import org.example.movita_backend.model.Booking;
 import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.ResultSetMapper;
 import org.example.movita_backend.model.User;
+import org.example.movita_backend.model.dto.BookingEvent;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.BookingDao;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -125,14 +126,14 @@ public class BookingDaoJDBC implements BookingDao {
 
 
     @Override
-    public Booking update(Booking booking) {
+    public Booking update(BookingEvent booking) {
         String query = "UPDATE partecipazione SET " +
                 "id_utente=?,id_evento=?,data=?, annullata=?"+
                 "WHERE id_utente = ? and id_evento = ?";
 
         try(PreparedStatement ps = connection.prepareStatement(query)){
-            ps.setInt(1, booking.getUtente().getId());
-            ps.setInt(2, booking.getEvento().getId());
+            ps.setInt(1, booking.getUtente());
+            ps.setInt(2, booking.getEvento());
             ps.setTimestamp(3,java.sql.Timestamp.valueOf(booking.getData()));
             ps.setBoolean(4, booking.getAnnullata());
             ps.executeUpdate();
@@ -141,18 +142,18 @@ public class BookingDaoJDBC implements BookingDao {
             throw new UsernameNotFoundException("Could not update booking.");
         }
 
-        return findById(booking.getUtente(), booking.getEvento());
+        return findById(DBManager.getInstance().getUserDAO().findById(booking.getUtente()), DBManager.getInstance().getEventDAO().findById(booking.getEvento()));
     }
 
     @Override
-    public void save(Booking booking) {
+    public void save(BookingEvent booking) {
         String query = "INSERT INTO partecipazione (id_utente, id_evento, data, annullata) " +
                 "VALUES (?, ?, ?, ?); ";
 
         try (PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            statement.setInt(1, booking.getUtente().getId());
-            statement.setInt(2, booking.getEvento().getId());
-            statement.setTimestamp(3, java.sql.Timestamp.valueOf(booking.getData()));
+            statement.setInt(1, booking.getUtente());
+            statement.setInt(2, booking.getEvento());
+            statement.setDate(3,  java.sql.Date.valueOf(booking.getData()));
             statement.setBoolean(4, booking.getAnnullata());
 
             statement.executeUpdate();

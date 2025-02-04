@@ -1,36 +1,9 @@
-<div id="carouselExampleDark" class="carousel carousel-dark slide">
-    <!-- Indicatori -->
-    <div class="carousel-indicators">
+<div class="container-fluid">
+    <div class="row flex-nowrap overflow-auto g-3">
         @for (item of eventiSimili; track $index) {
-            <button type="button"
-                    [class.active]="$index === 0"
-                    data-bs-target="#carouselExampleDark" 
-                    [attr.data-bs-slide-to]="$index"
-                    [attr.aria-label]="'Slide ' + ($index + 1)">
-            </button>
-        }
-    </div>
-
-    <!-- Contenuto del carosello -->
-    <div class="carousel-inner">
-        @for (item of eventiSimili; track $index) {
-            <div class="carousel-item" [class.active]="$index === 0">
-                <div class="row justify-content-center">
-                    <div class="col-md-4">
-                        <app-event-card [evento]="item"></app-event-card>
-                    </div>
-                </div>
+            <div class="col-auto">
+                <app-event-card [evento]="item"></app-event-card>
             </div>
         }
     </div>
-
-    <!-- Controlli -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
 </div>

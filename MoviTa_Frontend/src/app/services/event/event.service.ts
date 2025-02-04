@@ -3,6 +3,8 @@ import {Observable} from 'rxjs';
 import {Evento} from '../../model/Evento';
 import {AuthHttpClientService} from '../auth-http/auth-http-client.service';
 import { Partecipazione } from '../../model/Partecipazione';
+import { Recensione } from '../../model/Recensione';
+import { PartecipazioneDTO } from '../../model/partecipazione-dto';
 
 @Injectable({
   providedIn: 'root'
@@ -43,5 +45,12 @@ export class EventService {
   }
   public getBookingByEvent(idEvento:number):Observable<Partecipazione[]>{
     return this.authHttp.get(this.URL +`/get-booking-by-event/${idEvento}`);
+  }
+  public getEventReview(idEvento:number):Observable<Recensione[]>{
+    return this.authHttp.get(this.URL +`/get-event-review/${idEvento}`);
+  }
+
+  public setEventBooking(prenotazione:PartecipazioneDTO):Observable<Partecipazione>{
+    return this.authHttp.post(this.URL +"/book-event",prenotazione);
   }
 }
