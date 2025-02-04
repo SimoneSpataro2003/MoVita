@@ -4,6 +4,7 @@ import {Utente} from '../../../model/Utente';
 import {UserService} from '../../../services/user/user.service';
 import { ProfileComponent } from '../../../pages/profile/profile.component';
 import {RouterLink} from '@angular/router';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-card-friend',
@@ -20,8 +21,10 @@ export class CardFriendComponent implements OnInit, Loadable {
   numeroFollowers?: number;
   loaded: boolean = false;
   alreadyFollow = false;
+  currentUserId!: number;
 
-  constructor(private userService: UserService) {
+
+  constructor(private userService: UserService, private cookieService: CookieService) {
   }
 
   isLoaded(): boolean {
@@ -31,6 +34,10 @@ export class CardFriendComponent implements OnInit, Loadable {
   ngOnInit(): void {
     this.showNumberFollowers();
     this.checkFriendship()
+
+    let utente: Utente = JSON.parse(this.cookieService.get('utente'));
+    this.currentUserId = utente.id;
+
     this.loaded = true;
   }
 
@@ -46,7 +53,7 @@ export class CardFriendComponent implements OnInit, Loadable {
   }
 
   checkFriendship(): void {
-    this.userService.checkFriendship(this.userId, this.utenteAmico.id).subscribe({
+    this.userService.checkFriendship(this.currentUserId, this.utenteAmico.id).subscribe({
       next: (result) => {
         this.alreadyFollow = result;
       },
@@ -57,7 +64,7 @@ export class CardFriendComponent implements OnInit, Loadable {
   }
 
   deleteFriend(): void {
-    this.userService.deleteFriendship(this.userId, this.utenteAmico.id).subscribe({
+    this.userService.deleteFriendship(this.currentUserId, this.utenteAmico.id).subscribe({
       next: () => {
         this.alreadyFollow = false; // Aggiorna lo stato dopo la rimozione
       },
@@ -68,7 +75,7 @@ export class CardFriendComponent implements OnInit, Loadable {
   }
 
   addFriend(): void {
-    this.userService.addFriendship(this.userId, this.utenteAmico.id).subscribe({
+    this.userService.addFriendship(this.currentUserId, this.utenteAmico.id).subscribe({
       next: (result) => {
         this.alreadyFollow = true;
       }

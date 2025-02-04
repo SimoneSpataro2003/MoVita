@@ -49,38 +49,13 @@ export class EventCardComponent implements OnInit, Loadable{
     this.eventService.getCategories(this.evento.id).subscribe({
       next: (categorie: Categoria[]) =>{
         this.categorie = categorie;
-        this.getFriends();
+        this.loaded = true;
       },
       error:(err) =>{
         //TODO: mostra errore con una finestra popup!
         console.log(err);
       }
     })
-  }
-
-  getFriends() {
-    this.userService.getFriends(this.utente.id).subscribe({
-      next: (friendship : Utente[]) => {
-        this.utente.amici = friendship;
-        this.cookieService.set('utente', JSON.stringify(this.utente));
-        this.loaded = true;
-      },
-      error:(error) => {
-        console.log(error);
-      }
-    })
-  }
-
-  checkFriendship(): boolean {
-    this.userService.checkFriendship(this.utente.id, this.evento.creatore.id).subscribe({
-      next: (result) => {
-        return result;
-      },
-      error: () => {
-        console.error("Errore nel verificare l'amicizia");
-      }
-    });
-    return false;
   }
 
   isLoaded(): boolean {

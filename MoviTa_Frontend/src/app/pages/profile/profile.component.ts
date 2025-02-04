@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 import { Utente } from '../../model/Utente';
-import { CommonModule } from '@angular/common';
+import {CommonModule, NgOptimizedImage} from '@angular/common';
 import { CardFriendComponent } from '../../shared/common/card-friend/card-friend.component';
 import {EventService} from '../../services/event/event.service';
 import {Partecipazione} from '../../model/Partecipazione';
@@ -14,7 +14,7 @@ import {CookieService} from 'ngx-cookie-service';
   templateUrl: './profile.component.html',
   standalone: true,
   styleUrls: ['./profile.component.css'],
-  imports: [CommonModule, CardFriendComponent, RouterLink] // Aggiungi CommonModule qui
+  imports: [CommonModule, CardFriendComponent, RouterLink, NgOptimizedImage] // Aggiungi CommonModule qui
 })
 export class ProfileComponent implements OnInit {
   userId!: number;
@@ -64,7 +64,7 @@ export class ProfileComponent implements OnInit {
   }
 
   caricaImmagineProfilo():void{
-    this.userService.getImage(123).subscribe(
+    this.userService.getImage(this.userId).subscribe(
       {
         next: (data) => {
           this.immagineProfilo = URL.createObjectURL(data);

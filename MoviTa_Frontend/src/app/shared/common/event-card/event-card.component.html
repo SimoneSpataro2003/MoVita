@@ -3,31 +3,27 @@
     <div class="card-body position-relative">
 
       <!-- Info Creatore -->
-      <div class="d-flex align-items-center justify-content-center text-center">
-        <img class="rounded-circle mx-2" alt="imgUtente" src="img/home_create.jpg" width="50" height="50">
+      <div class="d-flex align-items-center justify-content-between">
 
-        @if(evento.creatore.premium){
-          <a class="text-secondary mx-2 mb-1 h6"
-             routerLink="/profile/{{evento.creatore.id}}"
-             (click)="$event.stopPropagation()">
-            {{ evento.creatore.nome }} <span class="bi bi-star-fill text-secondary"></span>
-          </a>
-        } @else {
-          <a class="text-secondary mx-2 mb-1 h6"
-             routerLink="/profile/{{evento.creatore.id}}"
-             (click)="$event.stopPropagation()">
-            {{ evento.creatore.nome }}
-          </a>
-        }
+        <!-- Immagine e Nome Creatore -->
+        <div class="d-flex align-items-center">
+          <img class="rounded-circle mx-2" alt="imgUtente" src="img/home_create.jpg" width="50" height="50">
+
+          @if(evento.creatore.premium){
+            <a class="text-secondary mx-2 mb-1 h6"
+               routerLink="/profile/{{evento.creatore.id}}"
+               (click)="$event.stopPropagation()">
+              {{ evento.creatore.nome }} <span class="bi bi-star-fill text-secondary"></span>
+            </a>
+          } @else {
+            <a class="text-secondary mx-2 mb-1 h6"
+               routerLink="/profile/{{evento.creatore.id}}"
+               (click)="$event.stopPropagation()">
+              {{ evento.creatore.nome }}
+            </a>
+          }
+        </div>
       </div>
-
-      @if(checkFriendship()){
-        <p class="mb-2 text-end"> segui già</p>
-      }
-      @else{
-        <p class="mb-2 text-end"> non seguito</p>
-      }
-
       <hr>
 
       <!-- Immagine Evento -->
@@ -103,14 +99,25 @@
           <address class="card-text text-secondary mb-0">{{ evento.citta }}, {{ evento.indirizzo }}</address>
         </div>
 
-        <!-- Prezzo -->
+        <!--Età minima-->
         <div class="d-flex justify-content-between">
-          @if(this.evento.prezzo == 0) {
-            <p class="card-text text-secondary fw-bold">Gratis</p>
-          } @else {
-            <p class="card-text text-secondary fw-bold">€{{ evento.prezzo }}</p>
-          }
+          <div>
+            @if(this.evento.etaMinima <= 0) {
+              <p class="card-text text-secondary fw-bold mb-0">Per tutti</p>
+            } @else {
+              <p class="card-text text-secondary fw-bold mb-0">{{ evento.etaMinima }}+</p>
+            }
+          </div>
+
+          <div>
+            @if(this.evento.prezzo == 0) {
+              <p class="card-text text-secondary fw-bold mb-0">Gratis</p>
+            } @else {
+              <p class="card-text text-secondary fw-bold mb-0">€{{ evento.prezzo }}</p>
+            }
+          </div>
         </div>
+
       </div>
     </div>
   </div>
