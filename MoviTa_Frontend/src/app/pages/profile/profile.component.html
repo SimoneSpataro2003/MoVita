@@ -1,54 +1,48 @@
-@if (user)
-{
+<div [hidden]="!user">
   <div class="card shadow-lg">
     <div class="card-body">
       <div class="row">
         <div class="col-md-4 text-center">
-          <img [src]="immagineProfilo" alt="Immagine Profilo" class="img-fluid rounded-circle" width="150">
+          <img [src]="immagineProfilo" alt="Immagine Profilo" class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;">
         </div>
         <div class="col-md-8">
           <h4>{{ user.nome }}</h4>
-          <p><strong>Username: {{ user.username }} @if(!user.azienda) {<h4> {{ user.personaCognome }}</h4>} @if(user.premium) {<span class="badge text-bg-secondary"><i class="bi bi-star-fill"></i></span>}</strong></p>
-          @if(user.azienda){<p><strong>Email:</strong> {{ user.email }}</p>}
+          <p><strong>Username:</strong> {{ user.username }}</p>
+          <div [hidden]="user.azienda">
+            <h4>{{ user.personaCognome }}</h4>
+          </div>
+          <div [hidden]="!user.premium || user.azienda">
+            <span class="badge bg-secondary"><i class="bi bi-star-fill"></i></span>
+          </div>
+          <p [hidden]="!user.azienda"><strong>Email:</strong> {{ user.email }}</p>
           <p><strong>Città:</strong> {{ user.citta }}</p>
-          <p><strong>Followers: </strong> @if(loadedAmici) {
-            {{ numberAmici }}} @else {
-            <p>#</p>
-          }</p>
+          <p><strong>Followers:</strong> {{ loadedAmici ? numberAmici : '#' }}</p>
 
-          @if(isMyProfile())
-          {
-            <button type="button" class="btn btn-primary" [routerLink]="['/search-users']">Cerca amici</button>
-            <button type="button" class="btn btn-primary" [routerLink]="['/payments', user.id]">Mostra pagamenti</button>
-          }
-          @else
-          {
-            @if(!isAlreadyFriends())
-            {
-              <button type="button" class="btn btn-primary" (click)="addFriend()">Segui</button>
-            }
-            @else
-            {
-              <button type="button" class="btn btn-danger" (click)="deleteFriend()">Segui già</button>
-            }
-          }
-
+          <div [hidden]="!isMyProfile()">
+            <button class="btn btn-primary" [routerLink]="['/search-users']">Cerca amici</button>
+            <button class="btn btn-primary" [routerLink]="['/payments', user.id]">Mostra pagamenti</button>
+          </div>
+          <div [hidden]="isMyProfile()">
+            <button [hidden]="isAlreadyFriends()" class="btn btn-primary" (click)="addFriend()">Segui</button>
+            <button [hidden]="!isAlreadyFriends()" class="btn btn-danger" (click)="deleteFriend()">Segui già</button>
+          </div>
         </div>
       </div>
       <hr>
       <h5>Amici</h5>
       <div class="row mb-4">
         <div class="col-12">
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3 flex-nowrap" style="overflow-x: auto; white-space: nowrap;">
-            @if(loadedAmici)
-            {
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3 flex-nowrap" style="overflow-x: auto;">
+            <div [hidden]="!loadedAmici">
               <!-- Loop sugli amici -->
               @for(friendship of this.friendships; track friendship.id){
                 <div class="col" style="display: inline-block; float: none;">
                   <app-card-friend [userId] = user.id [utenteAmico] = friendship class="h-50"></app-card-friend>
                 </div>
               }
-            }
+            <div [hidden]="loadedAmici" class="spinner-grow text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
           </div>
         </div>
       </div>
@@ -59,10 +53,8 @@
       <hr>
     </div>
   </div>
-}
-@else
-{
-  <div class="spinner-grow text-primary" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
-}
+</div>
+
+<div [hidden]="user" class="spinner-grow text-primary" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
