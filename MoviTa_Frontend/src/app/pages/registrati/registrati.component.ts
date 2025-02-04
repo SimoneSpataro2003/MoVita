@@ -14,34 +14,36 @@ import {CookieService} from 'ngx-cookie-service';
 })
 export class RegistratiComponent {
   router = inject(Router);
-  tipo: number = 0; // Inizializzazione
+  tipo: number = 0;
+  registerError: boolean = false;
 
   applyForm = new FormGroup({
-    username: new FormControl('', {validators: [Validators.required]}),
-    email: new FormControl('', {validators: [Validators.required]}),
-    password: new FormControl('', {validators: [Validators.required]}),
-    ripetiPassword: new FormControl('', {validators: [Validators.required]}),
+    nome: new FormControl(''),
+    cognome: new FormControl(''),
+    username: new FormControl(''),
+    email: new FormControl(''),
+    password: new FormControl(''),
+    ripetiPassword: new FormControl(''),
+    citta: new FormControl(''),
     indirizzo: new FormControl(''),
     recapito: new FormControl(''),
     partitaIVA: new FormControl(''),
   });
 
-  constructor(private authService: AuthService,
-              private cookieService: CookieService) {}
+  constructor(private authService: AuthService) {}
 
   registerUser() {
     const body = {
       username: this.applyForm.value.username,
       email: this.applyForm.value.email,
       password: this.applyForm.value.password,
-      //ripetiPassword: this.applyForm.value.ripetiPassword
+      citta: this.applyForm.value.citta,
+      nome: this.applyForm.value.nome,
+      cognome: this.applyForm.value.cognome,
     };
     this.authService.registerUser(body).subscribe({
       next: (response: any) => {
-        //FIXME(SIMONE): il token viene restuito solamente al login!
-        //this.cookieService.set('token', response.token);
-        //console.log(this.cookieService.get('token'));
-        //this.goHome();
+        this.goLogin();
         console.log(response);
       },
       error: (any) => {
@@ -55,26 +57,30 @@ export class RegistratiComponent {
       username: this.applyForm.value.username,
       email: this.applyForm.value.email,
       password: this.applyForm.value.password,
-      ripetiPassword: this.applyForm.value.ripetiPassword,
+      citta: this.applyForm.value.citta,
+      nome: this.applyForm.value.nome,
+      partitaIVA: this.applyForm.value.partitaIVA,
       indirizzo: this.applyForm.value.indirizzo,
-      recapito: this.applyForm.value.recapito,
-      partitaIVA: this.applyForm.value.partitaIVA
+      recapito: this.applyForm.value.recapito
     };
     this.authService.registerAgency(body).subscribe({
       next: (response: any) => {
-        //FIXME(SIMONE): il token viene restuito solamente al login!
-        //this.cookieService.set('token', response.token);
-        //console.log(this.cookieService.get('token'));
-        //this.goHome();
+        this.registerError = false;
+        this.goLogin();
         console.log(response);
       },
       error: (any) => {
-        //TODO: mostra popup di errore
+        this.registerError = true;
+        this.applyForm.reset();
       }
     });
   }
 
   goHome() {
     this.router.navigate(['/']);
+  }
+
+  goLogin() {
+    this.router.navigate(['/login']);
   }
 }

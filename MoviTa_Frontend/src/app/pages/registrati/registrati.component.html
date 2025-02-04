@@ -11,35 +11,50 @@
       <button type="button" class="btn btn-primary" style="width: 100px;" (click)="tipo = 2">Azienda</button>
     </div>
   } @else {
-    <div class="d-flex justify-content-between align-items-center w-100 px-3" style="max-width: 300px;">
-      <button type="button" class="btn-close ms-auto" aria-label="Close" (click)="tipo = 0"></button>
-    </div>
-    <div class="card" style="width: 20rem;">
+    <div class="card" style="width: 20rem; position: relative;">
+      <button type="button" class="btn-close" style="position: absolute; top: 10px; right: 10px;" aria-label="Close" (click)="tipo = 0"></button>
       <div class="card-body">
         <form [formGroup]="applyForm" (ngSubmit)="tipo == 1 ? registerUser() : registerAgency()">
           <div class="mb-2">
+            <label for="nome" class="form-label">Nome</label>
+            <input id="nome" type="text" class="form-control" formControlName="nome">
+          </div>
+
+          @if (tipo == 1) {
+            <div class="mb-2">
+              <label for="cognome" class="form-label">Cognome</label>
+              <input id="cognome" type="text" class="form-control" formControlName="cognome">
+            </div>
+          }
+
+          <div class="mb-2">
             <label for="username" class="form-label">Username</label>
-            <input id="username" type="text" class="form-control" formControlName="username" required>
+            <input id="username" type="text" class="form-control" formControlName="username">
           </div>
 
           <div class="mb-2">
             <label for="email" class="form-label">Email</label>
-            <input id="email" type="email" class="form-control" formControlName="email" required>
+            <input id="email" type="email" class="form-control" formControlName="email">
           </div>
 
           <div class="row mb-2">
             <div class="col-6">
               <label for="password" class="form-label">Password</label>
-              <input id="password" type="password" class="form-control" formControlName="password" required>
+              <input id="password" type="password" class="form-control" formControlName="password">
             </div>
 
             <div class="col-6">
               <label for="ripetiPassword" class="form-label">Ripeti Password</label>
-              <input id="ripetiPassword" type="password" class="form-control" formControlName="ripetiPassword" required>
+              <input id="ripetiPassword" type="password" class="form-control" formControlName="ripetiPassword">
             </div>
           </div>
 
-          <div *ngIf="tipo == 2">
+          <div class="mb-2">
+            <label for="citta" class="form-label">Città</label>
+            <input id="citta" type="text" class="form-control" formControlName="citta">
+          </div>
+
+          @if (tipo == 2) {
             <div class="row mb-2">
               <div class="col-6">
                 <label for="indirizzo" class="form-label">Indirizzo</label>
@@ -56,9 +71,15 @@
               <label for="partitaIVA" class="form-label">Partita IVA</label>
               <input id="partitaIVA" type="text" class="form-control" formControlName="partitaIVA">
             </div>
-          </div>
+          }
 
-          <button type="submit" class="btn btn-primary w-100 mt-2" [disabled]="!applyForm.valid">Registrati</button>
+          @if (registerError) {
+            <div class="alert alert-danger text-center">
+              Credenziali non complete. Riprova.
+            </div>
+          }
+
+          <button type="submit" class="btn btn-primary w-100 mt-2">Registrati</button>
         </form>
       </div>
     </div>
