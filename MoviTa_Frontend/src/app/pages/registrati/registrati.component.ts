@@ -43,11 +43,13 @@ export class RegistratiComponent {
     };
     this.authService.registerUser(body).subscribe({
       next: (response: any) => {
+        this.registerError = false;
         this.goLogin();
         console.log(response);
       },
       error: (any) => {
-        //TODO: mostra popup di errore
+        this.registerError = true;
+        this.applyForm.reset();
       }
     });
   }
