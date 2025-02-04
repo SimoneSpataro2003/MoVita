@@ -14,7 +14,6 @@ import {AuthService} from '../../services/auth/auth.service';
 export class RegistratiComponent {
   router = inject(Router);
   tipo: number = 0;
-  registerError: boolean = false;
 
   applyForm = new FormGroup({
     nome: new FormControl(''),
@@ -46,7 +45,7 @@ export class RegistratiComponent {
         console.log(response);
       },
       error: (any) => {
-        this.registerError = true;
+        //TODO: errore
         //this.applyForm.reset();
       }
     });
@@ -69,7 +68,7 @@ export class RegistratiComponent {
         console.log(response);
       },
       error: (any) => {
-        this.registerError = true;
+        //TODO: errore
         //this.applyForm.reset();
       }
     });

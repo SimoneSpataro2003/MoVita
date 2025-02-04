@@ -38,10 +38,11 @@ export class LoginComponent {
         this.cookieService.set('token', body.token);
         console.log(this.cookieService.get('token'));
         this.getUser();
+        this.loginError = false;
       },
       error: (any) =>{
-        this.loginError = true;
         this.applyForm.reset();
+        this.loginError = true;
       }
     });
   }
@@ -56,7 +57,7 @@ export class LoginComponent {
         this.goHome();
       },
       error: (any) =>{
-        this.loginError = true;
+        //TODO: errore
       }
     });
   }
