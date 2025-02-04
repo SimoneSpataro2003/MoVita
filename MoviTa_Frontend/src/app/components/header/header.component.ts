@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import {Router, RouterModule} from '@angular/router';
+import {Utente} from '../../model/Utente';
+import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-header',
@@ -9,10 +11,13 @@ import {Router, RouterModule} from '@angular/router';
   templateUrl: './header.component.html'
 })
 export class HeaderComponent {
+  protected currentUserId!: number;
+  constructor(private router: Router,
+              private cookieService: CookieService) {}
 
-  constructor(private router: Router) {}
-
-    goToProfile(userId: number) {
-    this.router.navigate(['/profile', userId]);
+    goToMyProfile() {
+      let utente: Utente = JSON.parse(this.cookieService.get('utente'));
+      this.currentUserId = utente.id;
+      this.router.navigate(['/profile', this.currentUserId]);
   }
 }

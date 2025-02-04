@@ -11,6 +11,7 @@ import { Observable } from 'rxjs';
 import { UserService } from '../../services/user/user.service';
 import { CarouselEventImageComponent } from './carousel-event-image/carousel-event-image.component';
 import { PartecipantiEventoComponent } from './partecipanti-evento/partecipanti-evento.component';
+
 @Component({
   selector: 'app-details',
   standalone: true,

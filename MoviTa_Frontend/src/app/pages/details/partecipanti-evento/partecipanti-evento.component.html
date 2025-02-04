@@ -1,1 +1,15 @@
-<p>partecipanti-evento works!</p>
+<div class="d-flex p-0">
+    @for (partecipazione of altriUtenti.slice(0, 3); track partecipazione; let i = $index) {
+        <app-card-friend class="m-3" [utenteAmico]="partecipazione.utente" [userId]="partecipazione.utente.id"></app-card-friend>
+    }
+    @if(altriUtenti.length>3)
+    {
+        <div class="card w-50 m-3">
+            <div class="card-body mt-4 text-center">
+              <h5 class="card-title">Piu di {{altriUtenti.length}}</h5>              
+              <a href="#" class="btn btn-outline-primary mt-4">Mostra Tutti</a>
+            </div>
+        </div>          
+    }
+
+</div>

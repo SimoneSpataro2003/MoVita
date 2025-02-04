@@ -63,6 +63,6 @@ export class EventCardComponent implements OnInit, Loadable{
   }
 
   navigaDettagliEvento(idEvento:number){
-    this.router.navigate([`/event-details/${idEvento}}`]);
+    this.router.navigate([`/event-details/${idEvento}`]);
   }
 }

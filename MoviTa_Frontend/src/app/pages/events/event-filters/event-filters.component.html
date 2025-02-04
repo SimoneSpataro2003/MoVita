@@ -1,0 +1,51 @@
+<div class="accordion" id="accordionExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button
+        class="accordion-button"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#collapseOne"
+        aria-expanded="true"
+        aria-controls="collapseOne"
+      >
+        Filtri: {{ filterSummary }}
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <form [formGroup]="filterForm">
+          <!-- Filtro per Nome -->
+          <div class="mb-3">
+            <label for="nomeFiltro" class="form-label">Cerca per Nome</label>
+            <input type="text" id="nomeFiltro" class="form-control" formControlName="nome" placeholder="Cerca per nome">
+          </div>
+
+          <!-- Filtro per Città -->
+          <div class="mb-3">
+            <label for="cittaFiltro" class="form-label">Cerca per Città</label>
+            <input type="text" id="cittaFiltro" class="form-control" formControlName="citta" placeholder="Cerca per città">
+          </div>
+
+          <!-- Filtro per Prezzo -->
+          <div class="mb-3">
+            <label for="prezzoFiltro" class="form-label">Prezzo (max): {{ filterForm.value.prezzoMax }}€</label>
+            <input type="range" id="prezzoFiltro" class="form-range" min="0" max="1000" step="10" formControlName="prezzoMax">
+          </div>
+
+          <!-- Filtro per Età Minima -->
+          <div class="mb-3">
+            <label for="etaMinimaFiltro" class="form-label">Età Minima</label>
+            <input type="number" id="etaMinimaFiltro" class="form-control" formControlName="etaMinima" min="0" max="100">
+          </div>
+
+          <!-- Pulsanti -->
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary" (click)="resetFilters()">Reset</button>
+            <button type="submit" class="btn btn-primary">Applica</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
