@@ -1,31 +1,36 @@
-<!-- <div id="carouselExampleDark" class="carousel carousel-dark slide">
+<div id="carouselExampleDark" class="carousel carousel-dark slide">
+    <!-- Indicatori -->
     <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active"
-            aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1"
-            aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2"
-            aria-label="Slide 3"></button>
+        @for (item of eventiSimili; track $index) {
+            <button type="button"
+                    [class.active]="$index === 0"
+                    data-bs-target="#carouselExampleDark" 
+                    [attr.data-bs-slide-to]="$index"
+                    [attr.aria-label]="'Slide ' + ($index + 1)">
+            </button>
+        }
     </div>
-    <div class="row carousel-inner">
 
-         @for (item of eventiSimili; track item) { 
-            <div class="carousel-item" >
-                <app-event-card [evento]="eventiSimili[0]"></app-event-card>
+    <!-- Contenuto del carosello -->
+    <div class="carousel-inner">
+        @for (item of eventiSimili; track $index) {
+            <div class="carousel-item" [class.active]="$index === 0">
+                <div class="row justify-content-center">
+                    <div class="col-md-4">
+                        <app-event-card [evento]="item"></app-event-card>
+                    </div>
+                </div>
             </div>
-
-        }               
-    
-
+        }
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark"
-        data-bs-slide="prev">
+
+    <!-- Controlli -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark"
-        data-bs-slide="next">
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
     </button>
-</div> -->
+</div>
