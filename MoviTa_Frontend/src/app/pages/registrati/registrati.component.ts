@@ -14,7 +14,7 @@ import {AuthService} from '../../services/auth/auth.service';
 export class RegistratiComponent {
   router = inject(Router);
   tipo: number = 0;
-  registerError: boolean = false;
+  //registerError: boolean = false;
 
   applyForm = new FormGroup({
     nome: new FormControl(''),
@@ -44,12 +44,12 @@ export class RegistratiComponent {
       next: (response: any) => {
         this.goLogin();
         console.log(response);
-        this.registerError = false;
+        //this.registerError = false;
       },
       error: (any) => {
         //TODO: errore
         //this.applyForm.reset();
-        this.registerError = true;
+        //this.registerError = true;
       }
     });
   }
@@ -69,11 +69,12 @@ export class RegistratiComponent {
       next: (response: any) => {
         this.goLogin();
         console.log(response);
+        //this.registerError = false;
       },
       error: (any) => {
         //TODO: errore
         //this.applyForm.reset();
-        this.registerError = true;
+        //this.registerError = true;
       }
     });
   }

@@ -16,7 +16,7 @@ import {Utente} from '../../model/Utente';
 })
 export class LoginComponent {
   router = inject(Router);
-  loginError: boolean = false;
+  //loginError: boolean = false;
 
   applyForm = new FormGroup({
     username: new FormControl('', {validators: [Validators.required]}),
@@ -38,11 +38,11 @@ export class LoginComponent {
         this.cookieService.set('token', body.token);
         console.log(this.cookieService.get('token'));
         this.getUser();
-        this.loginError = false;
+        //this.loginError = false;
       },
       error: (any) =>{
         this.applyForm.reset();
-        this.loginError = true;
+        //this.loginError = true;
       }
     });
   }
@@ -57,7 +57,7 @@ export class LoginComponent {
         this.goHome();
       },
       error: (any) =>{
-        //TODO: errore
+
       }
     });
   }

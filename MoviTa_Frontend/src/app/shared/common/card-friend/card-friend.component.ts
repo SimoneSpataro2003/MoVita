@@ -32,15 +32,15 @@ export class CardFriendComponent implements OnInit, Loadable {
   }
 
   ngOnInit(): void {
-    this.showNumberFollowers();
-    this.checkFriendship()
-    this.caricaImmagineProfilo()
 
     let utente: Utente = JSON.parse(this.cookieService.get('utente'));
     this.currentUserId = utente.id;
 
-    console.log("utente");
-    console.log(utente)
+    this.caricaImmagineProfilo()
+    this.showNumberFollowers();
+    this.checkFriendship()
+
+
 
     this.loaded = true;
   }
@@ -60,6 +60,7 @@ export class CardFriendComponent implements OnInit, Loadable {
     this.userService.checkFriendship(this.currentUserId, this.utenteAmico.id).subscribe({
       next: (result) => {
         this.alreadyFollow = result;
+        console.log("verifica amicizia " + this.currentUserId + " " + this.utenteAmico.id);
       },
       error: () => {
         console.error("Errore nel verificare l'amicizia");
@@ -87,7 +88,7 @@ export class CardFriendComponent implements OnInit, Loadable {
   }
 
   caricaImmagineProfilo():void{
-    this.userService.getImage(this.userId).subscribe(
+    this.userService.getImage(this.utenteAmico.id).subscribe(
       {
         next: (data) => {
           this.imagineProfile = URL.createObjectURL(data);

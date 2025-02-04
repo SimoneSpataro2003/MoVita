@@ -34,8 +34,10 @@ export class PaymentComponent implements OnInit , Loadable{
   ngOnInit(): void {
     let utente: Utente = JSON.parse(this.cookieService.get('utente'));
     this.currentUserId = utente.id;
-    this.showAllPayments();
 
+    console.log(this.currentUserId);
+
+    this.showAllPayments();
   }
 
   showAllPayments() {
