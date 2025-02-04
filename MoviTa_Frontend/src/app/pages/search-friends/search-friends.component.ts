@@ -32,6 +32,7 @@ export class SearchFriendsComponent implements OnInit {
 
   updateValue(event: Event): void {
     this.filter = (event.target as HTMLInputElement).value;
+    console.log(this.filter);
   }
 
   showUsersWithFilter(): void {
