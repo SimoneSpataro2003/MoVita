@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Loadable} from '../../../model/Loadable';
 import {Utente} from '../../../model/Utente';
 import {UserService} from '../../../services/user/user.service';
-import { ProfileComponent } from '../../../pages/profile/profile.component';
 import {RouterLink} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
 
@@ -22,6 +21,7 @@ export class CardFriendComponent implements OnInit, Loadable {
   loaded: boolean = false;
   alreadyFollow = false;
   currentUserId!: number;
+  protected imagineProfile: string | undefined;
 
 
   constructor(private userService: UserService, private cookieService: CookieService) {
@@ -34,9 +34,13 @@ export class CardFriendComponent implements OnInit, Loadable {
   ngOnInit(): void {
     this.showNumberFollowers();
     this.checkFriendship()
+    this.caricaImmagineProfilo()
 
     let utente: Utente = JSON.parse(this.cookieService.get('utente'));
     this.currentUserId = utente.id;
+
+    console.log("utente");
+    console.log(utente)
 
     this.loaded = true;
   }
@@ -80,5 +84,20 @@ export class CardFriendComponent implements OnInit, Loadable {
         this.alreadyFollow = true;
       }
     })
+  }
+
+  caricaImmagineProfilo():void{
+    this.userService.getImage(this.userId).subscribe(
+      {
+        next: (data) => {
+          this.imagineProfile = URL.createObjectURL(data);
+
+        },
+        error: (err) => {
+          console.error("Errore nel recupero dell'immagine del creatore dell'evento", err);
+
+        }
+      }
+    );
   }
 }

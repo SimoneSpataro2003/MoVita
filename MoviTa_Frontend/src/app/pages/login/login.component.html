@@ -1,29 +1,29 @@
 <div class="container d-flex flex-column justify-content-center align-items-center min-vh-100" style="gap: 10px;">
   <div class="d-flex justify-content-between align-items-center w-100 px-3" style="max-width: 300px;">
-    <button type="button" class="btn-close ms-auto" aria-label="Close" (click)="goHome()"></button>
-  </div>
-  <div class="d-flex justify-content-between align-items-center w-100 px-3" style="max-width: 300px;">
     <h2 class="text-center m-0 flex-grow-1">Esegui il login</h2>
   </div>
 
-  <div class="card" style="width: 20rem;">
+  <div class="card" style="width: 20rem; position: relative;">
+    <button type="button" class="btn-close" style="position: absolute; top: 10px; right: 10px;" aria-label="Close" (click)="goHome()"></button>
     <div class="card-body">
       <form [formGroup]="applyForm" (submit)="login()">
         <div class="mb-2">
           <label for="username" class="form-label">Username</label>
-          <input id="username" type="text" class="form-control" formControlName="username" required (click)="loginError = false">
+          <input id="username" type="text" class="form-control" formControlName="username" required>
         </div>
 
         <div class="mb-2">
           <label for="password" class="form-label">Password</label>
-          <input id="password" type="password" class="form-control" formControlName="password" required (click)="loginError = false">
+          <input id="password" type="password" class="form-control" formControlName="password" required>
         </div>
 
-        <div *ngIf="loginError" class="alert alert-danger text-center">
-          Credenziali errate. Riprova.
-        </div>
+        @if (loginError) {
+          <div class="alert alert-danger text-center">
+            Credenziali errate. Riprova.
+          </div>
+        }
 
-        <button type="submit" class="btn btn-primary w-100 mt-2" [disabled]="!applyForm.valid">Login</button>
+        <button type="submit" class="btn btn-primary w-100 mt-2">Login</button>
       </form>
     </div>
   </div>
