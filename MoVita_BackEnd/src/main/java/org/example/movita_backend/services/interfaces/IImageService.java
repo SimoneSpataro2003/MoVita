@@ -8,11 +8,11 @@ import java.util.Collection;
 
 public interface IImageService {
 
-    String userImagesPath = "static/images/user/";
-    String eventImagesPath = "static/images/event/";
+    String userImagesPath = "images/user/";
+    String eventImagesPath = "images/event/";
     Resource getUserImage(int userId)  throws IOException;
     Resource getEventImage(int eventId, String imageName) throws IOException;
     Collection<String> getEventImagesNames(int eventId)  throws IOException;
-    String addUserImage(int userId, MultipartFile image) throws IOException;
-
+    void addUserImage(int userId, MultipartFile image) throws IOException;
+    void addEventImage(int eventId, MultipartFile image) throws IOException;
 }
