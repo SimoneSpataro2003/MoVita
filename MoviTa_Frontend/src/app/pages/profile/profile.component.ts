@@ -8,13 +8,14 @@ import {EventService} from '../../services/event/event.service';
 import {Partecipazione} from '../../model/Partecipazione';
 import {Evento} from '../../model/Evento';
 import {CookieService} from 'ngx-cookie-service';
+import {EventCardComponent} from '../../shared/common/event-card/event-card.component';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   standalone: true,
   styleUrls: ['./profile.component.css'],
-  imports: [CommonModule, CardFriendComponent, RouterLink, NgOptimizedImage] // Aggiungi CommonModule qui
+  imports: [CommonModule, CardFriendComponent, RouterLink, EventCardComponent] // Aggiungi CommonModule qui
 })
 export class ProfileComponent implements OnInit {
   userId!: number;
@@ -22,7 +23,7 @@ export class ProfileComponent implements OnInit {
   currentUserId!: number;
   friendships: Utente[] = [];
   partecipations: Partecipazione[] = [];
-  createdEvents: Event[] = [];
+  createdEvents: Evento[] = [];
   loaded: boolean = false;
   protected numberAmici: number = 0;
   protected loadedAmici: boolean = false;
@@ -68,7 +69,6 @@ export class ProfileComponent implements OnInit {
       {
         next: (data) => {
           this.immagineProfilo = URL.createObjectURL(data);
-          console.log(this.immagineProfilo);
 
         },
         error: (err) => {
@@ -111,6 +111,7 @@ export class ProfileComponent implements OnInit {
       next: (partecipations: Partecipazione[]) => {
         console.log(partecipations); // Debug per verificare i dati ricevuti
         // Qui puoi assegnare i dati a una variabile, se necessario
+        this.partecipations = partecipations;
       },
       error: (error) => {
         console.log(error);
@@ -122,6 +123,7 @@ export class ProfileComponent implements OnInit {
     this.userService.getCreatedEventsById(this.userId).subscribe({
       next: (createdEvents : Evento[]) => {
         console.log(createdEvents);
+        this.createdEvents = createdEvents;
       },
       error: (error) => {
         console.log(error);

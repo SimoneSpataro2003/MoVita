@@ -6,13 +6,26 @@
           <img [src]="immagineProfilo" alt="Immagine Profilo" class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;">
         </div>
         <div class="col-md-8">
-          <h4>{{ user.nome }}</h4>
-          <p><strong>Username:</strong> {{ user.username }}</p>
+          <h4>
+            {{ user.nome }}
+            @if (!user.azienda)
+            {
+              {{user.personaCognome}}
+            }
+          </h4>
+
+          <p><strong>Username:</strong> {{ user.username }}
+
+            @if(user.premium)
+            {
+              <span class="badge bg-secondary"><i class="bi bi-star-fill"></i></span>
+            }
+          </p>
           <div [hidden]="user.azienda">
             <h4>{{ user.personaCognome }}</h4>
           </div>
           <div [hidden]="!user.premium || user.azienda">
-            <span class="badge bg-secondary"><i class="bi bi-star-fill"></i></span>
+
           </div>
           <p [hidden]="!user.azienda"><strong>Email:</strong> {{ user.email }}</p>
           <p><strong>Città:</strong> {{ user.citta }}</p>
@@ -35,26 +48,61 @@
           <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3 flex-nowrap" style="overflow-x: auto;">
             <div [hidden]="!loadedAmici">
               <!-- Loop sugli amici -->
-              @for(friendship of this.friendships; track friendship.id){
+              @for(friendship of this.friendships; track friendship.id)
+              {
                 <div class="col" style="display: inline-block; float: none;">
                   <app-card-friend [userId] = user.id [utenteAmico] = friendship class="h-50"></app-card-friend>
                 </div>
               }
-            <div [hidden]="loadedAmici" class="spinner-grow text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
+              <div [hidden]="loadedAmici" class="spinner-grow text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
             </div>
           </div>
         </div>
+        <hr>
+        <h5>Eventi creati</h5>
+        <div class="row mb-4">
+          <div class="col-12">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3 flex-nowrap" style="overflow-x: auto;">
+              <div [hidden]="!loadedAmici">
+                <!-- Loop sugli amici -->
+                @for(event of this.createdEvents; track event)
+                {
+                  <div class="col" style="display: inline-block; float: none;">
+                    <app-event-card [evento]="event"></app-event-card>
+                  </div>
+                }
+                <div [hidden]="loadedAmici" class="spinner-grow text-primary" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        <hr>
+        <h5>Partecipazioni</h5>
+          <div class="row mb-4">
+            <div class="col-12">
+              <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3 flex-nowrap" style="overflow-x: auto;">
+                <div [hidden]="!loadedAmici">
+                  <!-- Loop sugli amici -->
+                  @for(partecipation of this.partecipations; track partecipation.evento)
+                  {
+                    <div class="col" style="display: inline-block; float: none;">
+                      <app-event-card [evento]="partecipation.evento"></app-event-card>
+                    </div>
+                  }
+                  <div [hidden]="loadedAmici" class="spinner-grow text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+        <hr>
       </div>
-      <hr>
-      <h5>Partecipazioni</h5>
-      <hr>
-      <h5>Eventi creati</h5>
-      <hr>
     </div>
   </div>
-</div>
 
-<div [hidden]="user" class="spinner-grow text-primary" role="status">
-  <span class="visually-hidden">Loading...</span>
-</div>
+  <div [hidden]="user" class="spinner-grow text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>

@@ -2,7 +2,6 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Loadable} from '../../../model/Loadable';
 import {Utente} from '../../../model/Utente';
 import {UserService} from '../../../services/user/user.service';
-import { ProfileComponent } from '../../../pages/profile/profile.component';
 import {RouterLink} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
 
@@ -81,4 +80,6 @@ export class CardFriendComponent implements OnInit, Loadable {
       }
     })
   }
+
+
 }
