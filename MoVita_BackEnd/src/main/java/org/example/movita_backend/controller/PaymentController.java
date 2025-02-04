@@ -54,11 +54,13 @@ public class PaymentController {
         try
         {
             List<Payment> payments = paymentService.getPayments(userId);
+            System.out.println(payments);
             return ResponseEntity.ok(payments);
         }
         catch (Exception e)
         {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            System.out.println("non riesco a reperire i pagamenti di " + userId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         }
     }
 }

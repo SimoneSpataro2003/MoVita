@@ -4,7 +4,9 @@ import lombok.Getter;
 import org.apache.coyote.Response;
 import org.example.movita_backend.exception.event.EventNotValid;
 import org.example.movita_backend.model.*;
+import org.example.movita_backend.model.dto.BookingEvent;
 import org.example.movita_backend.model.dto.EventFilter;
+import org.example.movita_backend.model.dto.ReviewEvent;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.services.impl.UserService;
 import org.example.movita_backend.services.interfaces.IBookingService;
@@ -12,18 +14,24 @@ import org.example.movita_backend.services.interfaces.IEventService;
 import org.example.movita_backend.services.interfaces.IImageService;
 import org.example.movita_backend.services.interfaces.IReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.awt.print.Book;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/event")
@@ -83,20 +91,58 @@ public class EventController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
-    @GetMapping("/get-image-event/{eventId}/{imageName}")
-    public ResponseEntity<?> getEventImage(@PathVariable int eventId, @PathVariable String imageName){
-        try
-        {
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + imageName)
-                    .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-                    .body(imageService.getEventImage(eventId,imageName));
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The user image doesn't exist");
-        }
+//    @GetMapping("/get-image-event/{eventId}/{imageName}")
+//    public ResponseEntity<?> getEventImage(@PathVariable int eventId, @PathVariable String imageName){
+//        try
+//        {
+//            return ResponseEntity.ok()
+//                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + imageName)
+//                    .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+//                    .body(imageService.getEventImage(eventId,imageName));
+//        }
+//        catch (Exception e)
+//        {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The user image doesn't exist");
+//        }
+//
+//    }
 
+
+//    @Value("${upload.path}")
+//    private String uploadPath;
+//
+//    @PostMapping("/set-event-image")
+//    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+//
+//          //  String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+//            Path path = Paths.get("./");
+//            System.out.println(path);
+//            return ResponseEntity.ok("Image uploaded successfully");
+//
+//    }
+
+    @PostMapping("/set-event-image/{eventId}")
+    public ResponseEntity<String> setEventImage(@RequestBody MultipartFile image,
+                                              @PathVariable int eventId) {
+        try {
+            imageService.addEventImage(eventId, image);
+            return ResponseEntity.ok("Image uploaded successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
+        }
+    }
+
+    @GetMapping("/get-image-event/{eventId}/{imageName}")
+    public ResponseEntity<?> getEventImage(@PathVariable int eventId, @PathVariable String imageName) {
+        try {
+            Resource image = imageService.getEventImage(eventId, imageName);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + imageName + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                    .body(image);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The event image doesn't exist");
+        }
     }
 
     @GetMapping("/get-booking-by-user/{user}")
@@ -130,6 +176,18 @@ public class EventController {
         return ResponseEntity.ok(categories);
     }
 
+    @GetMapping("/get-event-review/{eventId}")
+    ResponseEntity<Collection<Review>> getEventReview(@PathVariable int eventId){
+        Collection<Review> reviews = reviewService.findByEvent(eventId);
+        return ResponseEntity.ok(reviews);
+    }
+
+    @PostMapping("/create-event-review")
+    ResponseEntity<Review> createEventReview(@RequestBody ReviewEvent review){
+        return  ResponseEntity.ok(
+                this.reviewService.createReview(review));
+    }
+
     @PostMapping("/create-event")
     ResponseEntity<Event> postCreateNewEvent(@RequestBody Event event) throws Exception {
         try{
@@ -151,7 +209,7 @@ public class EventController {
     }
 
     @PostMapping("/book-event")
-    ResponseEntity<Booking> postBookEvent(@RequestBody Booking booking) throws Exception
+    ResponseEntity<Booking> postBookEvent(@RequestBody BookingEvent booking) throws Exception
     {
         return  ResponseEntity.ok(
                 this.bookingService.createBooking(booking)

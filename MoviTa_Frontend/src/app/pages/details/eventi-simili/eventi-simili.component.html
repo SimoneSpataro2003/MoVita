@@ -1,0 +1,9 @@
+<div class="container-fluid">
+    <div class="row flex-nowrap overflow-auto g-3">
+        @for (item of eventiSimili; track $index) {
+            <div class="col-auto">
+                <app-event-card [evento]="item"></app-event-card>
+            </div>
+        }
+    </div>
+</div>

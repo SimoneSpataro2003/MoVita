@@ -8,17 +8,19 @@
         </div>
 
         <!-- Login and Register Buttons -->
-        @if(this.currentUserId == null)
-        {
+        <!--//TODO: FIXARE-->
+        <!--@if(this.cookieService.get('utente') != null)
+        {-->
           <div class="col-3 text-end">
             <button class="btn btn-outline-success h-button" type="submit" routerLink="login">Login</button>
-            <button class="btn btn-primary h-buttonoutline" type="submit" routerLink="register">Registrati</button>
+            <button class="btn btn-primary h-button outline" type="submit" routerLink="register">Registrati</button>
           </div>
-        } @else {
+        <!--} @else {-->
           <div class="text-end">
-            <button (click)="goToMyProfile()">Vai al profilo</button>
+            <button class="btn btn-outline-success h-button" type="submit">Logout</button>
+            <button class="btn btn-primary h-button outline" type="submit" (click)="goToMyProfile()">Vai al profilo</button>
           </div>
-        }
+        <!--}-->
 
 
       </div>

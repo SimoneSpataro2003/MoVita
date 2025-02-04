@@ -2,6 +2,7 @@ package org.example.movita_backend.services.impl;
 
 import org.example.movita_backend.model.Booking;
 import org.example.movita_backend.model.Event;
+import org.example.movita_backend.model.dto.BookingEvent;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.BookingDao;
 import org.example.movita_backend.persistence.dao.EventDao;
@@ -38,15 +39,15 @@ class BookingService implements IBookingService {
     }
 
     @Override
-    public Booking createBooking(Booking booking) throws Exception {
+    public Booking createBooking(BookingEvent booking) throws Exception {
         bookingDao.save(booking);
-        return bookingDao.findById(booking.getUtente(),booking.getEvento());
+        return bookingDao.findById(DBManager.getInstance().getUserDAO().findById(booking.getUtente()),DBManager.getInstance().getEventDAO().findById(booking.getEvento()));
     }
 
     @Override
-    public Booking updateBooking(Booking booking) throws Exception {
+    public Booking updateBooking(BookingEvent booking) throws Exception {
         bookingDao.save(booking);
-        return bookingDao.findById(booking.getUtente(),booking.getEvento());
+        return bookingDao.findById(DBManager.getInstance().getUserDAO().findById(booking.getUtente()),DBManager.getInstance().getEventDAO().findById(booking.getEvento()));
     }
 
     @Override

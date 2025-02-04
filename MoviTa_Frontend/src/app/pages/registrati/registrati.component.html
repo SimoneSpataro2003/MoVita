@@ -17,67 +17,69 @@
         <form [formGroup]="applyForm" (ngSubmit)="tipo == 1 ? registerUser() : registerAgency()">
           <div class="mb-2">
             <label for="nome" class="form-label">Nome</label>
-            <input id="nome" type="text" class="form-control" formControlName="nome" (click)="registerError = false">
+            <input id="nome" type="text" class="form-control" formControlName="nome">
           </div>
 
           @if (tipo == 1) {
             <div class="mb-2">
               <label for="cognome" class="form-label">Cognome</label>
-              <input id="cognome" type="text" class="form-control" formControlName="cognome" (click)="registerError = false">
+              <input id="cognome" type="text" class="form-control" formControlName="cognome">
             </div>
           }
 
           <div class="mb-2">
             <label for="username" class="form-label">Username</label>
-            <input id="username" type="text" class="form-control" formControlName="username" (click)="registerError = false">
+            <input id="username" type="text" class="form-control" formControlName="username">
           </div>
 
           <div class="mb-2">
             <label for="email" class="form-label">Email</label>
-            <input id="email" type="email" class="form-control" formControlName="email" (click)="registerError = false">
+            <input id="email" type="email" class="form-control" formControlName="email">
           </div>
 
           <div class="row mb-2">
             <div class="col-6">
               <label for="password" class="form-label">Password</label>
-              <input id="password" type="password" class="form-control" formControlName="password" (click)="registerError = false">
+              <input id="password" type="password" class="form-control" formControlName="password">
             </div>
 
             <div class="col-6">
               <label for="ripetiPassword" class="form-label">Ripeti Password</label>
-              <input id="ripetiPassword" type="password" class="form-control" formControlName="ripetiPassword" (click)="registerError = false">
+              <input id="ripetiPassword" type="password" class="form-control" formControlName="ripetiPassword">
             </div>
           </div>
 
           <div class="mb-2">
             <label for="citta" class="form-label">Città</label>
-            <input id="citta" type="text" class="form-control" formControlName="citta" (click)="registerError = false">
+            <input id="citta" type="text" class="form-control" formControlName="citta">
           </div>
 
           @if (tipo == 2) {
             <div class="row mb-2">
               <div class="col-6">
                 <label for="indirizzo" class="form-label">Indirizzo</label>
-                <input id="indirizzo" type="text" class="form-control" formControlName="indirizzo" (click)="registerError = false">
+                <input id="indirizzo" type="text" class="form-control" formControlName="indirizzo">
               </div>
 
               <div class="col-6">
-                <label for="recapito" class="form-label">Recapito</label>
-                <input id="recapito" type="text" class="form-control" formControlName="recapito" (click)="registerError = false">
+                <label for="recapito" class="form-label">N.telefono</label>
+                <input id="recapito" type="text" class="form-control" formControlName="recapito">
               </div>
             </div>
 
             <div class="mb-2">
-              <label for="partitaIVA" class="form-label">Partita IVA</label>
-              <input id="partitaIVA" type="text" class="form-control" formControlName="partitaIVA" (click)="registerError = false">
+              <label for="partitaIva" class="form-label">Partita Iva</label>
+              <input id="partitaIva" type="text" class="form-control" formControlName="partitaIva">
             </div>
           }
 
+          <!--
           @if (registerError) {
             <div class="alert alert-danger text-center">
-              Credenziali non complete. Riprova.
+              Credenziali non valide. Riprova.
             </div>
           }
+          -->
 
           <button type="submit" class="btn btn-primary w-100 mt-2">Registrati</button>
         </form>

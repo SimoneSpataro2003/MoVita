@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth/auth.service';
-import {CookieService} from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-registrati',
@@ -15,7 +14,7 @@ import {CookieService} from 'ngx-cookie-service';
 export class RegistratiComponent {
   router = inject(Router);
   tipo: number = 0;
-  registerError: boolean = false;
+  //registerError: boolean = false;
 
   applyForm = new FormGroup({
     nome: new FormControl(''),
@@ -27,53 +26,55 @@ export class RegistratiComponent {
     citta: new FormControl(''),
     indirizzo: new FormControl(''),
     recapito: new FormControl(''),
-    partitaIVA: new FormControl(''),
+    partitaIva: new FormControl(''),
   });
 
   constructor(private authService: AuthService) {}
 
   registerUser() {
     const body = {
+      nome: this.applyForm.value.nome,
+      cognome: this.applyForm.value.cognome,
       username: this.applyForm.value.username,
       email: this.applyForm.value.email,
       password: this.applyForm.value.password,
-      citta: this.applyForm.value.citta,
-      nome: this.applyForm.value.nome,
-      cognome: this.applyForm.value.cognome,
+      citta: this.applyForm.value.citta
     };
     this.authService.registerUser(body).subscribe({
       next: (response: any) => {
-        this.registerError = false;
         this.goLogin();
         console.log(response);
+        //this.registerError = false;
       },
       error: (any) => {
-        this.registerError = true;
-        this.applyForm.reset();
+        //TODO: errore
+        //this.applyForm.reset();
+        //this.registerError = true;
       }
     });
   }
 
   registerAgency() {
     const body = {
+      nome: this.applyForm.value.nome,
       username: this.applyForm.value.username,
       email: this.applyForm.value.email,
       password: this.applyForm.value.password,
       citta: this.applyForm.value.citta,
-      nome: this.applyForm.value.nome,
-      partitaIVA: this.applyForm.value.partitaIVA,
       indirizzo: this.applyForm.value.indirizzo,
-      recapito: this.applyForm.value.recapito
+      recapito: this.applyForm.value.recapito,
+      partitaIva: this.applyForm.value.partitaIva
     };
     this.authService.registerAgency(body).subscribe({
       next: (response: any) => {
-        this.registerError = false;
         this.goLogin();
         console.log(response);
+        //this.registerError = false;
       },
       error: (any) => {
-        this.registerError = true;
-        this.applyForm.reset();
+        //TODO: errore
+        //this.applyForm.reset();
+        //this.registerError = true;
       }
     });
   }

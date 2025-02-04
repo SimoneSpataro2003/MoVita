@@ -2,6 +2,7 @@ package org.example.movita_backend.services.impl;
 
 import org.example.movita_backend.model.Booking;
 import org.example.movita_backend.model.Review;
+import org.example.movita_backend.model.dto.ReviewEvent;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.BookingDao;
 import org.example.movita_backend.persistence.dao.ReviewDao;
@@ -9,6 +10,7 @@ import org.example.movita_backend.services.interfaces.IReviewService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 class ReviewService implements IReviewService {
 
@@ -33,14 +35,14 @@ class ReviewService implements IReviewService {
     }
 
     @Override
-    public Review createReview(Review review) throws Exception {
+    public Review createReview(ReviewEvent review){
         reviewDao.save(review);
-        return reviewDao.findById(review.getUtente(), review.getEvento());
+        return reviewDao.findById(DBManager.getInstance().getUserDAO().findById(review.getUtente()), DBManager.getInstance().getEventDAO().findById(review.getEvento()));
     }
 
-    @Override
-    public Review updateReview(Review review) throws Exception {
-        reviewDao.save(review);
-        return reviewDao.findById(review.getUtente(), review.getEvento());
-    }
+//    @Override
+//    public Review updateReview(Review review) throws Exception {
+//        reviewDao.save(review);
+//        return reviewDao.findById(review.getUtente(), review.getEvento());
+//    }
 }
