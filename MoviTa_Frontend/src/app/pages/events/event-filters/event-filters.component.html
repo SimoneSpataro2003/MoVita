@@ -9,12 +9,21 @@
         aria-expanded="true"
         aria-controls="collapseOne"
       >
-        Filtri: {{ filterSummary }}
+        <div class="text-start w-100">
+          <h5 class="text-center mb-1">Filtri</h5>
+          <p class="text-center mb-0">{{filterSummary}}</p>
+        </div>
       </button>
     </h2>
     <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-        <form [formGroup]="filterForm">
+        <form [formGroup]="filterForm" (ngSubmit)="getEventsByFilter()">
+          <!-- Filtro per Nome -->
+          <div class="mb-3">
+            <label for="creatoreFiltro" class="form-label">Cerca per Creatore</label>
+            <input type="text" id="creatoreFiltro" class="form-control" formControlName="creatore" placeholder="Cerca per Creatore">
+          </div>
+
           <!-- Filtro per Nome -->
           <div class="mb-3">
             <label for="nomeFiltro" class="form-label">Cerca per Nome</label>
@@ -39,9 +48,53 @@
             <input type="number" id="etaMinimaFiltro" class="form-control" formControlName="etaMinima" min="0" max="100">
           </div>
 
+          <!-- Filtro per Valutazione Media -->
+          <div class="mb-3">
+            <label for="valutazioneFiltro" class="form-label">Valutazione Minima</label>
+            <input type="range" id="valutazioneFiltro" class="form-range" min="0" max="5" step="0.5" formControlName="valutazioneMedia">
+            <div class="d-flex justify-content-between">
+              <span>0★</span>
+              <span>5★</span>
+            </div>
+          </div>
+
+          <!-- Checkbox "Almeno metà partecipanti" -->
+          <label>Almeno metà dei partecipanti</label>
+          <div class="mb-3 form-check">
+            <input type="checkbox" class="form-check-input" id="metaPartecipantiFiltro" formControlName="almenoMetaPartecipanti">
+            <label class="form-check-label" for="metaPartecipantiFiltro">Eventi con ≥ 50% iscritti</label>
+          </div>
+
+          <!-- Filtro per Categorie -->
+          <div class="mb-3">
+            <label class="form-label">Categorie</label>
+            <div class="row">
+              <div class="col-10">
+                @if(categorie.length == 0){
+                  <h5>Nessuna categoria scelta.</h5>
+                }@else{
+                  <div class="row row-cols-auto">
+                    @for(categoria of categorie; track categoria) {
+                      <div class="col">
+                        <div class="mb-4">
+                          <button class="cerchio btn btn-primary rounded-circle bi" [class]="IconaCategoriaMapper.getIconById(categoria)"></button>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+
+              <div class="col-2">
+                <button type="button" class="btn btn-secondary" (click)="openCategoryFilterModal()">Scegli...</button>
+              </div>
+            </div>
+          </div>
+
+          <hr>
           <!-- Pulsanti -->
           <div class="d-flex justify-content-end gap-2">
-            <button type="button" class="btn btn-secondary" (click)="resetFilters()">Reset</button>
+            <button type="button" class="btn btn-danger" (click)="resetFilters()">Reset</button>
             <button type="submit" class="btn btn-primary">Applica</button>
           </div>
         </form>

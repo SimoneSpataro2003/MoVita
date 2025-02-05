@@ -7,15 +7,18 @@ import { Partecipazione } from '../../model/Partecipazione';
 import { CategoryService } from '../../services/category/category.service';
 import { Categoria } from '../../model/Categoria';
 import { CookieService } from 'ngx-cookie-service';
-import { Observable } from 'rxjs';
 import { UserService } from '../../services/user/user.service';
 import { CarouselEventImageComponent } from './carousel-event-image/carousel-event-image.component';
 import { PartecipantiEventoComponent } from './partecipanti-evento/partecipanti-evento.component';
+import { EventiSimiliComponent } from './eventi-simili/eventi-simili.component';
+import { RecensioneComponent } from './recensione/recensione.component';
+import { Utente } from '../../model/Utente';
+import { PartecipazioneDTO } from '../../model/partecipazione-dto';
 
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [CommonModule, PartecipantiEventoComponent,CarouselEventImageComponent],
+  imports: [CommonModule, RecensioneComponent ,EventiSimiliComponent, PartecipantiEventoComponent,CarouselEventImageComponent],
   templateUrl: './details.component.html',
   styleUrl: './details.component.css',
 })
@@ -28,6 +31,10 @@ export class DetailsComponent {
   immaginiEvento: Blob[] = [];
   immagineVisibile: string ="";
   @ViewChild(CarouselEventImageComponent) carouselImage!: CarouselEventImageComponent;
+  @ViewChild(EventiSimiliComponent) eventiSimiliComponent!: EventiSimiliComponent;
+  @ViewChild(RecensioneComponent) recensioneComponent!: RecensioneComponent;
+  prenotato = false;
+
 
 
   
@@ -37,7 +44,8 @@ export class DetailsComponent {
     this.idEvento = Number(this.route.snapshot.paramMap.get('id'));
     this.mostraDettagliEvento();        
     this.mostraPartecipazioniEvento();
-    this.ottieniCategorieEvento();     
+    this.sePrenotato();
+        
   }
 
 
@@ -48,13 +56,39 @@ export class DetailsComponent {
           this.evento = data;
           this.mostraDescrizioneEvento();
           this.caricaImmagineCreatoreEvento();     
-          this.carouselImage.caricaNomiImmaginiEvento(this.evento); 
+          this.carouselImage.caricaNomiImmaginiEvento(this.evento);
+          this.eventiSimiliComponent.mostraEventiSimili(this.idEvento);
+          this.recensioneComponent.ottieniRecensioni();
         },
         error: (err) => {
           console.error('Errore nel recupero dettagli evento', err);        
         }
       });      
     }  
+  }
+
+  sePrenotato():void{
+    let eventiPrenotati: Partecipazione[] = [];
+    let utenteId = JSON.parse(this.cookieService.get('utente')).id;
+    this.eventService.getBookingById(utenteId).subscribe(
+      {
+        next: (data) =>{
+          eventiPrenotati = data;
+          for(let e of eventiPrenotati)
+          {
+            if(e.evento.id == this.idEvento)
+              this.prenotato = true;
+            console.log("PRENOTATOOOOO")
+          }
+         
+        },
+        error: (err) => {
+          console.error('Errore nel recupero PARTECIPAZIONE evento', err);
+        
+        }
+      }
+    );
+   
   }
 
   mostraDescrizioneEvento():void{
@@ -89,69 +123,6 @@ export class DetailsComponent {
     }  
   }
   
-  ottieniCategorieEvento(){
-    let categorie:Categoria[] = [];
-    
-    if (this.idEvento) {
-      this.eventService.getCategories(this.idEvento).subscribe({
-        next: (data) => {
-          categorie = data;
-          console.log("CATEGORIE");
-          console.log(data);  
-          console.log("FINE");
-          this.mostraEventiSimili(categorie);        
-        },
-        error: (err) => {
-          console.error('Errore nel recupero dettagli evento', err);
-        }
-      }); 
-      
-      return categorie;
-    }
-    return categorie; 
-  }
-
-
-  mostraEventiSimili(categorie: Categoria[] ): void { 
-      
-      console.log("CATEGORIE ARRIVATE");     
-      for(let i of categorie) 
-      {
-        if (this.idEvento) {
-          this.categoryService.findEventsByCategory(String(i.id)).subscribe({
-            next: (data) => {
-              const isUnique = (data: Evento[]) => {
-                for (let dataItem of data) {
-                  for(let eventItem of this.eventiSimili ){   
-                    console.log(`${eventItem.id} ${dataItem.id}`)             
-                    if(eventItem.id == dataItem.id)
-                      return false;
-                  }                  
-                }
-                return true;
-              };
-
-              if(isUnique(data))
-              {
-                this.eventiSimili = this.eventiSimili.concat(data);   
-                console.log("Eventi simili")
-                console.log(this.eventiSimili);
-                console.log("Eventi simili")
-                       
-               
-              }              
-            
-            },
-            error: (err) => {
-              console.error('Errore nel recupero eventi simili', err);
-            
-            }
-          });      
-        }  
-    }
-    
-    
-  }
   caricaImmagineCreatoreEvento():void{
     if(this.evento?.creatore !== undefined){
       this.userService.getImage(this.evento?.creatore?.id).subscribe(
@@ -169,7 +140,38 @@ export class DetailsComponent {
     }
   }
 
- 
+  partecipa():void{   
+    let utenteId = JSON.parse(this.cookieService.get('utente')).id;
+    console.log("Utente LOGGATO")
+    console.log(utenteId);	
+    if(this.evento!== null){
+      
+      const dataOggi: string = new Date().toISOString().split('T')[0];
+      
+      let partecipazione: PartecipazioneDTO ={
+        evento: this.evento.id,
+        utente:utenteId,
+        data:dataOggi,
+        annullata:false
+      }
+
+      this.eventService.setEventBooking(partecipazione).subscribe(
+        {
+          next: (data) => {
+            this.prenotato = true;
+            console.log("Prenotazione effettuata con successo");
+          },
+          error: (err) => {
+            console.log("Errore nell'effetuare prenotazione", err);
+          }
+        }
+        
+      );
+    }  
+
+    
+
+  } 
 
 
 }

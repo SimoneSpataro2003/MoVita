@@ -46,7 +46,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/admin/**").hasAnyAuthority(Role.ADMIN.name())
-                        //FIXME: fà si che non venga permesso all'admin!
                         .requestMatchers("/api/user/**").permitAll()
                         .anyRequest().authenticated()
                 )

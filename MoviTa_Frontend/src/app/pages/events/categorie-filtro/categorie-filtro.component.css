@@ -1,0 +1,21 @@
+.bottone-circolare{
+  width: 100px;
+  height: 100px;
+}
+
+.bottone_selezionato{
+  background-color: #2bd6c8;
+}
+
+.bottone_non_selezionato{
+  background-color: #2a8dd5;
+}
+
+/*TODO: effettua gli hover!*/
+.bottone_selezionato:hover{
+
+}
+
+.bottone_non_selezionato:hover{
+
+}

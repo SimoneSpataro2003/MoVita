@@ -1,31 +1,29 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {FormsModule} from "@angular/forms";
 import {NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {Categoria} from '../../../model/Categoria';
 import {CategoryService} from '../../../services/category/category.service';
-import {Evento} from '../../../model/Evento';
-import {Loadable} from '../../../model/Loadable';
-import {NgClass} from '@angular/common';
-import {IconaCategoriaMapper} from "../../../model/IconaCategoriaMapper";
 import {CookieService} from 'ngx-cookie-service';
 import {Utente} from '../../../model/Utente';
-import {FormsModule} from '@angular/forms';
+import {IconaCategoriaMapper} from '../../../model/IconaCategoriaMapper';
+import {NgClass} from '@angular/common';
 
 @Component({
-  selector: 'app-consigli-evento',
+  selector: 'app-categorie-filtro',
   standalone: true,
   imports: [
-    NgClass,
-    FormsModule
+    FormsModule,
+    NgClass
   ],
-  templateUrl: './consigli-evento.component.html',
-  styleUrl: './consigli-evento.component.css'
+  templateUrl: './categorie-filtro.component.html',
+  styleUrl: './categorie-filtro.component.css'
 })
-export class ConsigliEventoComponent implements OnInit,Loadable{
+export class CategorieFiltroComponent {
   @Input() thisModal!: NgbModalRef;
+  @Input() categorieScelte = new Array<number>();
+  @Output() ottieniCategorieScelte = new EventEmitter<Array<number>>
   categorie !: Categoria[];
-  categorieScelte = new Array<number>();
   loaded: boolean = false;
-  showConsigli: boolean = false;
 
 
   constructor(private categoryService:CategoryService,
@@ -50,23 +48,9 @@ export class ConsigliEventoComponent implements OnInit,Loadable{
     })
   }
 
-  insertUserCategories(){
-    let utente: Utente = JSON.parse(this.cookieService.get('utente'));
-    this.categoryService.insertUserCategories(utente.id,this.categorieScelte).subscribe({
-      next: () =>{
-        //TODO: mostra successo con una finestra popup!
-        console.log("fatto!");
-        //ho modificato i dati dell'utente: modifico il cookie!
-        let utente: Utente = JSON.parse(this.cookieService.get('utente'));
-        utente.mostraConsigliEventi = false;
-        this.cookieService.set('utente',JSON.stringify(utente));
-        this.closeModal();
-      },
-      error:(err) =>{
-        //TODO: mostra errore con una finestra popup!
-        console.log(err)
-      }
-    })
+  returnCategories() {
+    this.ottieniCategorieScelte.emit(this.categorieScelte);
+    this.thisModal.close();
   }
 
   closeModal() {
@@ -90,5 +74,5 @@ export class ConsigliEventoComponent implements OnInit,Loadable{
     return this.categorieScelte.includes(categoria.id);
   }
 
-    protected readonly IconaCategoriaMapper = IconaCategoriaMapper;
+  protected readonly IconaCategoriaMapper = IconaCategoriaMapper;
 }

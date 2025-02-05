@@ -58,6 +58,10 @@ export class EventsComponent implements OnInit, Loadable{
     })
   }
 
+  showEvents($event: Evento[]){
+    this.eventi = $event;
+  }
+
   public showConsigliEvento(){
     //mostro i consigli solamente se il valore di mostraConsigliEventi è true!
     if (typeof window !== "undefined" && this.utente.mostraConsigliEventi) {

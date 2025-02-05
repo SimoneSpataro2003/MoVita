@@ -52,4 +52,8 @@ export class IconaCategoriaMapper{
   static getIcon(categoria: Categoria): string {
     return this.iconMap[categoria.id] || "bi-question-circle";
   }
+
+  static getIconById(id: number): string {
+    return this.iconMap[id] || "bi-question-circle";
+  }
 }

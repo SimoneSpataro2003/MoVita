@@ -16,6 +16,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -24,6 +26,7 @@ public class ImageService implements IImageService {
 
 
     private final ResourceLoader resourceLoader;
+
 
     public ImageService(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;    }
@@ -70,14 +73,20 @@ public class ImageService implements IImageService {
         }
     }
 
-    //FIXME: Aggiustare
     @Override
-    public String addUserImage(int userId, MultipartFile image) throws IOException {
-//        Resource resource = resourceLoader.getResource("classpath:"+userImagesPath);
-//        Files.write(Path.of(userImagesPath+"2.jpg"), image.getBytes());
-//
-
-        return null;
+    public void addUserImage(int userId, MultipartFile image) throws IOException {
 
     }
+
+    @Override
+    public void addEventImage(int eventId, MultipartFile image) throws IOException {
+        Path eventDir = Paths.get(eventImagesPath + eventId);
+        if (!Files.exists(eventDir)) {
+            Files.createDirectories(eventDir);
+        }
+        Path filePath = eventDir.resolve(image.getOriginalFilename());
+        System.out.println(filePath.toAbsolutePath());
+        Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+    }
+
 }

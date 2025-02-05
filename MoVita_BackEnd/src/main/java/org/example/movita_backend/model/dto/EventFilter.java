@@ -7,9 +7,10 @@ import java.util.List;
 
 @Getter
 public class EventFilter {
-    private int creatore_id;
+    private String usernameCreatore;
+    private String nome;
     private String citta;
-    private List<Integer> categorie_id;
+    private List<Integer> categorieId;
     private int etaMinima;
     private float prezzoMassimo;
     private float valutazioneMedia;

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import {Component, Input, OnChanges, OnInit, QueryList, SimpleChanges, ViewChild, ViewChildren} from '@angular/core';
 import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { MapService } from '../../../services/map/map.service';
 import { Evento } from '../../../model/Evento';
@@ -18,7 +18,7 @@ import {forkJoin, map} from 'rxjs'; // Importa forkJoin
   templateUrl: './map.component.html',
   styleUrl: './map.component.css'
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnInit, OnChanges {
   @Input() eventi!: Evento[];
   @ViewChild(MapInfoWindow, { static: false }) infoWindow!: MapInfoWindow;
   @ViewChildren(MapMarker) markers!: QueryList<MapMarker>;
@@ -36,6 +36,17 @@ export class MapComponent implements OnInit {
     // La funzione computeCenter verrà chiamata al termine delle risposte del servizio
   }
 
+  constructor(private mapService: MapService) {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['eventi'] && !changes['eventi'].firstChange) {
+      this.points = [];
+      console.log("Lista eventi cambiata, aggiornamento mappa...");
+      this.caricaCoordinateEventi();
+    }
+  }
+
+
   openInfoWindow(windowIndex: number, content: string) {
     this.markers.forEach((marker: MapMarker, ix: number) => {
       if (windowIndex === ix) {
@@ -45,17 +56,7 @@ export class MapComponent implements OnInit {
     });
   }
 
-  constructor(private mapService: MapService) {}
-
-  moveMap(event: google.maps.MapMouseEvent) {
-    if (event.latLng != null) this.center = event.latLng.toJSON();
-  }
-
-  move(event: google.maps.MapMouseEvent) {
-    //if (event.latLng != null) this.display = event.latLng.toJSON();
-  }
-
-  // Modificato per usare forkJoin e attendere tutte le risposte
+    // Modificato per usare forkJoin e attendere tutte le risposte
   caricaCoordinateEventi() {
     // Crea un array di osservabili per tutte le richieste
     const coordinateRequests = this.eventi.map(evento =>
@@ -82,6 +83,7 @@ export class MapComponent implements OnInit {
       }
     });
   }
+
 
   private createBody(evento: Evento): string {
     return `<article class="text-primary text-center">
