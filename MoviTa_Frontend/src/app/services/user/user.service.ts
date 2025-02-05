@@ -54,4 +54,8 @@ export class UserService {
   public getCreatedEventsById(id:number): Observable<Evento[]> {
     return this.authHttp.get(`${this.apiUrl}/get-created-events/${id}`);
   }
+
+  public updateUser(id: number | null, userData: any): Observable<any> {
+    return this.authHttp.put(`${this.apiUrl}/${id}`, userData);
+  }
 }

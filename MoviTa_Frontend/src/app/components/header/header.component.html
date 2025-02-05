@@ -3,34 +3,21 @@
     <div class="container">
       <div class="row align-items-center w-100">
         <!-- Logo -->
-        <div class="col-3 text-start">
-          <a class="navbar-brand text-white">MoVita</a>
+        <div class="col-6 text-start">
+          <a class="navbar-brand text-white" routerLink="/">MoVita</a>
         </div>
 
-        <!-- Search Bar -->
-        <div class="col-6">
-          <div class="input-group">
-            <input class="form-control text-center pl-3 h-input" type="search" placeholder="Filtra per evento, organizzatore o categoria" aria-label="Search">
-            <button class="btn btn-outline-success h-buttonoutline underlined" type="submit"><i class="bi bi-search"></i></button>
-          </div>
-        </div>
-
-        <!-- Login and Register Buttons -->
-        <!--//TODO: FIXARE-->
-        <!--@if(this.cookieService.get('utente') != null)
-        {-->
-          <div class="col-3 text-end">
-            <button class="btn btn-outline-success h-button" type="submit" routerLink="login">Login</button>
-            <button class="btn btn-primary h-button outline" type="submit" routerLink="register">Registrati</button>
-          </div>
-        <!--} @else {-->
-          <div class="text-end">
+        @if(logged){
+          <div class="col-6 text-end">
             <button class="btn btn-outline-success h-button" type="submit">Logout</button>
             <button class="btn btn-primary h-button outline" type="submit" (click)="goToMyProfile()">Vai al profilo</button>
           </div>
-        <!--}-->
-
-
+        }@else{
+          <div class="col-6 text-end">
+            <button class="btn btn-outline-success h-button" type="submit" routerLink="login">Login</button>
+            <button class="btn btn-primary h-button outline" type="submit" routerLink="register">Registrati</button>
+          </div>
+        }
       </div>
     </div>
   </nav>

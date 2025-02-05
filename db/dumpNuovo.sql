@@ -477,7 +477,7 @@ ALTER TABLE ONLY public.amicizia
 --
 
 ALTER TABLE ONLY public.amicizia
-    ADD CONSTRAINT fk_id_utente2 FOREIGN KEY (id_utente2) REFERENCES public.evento(id) ON DELETE CASCADE;
+    ADD CONSTRAINT fk_id_utente2 FOREIGN KEY (id_utente2) REFERENCES public.utente(id) ON DELETE CASCADE;
 
 
 --

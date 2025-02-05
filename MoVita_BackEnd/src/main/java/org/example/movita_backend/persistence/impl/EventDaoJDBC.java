@@ -119,12 +119,16 @@ public class EventDaoJDBC implements EventDao {
 
     @Override
     public List<Event> findByFilter(EventFilter filter) {
-        StringBuilder query = new StringBuilder("SELECT * FROM evento e WHERE 1=1 ");
+        StringBuilder query = new StringBuilder("SELECT e.* FROM evento e, utente u WHERE e.creatore = u.id");
         List<Object> parameters = new ArrayList<>();
 
-        if (filter.getCreatore_id() > 0) {
-            query.append(" AND e.creatore LIKE ? ");
-            parameters.add("%"+filter.getCreatore_id()+"%");
+        if (filter.getUsernameCreatore() != null && !filter.getUsernameCreatore().isEmpty() ) {
+            query.append(" AND u.username LIKE ? ");
+            parameters.add("%"+filter.getUsernameCreatore()+"%");
+        }
+        if (filter.getNome() != null && !filter.getNome().isEmpty()) {
+            query.append(" AND e.nome LIKE ? ");
+            parameters.add("%"+filter.getNome()+"%");
         }
         if (filter.getCitta() != null && !filter.getCitta().isEmpty()) {
             query.append(" AND e.citta LIKE ? ");
@@ -145,11 +149,11 @@ public class EventDaoJDBC implements EventDao {
         if (filter.isAlmenoMetaPartecipanti()) {
             query.append(" AND e.num_partecipanti >= e.max_num_partecipanti / 2 ");
         }
-        if (filter.getCategorie_id() != null && !filter.getCategorie_id().isEmpty()) {
+        if (filter.getCategorieId() != null && !filter.getCategorieId().isEmpty()) {
             //questa stringa mette un punto interrogativo nella query per ogni id_categoria presente.
-            String inClause = String.join(",", filter.getCategorie_id().stream().map(id -> "?").toArray(String[]::new));
+            String inClause = String.join(",", filter.getCategorieId().stream().map(id -> "?").toArray(String[]::new));
             query.append(" AND e.id IN (SELECT ec.id_evento as id FROM evento_categoria ec WHERE ec.id_categoria IN (" + inClause + ")) ");
-            parameters.addAll(filter.getCategorie_id());
+            parameters.addAll(filter.getCategorieId());
         }
 
         try (PreparedStatement stmt = connection.prepareStatement(query.toString())) {
@@ -218,7 +222,7 @@ public class EventDaoJDBC implements EventDao {
     public int save(Event event) {
 
         String query = "INSERT INTO evento (nome, data, prezzo, citta, indirizzo, num_partecipanti, max_num_partecipanti, eta_minima, descrizione, valutazione_media, creatore) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0,?); ";
 
         try (PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, event.getNome());
@@ -230,8 +234,7 @@ public class EventDaoJDBC implements EventDao {
             statement.setInt(7, event.getMaxNumPartecipanti());
             statement.setInt(8, event.getEtaMinima());
             statement.setString(9, event.getDescrizione());
-            statement.setFloat(10, event.getValutazioneMedia());
-            statement.setInt(11, event.getCreatore().getId());
+            statement.setInt(10, event.getCreatore().getId());
 
             statement.executeUpdate();
 

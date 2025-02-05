@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import {Component, inject, OnInit} from '@angular/core';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 import { Utente } from '../../model/Utente';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
@@ -9,6 +9,7 @@ import {Partecipazione} from '../../model/Partecipazione';
 import {Evento} from '../../model/Evento';
 import {CookieService} from 'ngx-cookie-service';
 import {EventCardComponent} from '../../shared/common/event-card/event-card.component';
+import {Loadable} from '../../model/Loadable';
 
 @Component({
   selector: 'app-profile',
@@ -17,7 +18,8 @@ import {EventCardComponent} from '../../shared/common/event-card/event-card.comp
   styleUrls: ['./profile.component.css'],
   imports: [CommonModule, CardFriendComponent, RouterLink, EventCardComponent] // Aggiungi CommonModule qui
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, Loadable {
+  router = inject(Router);
   userId!: number;
   user!: Utente;
   currentUserId!: number;
@@ -26,7 +28,6 @@ export class ProfileComponent implements OnInit {
   createdEvents: Evento[] = [];
   loaded: boolean = false;
   protected numberAmici: number = 0;
-  protected loadedAmici: boolean = false;
   private alreadyFollow: boolean = false;
   protected immagineProfilo!: string;
 
@@ -41,16 +42,13 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
       this.userId = parseInt(params.get('id')!, 10);
+      let utente: Utente = JSON.parse(this.cookieService.get('utente'));
+      this.currentUserId = utente.id;
       this.getUser();
       this.getFriends();
       this.getPartecipations()
       this.getCreatedEvents()
       this.checkFriendship();
-
-      let utente: Utente = JSON.parse(this.cookieService.get('utente'));
-      this.currentUserId = utente.id;
-
-      this.loaded = true;
     });
   }
 
@@ -85,6 +83,7 @@ export class ProfileComponent implements OnInit {
         console.log(user); // Verifica la struttura della risposta
         this.user = user; // Questo potrebbe dare errore se i tipi non sono compatibili
         this.caricaImmagineProfilo();
+        this.loaded = true;
       },
       error:(error) => {
         console.log(error);
@@ -97,7 +96,6 @@ export class ProfileComponent implements OnInit {
       next: (friendship : Utente[]) => {
         this.friendships = friendship;
         console.log(friendship);
-        this.loadedAmici = true;
         this.numberAmici = this.friendships.length;
       },
       error:(error) => {
@@ -151,7 +149,7 @@ export class ProfileComponent implements OnInit {
     this.userService.checkFriendship(this.currentUserId, this.userId).subscribe({
       next: (result) => {
         this.alreadyFollow = result;
-        console.log(this.userId + " : " +result)
+        console.log(this.userId + " : " + result)
       },
       error: () => {
         console.error("Errore nel verificare l'amicizia");
@@ -159,5 +157,11 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  goToSettings() {
+    this.router.navigate(['/profile/settings', this.currentUserId]);
+  }
 
+  isLoaded(): boolean {
+    return this.loaded;
+  }
 }

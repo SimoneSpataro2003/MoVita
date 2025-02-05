@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
 import {Categoria} from '../../../model/Categoria';
 import {CategoryService} from '../../../services/category/category.service';
@@ -30,7 +30,6 @@ export class ConsigliEventoComponent implements OnInit,Loadable{
 
   constructor(private categoryService:CategoryService,
               private cookieService: CookieService) {
-
   }
 
   ngOnInit() {
@@ -51,11 +50,11 @@ export class ConsigliEventoComponent implements OnInit,Loadable{
     })
   }
 
-  insertUserCategories() {
-    //TODO: devi prendere il profilo dell'utente dai cookie!
-    this.categoryService.insertUserCategories(3,this.categorieScelte).subscribe({
+  insertUserCategories(){
+    let utente: Utente = JSON.parse(this.cookieService.get('utente'));
+    this.categoryService.insertUserCategories(utente.id,this.categorieScelte).subscribe({
       next: () =>{
-        //TODO: mostra succecco con una finestra popup!
+        //TODO: mostra successo con una finestra popup!
         console.log("fatto!");
         //ho modificato i dati dell'utente: modifico il cookie!
         let utente: Utente = JSON.parse(this.cookieService.get('utente'));

@@ -2,6 +2,7 @@ package org.example.movita_backend.persistence.proxy;
 
 import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.Payment;
+import org.example.movita_backend.model.ResultSetMapper;
 import org.example.movita_backend.model.User;
 import org.example.movita_backend.persistence.DBManager;
 
@@ -34,16 +35,16 @@ public class UserProxy extends User {
         String query = "SELECT * FROM pagamento WHERE pagamento.id_utente = ? ORDER BY data";
         List<Payment> payments = new ArrayList<>();
 
-        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setInt(1, userId);
-            ResultSet rs = preparedStatement.executeQuery();
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
                 payments.add(mapPayment(rs));
             }
 
             this.pagamenti = payments;
-            return payments;
+            return this.pagamenti;
         } catch (SQLException e) {
             throw new RuntimeException("Errore nel recupero dei pagamenti dal database", e);
         }
@@ -90,11 +91,11 @@ public class UserProxy extends User {
 
     private Payment mapPayment(ResultSet rs) throws SQLException {
         Payment payment = new Payment();
-        payment.setId(rs.getInt("id_pagamento"));
-        payment.setTitolo(rs.getString("titolo_pagamento"));
+        payment.setId(rs.getInt("id"));
+        payment.setTitolo(rs.getString("titolo"));
         payment.setAmmontare(rs.getInt("ammontare"));
-        payment.setId_utente(rs.getInt("id_utente"));
         payment.setData(rs.getString("data"));
+        payment.setId_utente(rs.getInt("id_utente"));
         return payment;
     }
 }

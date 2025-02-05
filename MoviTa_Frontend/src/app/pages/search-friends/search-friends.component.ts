@@ -17,7 +17,7 @@ import {CookieService} from 'ngx-cookie-service';
 export class SearchFriendsComponent implements OnInit {
   filter: string = "";
   users: Utente[] = [];
-  loaded = false;
+  loaded = true;
   private currentUserId: number | undefined;
 
   constructor(

@@ -1,6 +1,7 @@
 package org.example.movita_backend.persistence.impl;
 
 import org.example.movita_backend.model.*;
+import org.example.movita_backend.model.dto.ReviewEvent;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.ReviewDao;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -101,13 +102,13 @@ public class ReviewDaoJDBC implements ReviewDao {
     }
 
     @Override
-    public void save(Review review) {
-        String query = "INSERT INTO recensione (id_utente, id_evento, data, annullata) " +
-                "VALUES (?, ?, ?, ?); ";
+    public void save(ReviewEvent review) {
+        String query = "INSERT INTO recensione (id_utente, id_evento, titolo, descrizione, valutazione) " +
+                "VALUES (?, ?, ?, ?,?); ";
 
         try (PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
-            statement.setInt(1, review.getUtente().getId());
-            statement.setInt(2, review.getEvento().getId());
+            statement.setInt(1, review.getUtente());
+            statement.setInt(2, review.getEvento());
             statement.setString(3, review.getTitolo());
             statement.setString(4, review.getDescrizione());
             statement.setByte(5, review.getValutazione());

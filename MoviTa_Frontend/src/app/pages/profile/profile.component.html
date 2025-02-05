@@ -1,4 +1,8 @@
-<div [hidden]="!user">
+@if (!isLoaded()) {
+  <div class="mb-3">
+    <label class="form-label">Caricamento</label>
+  </div>
+} @else {
   <div class="card shadow-lg">
     <div class="card-body">
       <div class="row">
@@ -6,13 +10,25 @@
           <img [src]="immagineProfilo" alt="Immagine Profilo" class="img-fluid rounded-circle" style="width: 200px; height: 200px; object-fit: cover;">
         </div>
         <div class="col-md-8">
-          <h4>
-            {{ user.nome }}
-            @if (!user.azienda)
-            {
-              {{user.personaCognome}}
+          <div class="d-inline-flex align-items-center">
+            <h4 class="m-0">
+              {{ user.nome }}
+              @if (!user.azienda)
+              {
+                {{user.personaCognome}}
+              }
+            </h4>
+            @if (isMyProfile()) {
+              <button type="button" class="btn btn-primary ms-2 p-1 d-flex" (click)="goToSettings()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+                  <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0"></path>
+                  <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"></path>
+                </svg>
+              </button>
             }
-          </h4>
+          </div>
+
+          <br>
 
           <p><strong>Username:</strong> {{ user.username }}
 
@@ -22,12 +38,9 @@
             }
           </p>
 
-          <div [hidden]="!user.premium || user.azienda">
-
-          </div>
-          <p [hidden]="!user.azienda"><strong>Email:</strong> {{ user.email }}</p>
+          <p><strong>Email:</strong> {{ user.email }}</p>
           <p><strong>Città:</strong> {{ user.citta }}</p>
-          <p><strong>Followers:</strong> {{ loadedAmici ? numberAmici : '#' }}</p>
+          <p><strong>Followers:</strong> {{ numberAmici }}</p>
 
           <div [hidden]="!isMyProfile()">
             <button class="btn btn-primary" [routerLink]="['/search-users']">Cerca amici</button>
@@ -44,18 +57,13 @@
       <div class="row mb-4">
         <div class="col-12">
           <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3 flex-nowrap" style="overflow-x: auto;">
-            <div [hidden]="!loadedAmici">
-              <!-- Loop sugli amici -->
-              @for(friendship of this.friendships; track friendship.id)
-              {
-                <div class="col" style="display: inline-block; float: none;">
-                  <app-card-friend [userId] = user.id [utenteAmico] = friendship class="h-50"></app-card-friend>
-                </div>
-              }
-              <div [hidden]="loadedAmici" class="spinner-grow text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
+            <!-- Loop sugli amici -->
+            @for(friendship of this.friendships; track friendship.id)
+            {
+              <div class="col" style="display: inline-block; float: none;">
+                <app-card-friend [userId] = user.id [utenteAmico] = friendship class="h-50"></app-card-friend>
               </div>
-            </div>
+            }
           </div>
         </div>
         <hr>
@@ -63,44 +71,33 @@
         <div class="row mb-4">
           <div class="col-12">
             <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3 flex-nowrap" style="overflow-x: auto;">
-              <div [hidden]="!loadedAmici">
-                <!-- Loop sugli amici -->
-                @for(event of this.createdEvents; track event)
-                {
-                  <div class="col" style="display: inline-block; float: none;">
-                    <app-event-card [evento]="event"></app-event-card>
-                  </div>
-                }
-                <div [hidden]="loadedAmici" class="spinner-grow text-primary" role="status">
-                  <span class="visually-hidden">Loading...</span>
+              <!-- Loop sugli amici -->
+              @for(event of this.createdEvents; track event)
+              {
+                <div class="col" style="display: inline-block; float: none;">
+                  <app-event-card [evento]="event"></app-event-card>
                 </div>
-              </div>
+              }
             </div>
           </div>
-        <hr>
-        <h5>Partecipazioni</h5>
+          <hr>
+          <h5>Partecipazioni</h5>
           <div class="row mb-4">
             <div class="col-12">
               <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3 flex-nowrap" style="overflow-x: auto;">
-                <div [hidden]="!loadedAmici">
-                  <!-- Loop sugli amici -->
-                  @for(partecipation of this.partecipations; track partecipation.evento)
-                  {
-                    <div class="col" style="display: inline-block; float: none;">
-                      <app-event-card [evento]="partecipation.evento"></app-event-card>
-                    </div>
-                  }
-                  <div [hidden]="loadedAmici" class="spinner-grow text-primary" role="status">
-                    <span class="visually-hidden">Loading...</span>
+                <!-- Loop sugli amici -->
+                @for(partecipation of this.partecipations; track partecipation.evento)
+                {
+                  <div class="col" style="display: inline-block; float: none;">
+                    <app-event-card [evento]="partecipation.evento"></app-event-card>
                   </div>
-                </div>
+                }
               </div>
             </div>
-        <hr>
+            <hr>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-
-  <div [hidden]="user" class="spinner-grow text-primary" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
+}

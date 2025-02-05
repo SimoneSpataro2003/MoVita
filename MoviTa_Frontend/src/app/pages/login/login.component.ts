@@ -48,6 +48,7 @@ export class LoginComponent {
   }
 
   getUser(){
+    console.log(this.applyForm.value.username);
     this.userService.getUserByUsername(this.applyForm.value.username||'').subscribe({
       next: (utente: Utente) =>{
         console.log(utente);

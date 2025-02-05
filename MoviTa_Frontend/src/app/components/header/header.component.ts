@@ -21,4 +21,8 @@ export class HeaderComponent{
     this.currentUserId = utente.id;
     this.router.navigate(['/profile', this.currentUserId]);
   }
+
+  get logged():boolean{
+    return this.cookieService.check('token');
+  }
 }
