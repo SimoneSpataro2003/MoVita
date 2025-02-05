@@ -1,19 +1,20 @@
 package org.example.movita_backend.controller;
 
 import org.example.movita_backend.model.Event;
+import org.example.movita_backend.model.Payment;
 import org.example.movita_backend.model.User;
 import org.example.movita_backend.services.impl.UserService;
 import org.example.movita_backend.services.interfaces.IImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -93,29 +94,25 @@ public class UserController
     }
 
     @GetMapping("/get-image-user/{userId}")
-    public ResponseEntity<?> getUserImage(@PathVariable int userId)
-    {
-        try
-        {
-             return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + userId + ".jpg\"")
-                .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-                .body(imageService.getUserImage(userId));
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The user image doesn't exist");
+    public ResponseEntity<?> getUserImage(@PathVariable int userId) {
+        try {
+            Resource image = imageService.getUserImage(userId);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + userId + ".jpg" + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                    .body(image);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The event image doesn't exist");
         }
     }
 
-
     @PostMapping("/set-user-image/{userId}")
-    public ResponseEntity<String> createUserImage(@PathVariable int userId, @RequestBody MultipartFile image)
-    {
+    public ResponseEntity<String> setUserImage(@RequestBody MultipartFile image,
+                                               @PathVariable int userId) {
         try {
-            imageService.addUserImage(userId,image);
+            imageService.addUserImage(userId, image);
             return ResponseEntity.ok("Image uploaded successfully");
-        } catch (IOException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
         }
     }
@@ -140,7 +137,7 @@ public class UserController
         try
         {
             List<User> friends = userService.getFriends(userId);
-            System.out.println(friends);
+            System.out.println("amici: " + friends);
             return ResponseEntity.status(HttpStatus.OK).body(friends);
         }
         catch (Exception e)
@@ -189,6 +186,22 @@ public class UserController
             return ResponseEntity.ok(areFriends);
         } catch (Exception e) {
             System.err.println("Error checking friendship: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PatchMapping("go-premium/{userId}")
+    public ResponseEntity<Boolean> goPremium(@PathVariable int userId) {
+        try
+        {
+            userService.updatePremiumStatus(userId);
+            Payment payment = new Payment("Passaggio a premium", 69, LocalDate.now().toString(), userId);
+            userService. paymentService.createCheckoutSession(payment);
+            return ResponseEntity.ok(true);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error going premium: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

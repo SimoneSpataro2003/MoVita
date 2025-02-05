@@ -29,6 +29,8 @@ export class EventCardComponent implements OnInit, Loadable{
   utente!: Utente;
   categorie :Categoria[] = [];
   loaded: boolean = false;
+  immagineEvento : string = "";
+  immagineCreatore: string ="";
   readonly IconaCategoriaMapper = IconaCategoriaMapper;
 
 
@@ -42,7 +44,47 @@ export class EventCardComponent implements OnInit, Loadable{
 
   ngOnInit() {
     this.utente = JSON.parse(this.cookieService.get('utente')) ;
-    this.showEventCategories();
+    this.showImageEvent();
+    this.showImageCreator();
+    this.showEventCategories();    
+  }
+
+  
+  showImageCreator():void{
+    if(this.utente!==null && this.utente!==undefined)
+    {
+      this.userService.getImage(this.utente.id).subscribe(
+        {
+          next: (data) => {
+            this.immagineCreatore = URL.createObjectURL(data);    
+                            
+          },
+          error: (error) =>{
+            console.log("Errore nel recupero immagine creatore",error);
+
+          }
+            
+        }
+      );
+    }
+  }
+
+  showImageEvent():void{
+    if(this.evento!==null && this.evento!==undefined)
+    {
+      this.eventService.getImage(this.evento.id,"1.jpg").subscribe(
+        {
+          next: (data) => {
+            this.immagineEvento = URL.createObjectURL(data);                    
+          },
+          error: (error) =>{
+            console.log("Errore nel recupero immagine evento card",error);
+
+          }
+            
+        }
+      );
+    }
   }
 
   showEventCategories(){

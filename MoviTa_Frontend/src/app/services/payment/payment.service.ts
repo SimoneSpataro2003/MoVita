@@ -12,7 +12,7 @@ export class PaymentService {
 
   constructor(private authHttp: AuthHttpClientService) { }
 
-  public getPayments(id: number | undefined): Observable<any> {
+  public getPayments(id: number | undefined): Observable<Pagamento[]> {
     return this.authHttp.get(`${this.apiUrl}/get-payments/${id}`);
   }
 }

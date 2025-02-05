@@ -5,6 +5,8 @@ import org.example.movita_backend.model.Payment;
 import org.example.movita_backend.persistence.proxy.UserProxy;
 import org.example.movita_backend.services.impl.PaymentService;
 import org.example.movita_backend.services.impl.UserService;
+import org.example.movita_backend.services.interfaces.IImageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,7 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
+    @Autowired
     public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
     }

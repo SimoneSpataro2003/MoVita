@@ -275,9 +275,9 @@ public class UserDaoJDBC implements UserDao {
     }
 
     @Override
-    public User updatePremiumStatus(int userId) {
+    public void updatePremiumStatus(int userId) {
         String query = "UPDATE utente SET " +
-                "premium = true, premium_data_inizio = CURRENT_TIMESTAMP, premium_data_fine = CURRENT_TIMESTAMP + INTEVAL '1month' " +
+                "premium = true, premium_data_inizio = CURRENT_TIMESTAMP, premium_data_fine = CURRENT_TIMESTAMP + INTERVAL '1month' " +
                 "WHERE id=?";
 
         try(PreparedStatement ps = connection.prepareStatement(query)){
@@ -287,7 +287,7 @@ public class UserDaoJDBC implements UserDao {
             e.printStackTrace();
             throw new UsernameNotFoundException("Could not update user.");
         }
-        return findById(userId);
+        findById(userId);
     }
 
     @Override
@@ -506,7 +506,6 @@ public class UserDaoJDBC implements UserDao {
             throw new RuntimeException("Couldn't check friendship.", e);
         }
     }
-
 
     private User mapUser(ResultSet rs) throws SQLException {
         User u = new User();

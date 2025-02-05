@@ -222,7 +222,7 @@ public class EventDaoJDBC implements EventDao {
     public int save(Event event) {
 
         String query = "INSERT INTO evento (nome, data, prezzo, citta, indirizzo, num_partecipanti, max_num_partecipanti, eta_minima, descrizione, valutazione_media, creatore) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?); ";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0,?); ";
 
         try (PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, event.getNome());
@@ -234,8 +234,7 @@ public class EventDaoJDBC implements EventDao {
             statement.setInt(7, event.getMaxNumPartecipanti());
             statement.setInt(8, event.getEtaMinima());
             statement.setString(9, event.getDescrizione());
-            statement.setFloat(10, event.getValutazioneMedia());
-            statement.setInt(11, event.getCreatore().getId());
+            statement.setInt(10, event.getCreatore().getId());
 
             statement.executeUpdate();
 

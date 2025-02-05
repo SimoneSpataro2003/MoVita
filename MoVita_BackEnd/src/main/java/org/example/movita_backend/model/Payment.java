@@ -17,8 +17,8 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(int id, String titolo, int ammontare, String data, int id_utente) {
-        this.id = id;
+    public Payment(String titolo, int ammontare, String data, int id_utente)
+    {
         this.titolo = titolo;
         this.ammontare = ammontare;
         this.data = data;
