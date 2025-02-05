@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.example.movita_backend.exception.InvalidTokenException;
 import org.example.movita_backend.services.impl.AuthService;
 import org.example.movita_backend.services.impl.JWTService;
+import org.example.movita_backend.services.impl.TokenInvalidatedService;
 import org.example.movita_backend.services.impl.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +32,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+    @Autowired
+    private TokenInvalidatedService tokenInvalidatedService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -46,6 +49,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             token = authHeader.substring(7);
             username = jwtService.extractUsername(token);
+
+            if(tokenInvalidatedService.isTokenInvalidated(token)){
+                throw new InvalidTokenException("Invalid token");
+            }
 
             if(org.apache.commons.lang3.StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null){
                 UserDetails utente = customUserDetailsService.loadUserByUsername(username);

@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {CookieService} from 'ngx-cookie-service';
 import {EventService} from '../../../services/event/event.service';
 import {Evento} from '../../../model/Evento';
 import {IconaCategoriaMapper} from '../../../model/IconaCategoriaMapper';
 import {ConsigliEventoComponent} from '../consigli-evento/consigli-evento.component';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal, NgbOffcanvasRef} from '@ng-bootstrap/ng-bootstrap';
 import {CategorieFiltroComponent} from '../categorie-filtro/categorie-filtro.component';
 
 @Component({
@@ -17,29 +17,35 @@ import {CategorieFiltroComponent} from '../categorie-filtro/categorie-filtro.com
   templateUrl: './event-filters.component.html',
   styleUrl: './event-filters.component.css'
 })
-export class EventFiltersComponent {
+export class EventFiltersComponent implements OnChanges{
 
-  filterForm: FormGroup;
+  @Input() filterForm!: FormGroup;
+  @Input() thisOffCanvas!: NgbOffcanvasRef;
+  @Input() filterSummary !: string;
   @Output() ottieniEventi = new EventEmitter<Evento[]>();
+  @Output() ottieniFilterSummary = new EventEmitter<string>();
+  @Output() ottieniFormGroup = new EventEmitter<FormGroup>();
 
   constructor(private fb: FormBuilder,
               private cookieService: CookieService,
               private eventService: EventService,
               private modalService: NgbModal) {
 
-    this.filterForm = this.fb.group({
-      creatore:[''],
-      nome: [''],
-      citta: [''],
-      prezzoMax: [1000],
-      etaMinima: [''],
-      valutazioneMedia: [0],
-      almenoMetaPartecipanti: [false],
-      categorie: [[]],
-    });
+    if(!this.filterForm){
+      this.filterForm = this.fb.group({
+        creatore:[''],
+        nome: [''],
+        citta: [''],
+        prezzoMax: [1000],
+        etaMinima: [''],
+        valutazioneMedia: [0],
+        almenoMetaPartecipanti: [false],
+        categorie: [[]],
+      });
+    }
   }
 
-  get filterSummary(): string {
+  updateFilterSummary() {
     const { creatore, nome, citta, prezzoMax, etaMinima, valutazioneMedia, almenoMetaPartecipanti, categorie } = this.filterForm.value;
     let summary = [];
 
@@ -52,7 +58,12 @@ export class EventFiltersComponent {
     if (almenoMetaPartecipanti) summary.push(`≥ 50% iscritti`);
     if (categorie.length) summary.push(`Categorie scelte: ${categorie.length}`);
 
-    return summary.length ? summary.join(' | ') : 'Nessun filtro selezionato';
+    this.filterSummary = summary.length ? summary.join(' | ') : 'Nessun filtro selezionato';
+    this.ottieniFilterSummary.emit(this.filterSummary);
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.updateFilterSummary()
   }
 
   getEventsByFilter(){
@@ -69,17 +80,20 @@ export class EventFiltersComponent {
 
     this.eventService.getEventsByFilter(body).subscribe({
       next: (eventi: Evento[])=>{
-        console.log(eventi);
         this.ottieniEventi.emit(eventi);
+        this.ottieniFormGroup.emit(this.filterForm);
       },
       error:(err) =>{
         //TODO: messaggio di errore!
       }
     });
+
+    this.thisOffCanvas.close();
   }
 
   resetFilters() {
     this.filterForm.reset({ prezzoMax: 1000, valutazioneMedia: 0, almenoMetaPartecipanti: false, categorie: [] });
+    this.updateFilterSummary();
   }
 
   protected readonly IconaCategoriaMapper = IconaCategoriaMapper;
@@ -101,5 +115,9 @@ export class EventFiltersComponent {
   get categorie(){
     let cat: number[] = this.filterForm.value.categorie;
     return cat;
+  }
+
+  get prezzoMax(){
+    return this.filterForm.value.prezzoMax;
   }
 }

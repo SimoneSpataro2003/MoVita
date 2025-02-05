@@ -1,0 +1,14 @@
+<div class="modal-content">
+  <div class="modal-header d-flex flex-column align-items-center w-100">
+    <h5 class="modal-title text-warning">Effettua logout</h5>
+    <button type="button" class="btn-close position-absolute top-0 end-0 m-3" aria-label="Close" (click)="thisModal.close()"></button>
+  </div>
+  <div class="modal-body">
+    <p class="text-center">Sei sicuro di voler effettuare il logout?</p>
+
+    <div class="d-flex align-items-center justify-content-evenly">
+      <button type="button" class="btn btn-secondary me-2" (click)="thisModal.close()">Chiudi</button>
+      <button type="button" class="btn btn-warning" (click)="logout()">Effettua il logout</button>
+    </div>
+  </div>
+</div>

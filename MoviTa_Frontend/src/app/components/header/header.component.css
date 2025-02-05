@@ -25,6 +25,7 @@
   border-style: none;
   border-radius: 0; /* Rimuove gli angoli arrotondati */
   outline: none; /* Rimuove l'effetto di focus predefinito */
+  color:white !important;
 }
 
 .underlined{

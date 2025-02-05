@@ -2,6 +2,8 @@ import {Component} from '@angular/core';
 import {Router, RouterModule} from '@angular/router';
 import {Utente} from '../../model/Utente';
 import {CookieService} from 'ngx-cookie-service';
+import {NgbActiveModal, NgbModal, NgbModalRef} from '@ng-bootstrap/ng-bootstrap';
+import {ConfirmLogoutComponent} from '../../confirm-logout/confirm-logout.component';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +16,8 @@ export class HeaderComponent{
   currentUserId!: number;
 
   constructor(private router: Router,
-              protected cookieService: CookieService) {}
+              private cookieService: CookieService,
+              private modalService: NgbModal) {}
 
   goToMyProfile() {
     let utente: Utente = JSON.parse(this.cookieService.get('utente'));
@@ -24,5 +27,10 @@ export class HeaderComponent{
 
   get logged():boolean{
     return this.cookieService.check('token');
+  }
+
+  openLogoutModal() {
+    let thisModal :NgbModalRef= this.modalService.open(ConfirmLogoutComponent, {centered: true});
+    thisModal.componentInstance.thisModal = thisModal;
   }
 }

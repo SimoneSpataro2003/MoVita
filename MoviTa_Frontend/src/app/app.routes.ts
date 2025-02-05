@@ -10,21 +10,23 @@ import {ProfileComponent} from './pages/profile/profile.component';
 import {PaymentComponent} from './pages/payment/payment.component';
 import {SearchFriendsComponent} from './pages/search-friends/search-friends.component';
 import {SettingsComponent} from './pages/settings/settings.component';
+import {authGuard} from './guard/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
     children:[
-      {path: '', component:HomeComponent},
+      {path: '', component: HomeComponent},
       {path: 'events', component: EventsComponent},
       {path: 'event-details/:id', component: DetailsComponent},
       {path:'profile/:id', component: ProfileComponent},
       {path: 'payments/:id', component: PaymentComponent },
       {path: 'search-users', component: SearchFriendsComponent},
       {path: 'profile/settings/:id', component: SettingsComponent}
-    ]
-    //canActivate:[authGuard] <-- per evitare accessi se non presente il token
+    ],
+    canActivate:[authGuard],
+    canActivateChild:[authGuard]
   },
 
   /*{
@@ -38,7 +40,7 @@ export const routes: Routes = [
     component: AuthLayoutComponent,
     children:[
       {path: 'login', component:LoginComponent},
-      {path: 'register', component: RegistratiComponent}
+      {path: 'register', component: RegistratiComponent},
     ]
   }
 ];

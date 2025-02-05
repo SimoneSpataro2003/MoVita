@@ -7,8 +7,7 @@
       </div>
     </div>
     <div class="row mb-4">
-      <app-event-filters (ottieniEventi)="showEvents($event)">
-      </app-event-filters>
+      <button class="btn btn-primary" (click)="showFiltriEvento()">Filtri: {{filterSummary}}</button>
     </div>
     @if(eventi.length >0){
       <div class="row mb-4">

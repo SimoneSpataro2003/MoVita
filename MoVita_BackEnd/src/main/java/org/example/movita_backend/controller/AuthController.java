@@ -1,5 +1,6 @@
 package org.example.movita_backend.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.example.movita_backend.model.dto.LoginRequest;
 import org.example.movita_backend.model.dto.RegisterAgencyRequest;
@@ -32,5 +33,16 @@ public class AuthController {
     @PostMapping("/register-agency")
     public ResponseEntity<?> registerAgency(@Valid @RequestBody RegisterAgencyRequest registerAgencyRequest) {
         return ResponseEntity.ok(authService.registerAgency(registerAgencyRequest));
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            authService.logout(token);
+        }
+        return ResponseEntity.ok().build();
     }
 }

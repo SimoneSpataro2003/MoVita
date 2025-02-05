@@ -23,4 +23,8 @@ export class AuthService {
   registerAgency(body: any): Observable<any>{
     return this.http.post(this.URL + '/register-agency', body);
   }
+
+  logout(): Observable<any>{
+    return this.http.get(this.URL +'/logout');
+  }
 }

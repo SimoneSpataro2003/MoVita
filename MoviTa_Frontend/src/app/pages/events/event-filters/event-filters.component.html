@@ -1,104 +1,89 @@
-<div class="accordion" id="accordionExample">
-  <div class="accordion-item">
-    <h2 class="accordion-header" id="headingOne">
-      <button
-        class="accordion-button"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#collapseOne"
-        aria-expanded="true"
-        aria-controls="collapseOne"
-      >
-        <div class="text-start w-100">
-          <h5 class="text-center mb-1">Filtri</h5>
-          <p class="text-center mb-0">{{filterSummary}}</p>
+<div class="offcanvas-container">
+  <div class="offcanvas-header bg-primary-subtle sticky-top">
+    <!-- Contenitore per i bottoni fissati in alto a destra -->
+    <div class="position-absolute top-0 end-0 m-3">
+      <button type="button" class="btn btn-danger rounded-0" (click)="resetFilters()">Reset</button>
+      <button type="submit" class="btn btn-success rounded-0" (click)="getEventsByFilter()">Applica</button>
+    </div>
+
+    <!-- Contenitore per il titolo e il riepilogo filtri centrati -->
+    <div class="w-100 d-flex flex-column align-items-center">
+      <h5 class="text-secondary mb-2">Filtri</h5>
+      <p class="text-secondary mb-0">{{ filterSummary }}</p>
+    </div>
+  </div>
+
+  <div class="offcanvas-body overflow-auto">
+    <form [formGroup]="filterForm" (change)="updateFilterSummary()" (ngSubmit)="getEventsByFilter()">
+      <div class="mb-3">
+        <label for="nomeFiltro" class="form-label h6">Cerca per Nome</label>
+        <input type="text" id="nomeFiltro" class="form-control" formControlName="nome" placeholder="Cerca per nome">
+      </div>
+
+      <div class="row">
+        <div class="mb-3 col-6">
+          <label for="creatoreFiltro" class="form-label h6">Cerca per Creatore</label>
+          <input type="text" id="creatoreFiltro" class="form-control" formControlName="creatore" placeholder="Cerca per Creatore">
         </div>
-      </button>
-    </h2>
-    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-      <div class="accordion-body">
-        <form [formGroup]="filterForm" (ngSubmit)="getEventsByFilter()">
-          <!-- Filtro per Nome -->
-          <div class="mb-3">
-            <label for="creatoreFiltro" class="form-label">Cerca per Creatore</label>
-            <input type="text" id="creatoreFiltro" class="form-control" formControlName="creatore" placeholder="Cerca per Creatore">
-          </div>
 
-          <!-- Filtro per Nome -->
-          <div class="mb-3">
-            <label for="nomeFiltro" class="form-label">Cerca per Nome</label>
-            <input type="text" id="nomeFiltro" class="form-control" formControlName="nome" placeholder="Cerca per nome">
-          </div>
+        <div class="mb-3 col-6">
+          <label for="cittaFiltro" class="form-label h6">Cerca per Città</label>
+          <input type="text" id="cittaFiltro" class="form-control" formControlName="citta" placeholder="Cerca per città">
+        </div>
 
-          <!-- Filtro per Città -->
-          <div class="mb-3">
-            <label for="cittaFiltro" class="form-label">Cerca per Città</label>
-            <input type="text" id="cittaFiltro" class="form-control" formControlName="citta" placeholder="Cerca per città">
-          </div>
+      </div>
 
-          <!-- Filtro per Prezzo -->
-          <div class="mb-3">
-            <label for="prezzoFiltro" class="form-label">Prezzo (max): {{ filterForm.value.prezzoMax }}€</label>
-            <input type="range" id="prezzoFiltro" class="form-range" min="0" max="1000" step="10" formControlName="prezzoMax">
-          </div>
+      <div class="row">
+        <div class="mb-3 col-8">
+          <label for="prezzoFiltro" class="form-label h6">Prezzo (max): {{ prezzoMax }}€</label>
+          <input type="range" id="prezzoFiltro" class="form-range" min="0" max="1000" step="0.5" formControlName="prezzoMax">
+        </div>
 
-          <!-- Filtro per Età Minima -->
-          <div class="mb-3">
-            <label for="etaMinimaFiltro" class="form-label">Età Minima</label>
-            <input type="number" id="etaMinimaFiltro" class="form-control" formControlName="etaMinima" min="0" max="100">
+        <div class="mb-3 col-4">
+          <label for="valutazioneFiltro" class="form-label h6">Valutazione Minima</label>
+          <input type="range" id="valutazioneFiltro" class="form-range" min="0" max="5" step="0.5" formControlName="valutazioneMedia">
+          <div class="d-flex justify-content-between">
+            <span>0★</span>
+            <span>5★</span>
           </div>
+        </div>
+      </div>
 
-          <!-- Filtro per Valutazione Media -->
-          <div class="mb-3">
-            <label for="valutazioneFiltro" class="form-label">Valutazione Minima</label>
-            <input type="range" id="valutazioneFiltro" class="form-range" min="0" max="5" step="0.5" formControlName="valutazioneMedia">
-            <div class="d-flex justify-content-between">
-              <span>0★</span>
-              <span>5★</span>
-            </div>
+      <div class="row">
+        <div class="mb-3 col-10">
+          <label for="etaMinimaFiltro" class="form-label h6">Età Minima</label>
+          <input type="number" id="etaMinimaFiltro" class="form-control" formControlName="etaMinima" min="0" max="100">
+        </div>
+
+        <div class="mb-3 col-2">
+          <label class="form-label mb-0 h6" for="metaPartecipantiFiltro">Eventi con ≥ 50% iscritti</label><br>
+          <input type="checkbox" class="form-check-input h6" id="metaPartecipantiFiltro" formControlName="almenoMetaPartecipanti">
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label h6">Categorie</label>
+        <div class="row">
+          <div class="col-2">
+            <button type="button" class="btn btn-secondary" (click)="openCategoryFilterModal()">Scegli...</button>
           </div>
-
-          <!-- Checkbox "Almeno metà partecipanti" -->
-          <label>Almeno metà dei partecipanti</label>
-          <div class="mb-3 form-check">
-            <input type="checkbox" class="form-check-input" id="metaPartecipantiFiltro" formControlName="almenoMetaPartecipanti">
-            <label class="form-check-label" for="metaPartecipantiFiltro">Eventi con ≥ 50% iscritti</label>
-          </div>
-
-          <!-- Filtro per Categorie -->
-          <div class="mb-3">
-            <label class="form-label">Categorie</label>
-            <div class="row">
-              <div class="col-10">
-                @if(categorie.length == 0){
-                  <h5>Nessuna categoria scelta.</h5>
-                }@else{
-                  <div class="row row-cols-auto">
-                    @for(categoria of categorie; track categoria) {
-                      <div class="col">
-                        <div class="mb-4">
-                          <button class="cerchio btn btn-primary rounded-circle bi" [class]="IconaCategoriaMapper.getIconById(categoria)"></button>
-                        </div>
-                      </div>
-                    }
+          <div class="col-10">
+            @if(categorie.length == 0){
+              <p>Nessuna categoria scelta.</p>
+            }@else{
+              <div class="row row-cols-auto">
+                @for(categoria of categorie; track categoria) {
+                  <div class="col">
+                    <div class="mb-4">
+                      <button class="cerchio btn btn-secondary rounded-circle bi" [class]="IconaCategoriaMapper.getIconById(categoria)"></button>
+                    </div>
                   </div>
                 }
               </div>
-
-              <div class="col-2">
-                <button type="button" class="btn btn-secondary" (click)="openCategoryFilterModal()">Scegli...</button>
-              </div>
-            </div>
+            }
           </div>
-
-          <hr>
-          <!-- Pulsanti -->
-          <div class="d-flex justify-content-end gap-2">
-            <button type="button" class="btn btn-danger" (click)="resetFilters()">Reset</button>
-            <button type="submit" class="btn btn-primary">Applica</button>
-          </div>
-        </form>
+        </div>
       </div>
-    </div>
+    </form>
   </div>
 </div>

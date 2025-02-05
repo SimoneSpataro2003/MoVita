@@ -10,6 +10,7 @@ import org.example.movita_backend.model.dto.LoginRequest;
 import org.example.movita_backend.model.dto.RegisterAgencyRequest;
 import org.example.movita_backend.model.dto.RegisterPersonRequest;
 import org.example.movita_backend.services.interfaces.IAuthService;
+import org.example.movita_backend.services.interfaces.ITokenInvalidatedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,6 +35,11 @@ public class AuthService implements IAuthService {
 
     @Autowired
     private JWTService jwtService;
+
+    @Autowired
+    private ITokenInvalidatedService tokenInvalidatedService;
+
+
 
     private void emailAlreadyExists(String email){
         User user = userDao.findByEmail(email);
@@ -119,6 +125,6 @@ public class AuthService implements IAuthService {
 
     @Override
     public void logout(String token) {
-
+        tokenInvalidatedService.invalidateToken(token);
     }
 }
