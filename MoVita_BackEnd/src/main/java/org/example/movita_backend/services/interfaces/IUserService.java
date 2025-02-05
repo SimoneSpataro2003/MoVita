@@ -14,6 +14,6 @@ public interface IUserService {
     int countFriendships(int userId);
     List<Event> getCreatedEventsByUserId(int userId);
     List<User> getFriends(int userId);
-    void goPremium(int userId);
+    void updatePremiumStatus(int userId);
     boolean checkFriendship(int userId1, int userId2);
 }

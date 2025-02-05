@@ -60,8 +60,8 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public void goPremium(int userId) {
-        userDao.goPremium(userId);
+    public void updatePremiumStatus(int userId) {
+        userDao.updatePremiumStatus(userId);
     }
 
     @Override

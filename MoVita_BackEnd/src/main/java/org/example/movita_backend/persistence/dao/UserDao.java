@@ -20,7 +20,7 @@ public interface UserDao {
     User updatePerson(User user);
     User updateAgency(User user);
     //update specifici, che necessitano di operazioni aggiuntive separate.
-    User updatePremiumStatus(int userId);
+    void updatePremiumStatus(int userId);
     User updatePassword(int userId, String newPassword);
     User updateProfileImage(int userId, String imagePath);
     User updateConsigliEventi(int userId);
@@ -34,8 +34,6 @@ public interface UserDao {
 
     List<Event> getCreatedEventsByUserId(int userId);
     boolean checkFriendship(int userId1, int userId2);
-
-    void goPremium(int userId);
 
     //TODO: ALTRI
     //associazioni
