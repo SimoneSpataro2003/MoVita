@@ -17,6 +17,7 @@ import {Utente} from '../../model/Utente';
 export class SettingsComponent implements OnInit {
   user: any;
   userId: number | null = null;
+  loaded: boolean = false;
 
   constructor(private route: ActivatedRoute, private userService: UserService) {}
 
@@ -27,6 +28,7 @@ export class SettingsComponent implements OnInit {
       this.userService.getUserById(this.userId).subscribe(
         (data) => {
           this.user = data;
+          this.loaded = true;
         },
         (error) => {
           //TODO: errore nel caricamento del profilo
