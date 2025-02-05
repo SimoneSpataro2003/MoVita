@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {ActivatedRoute, RouterLink} from '@angular/router';
+import {Component, inject, OnInit} from '@angular/core';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import { UserService } from '../../services/user/user.service';
 import { Utente } from '../../model/Utente';
 import {CommonModule, NgOptimizedImage} from '@angular/common';
@@ -18,6 +18,7 @@ import {EventCardComponent} from '../../shared/common/event-card/event-card.comp
   imports: [CommonModule, CardFriendComponent, RouterLink, EventCardComponent] // Aggiungi CommonModule qui
 })
 export class ProfileComponent implements OnInit {
+  router = inject(Router);
   userId!: number;
   user!: Utente;
   currentUserId!: number;
@@ -159,5 +160,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-
+  goToSettings() {
+    this.router.navigate(['/profile/settings', this.currentUserId]);
+  }
 }

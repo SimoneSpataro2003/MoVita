@@ -76,7 +76,7 @@ public class UserController
         }
     }
 
-    @PostMapping("/delete-friendship/{userId1}/{userId2}")
+    @DeleteMapping("/delete-friendship/{userId1}/{userId2}")
     public ResponseEntity<Void> deleteFriendship(@PathVariable int userId1, @PathVariable int userId2)
     {
         try
