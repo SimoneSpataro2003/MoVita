@@ -91,35 +91,6 @@ public class EventController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
-//    @GetMapping("/get-image-event/{eventId}/{imageName}")
-//    public ResponseEntity<?> getEventImage(@PathVariable int eventId, @PathVariable String imageName){
-//        try
-//        {
-//            return ResponseEntity.ok()
-//                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + imageName)
-//                    .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-//                    .body(imageService.getEventImage(eventId,imageName));
-//        }
-//        catch (Exception e)
-//        {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The user image doesn't exist");
-//        }
-//
-//    }
-
-
-//    @Value("${upload.path}")
-//    private String uploadPath;
-//
-//    @PostMapping("/set-event-image")
-//    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
-//
-//          //  String fileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
-//            Path path = Paths.get("./");
-//            System.out.println(path);
-//            return ResponseEntity.ok("Image uploaded successfully");
-//
-//    }
 
     @PostMapping("/set-event-image/{eventId}")
     public ResponseEntity<String> setEventImage(@RequestBody MultipartFile image,
