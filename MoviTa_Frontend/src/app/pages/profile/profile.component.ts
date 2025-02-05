@@ -157,7 +157,7 @@ export class ProfileComponent implements OnInit, Loadable {
     });
   }
 
-  passaPremium() {
+  goPremium() {
     this.userService.goPremium(this.currentUserId).subscribe({
       next: (data) => {
         console.log(data);

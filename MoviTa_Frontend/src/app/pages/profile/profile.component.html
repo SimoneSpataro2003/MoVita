@@ -50,6 +50,9 @@
             <button [hidden]="isAlreadyFriends()" class="btn btn-primary" (click)="addFriend()">Segui</button>
             <button [hidden]="!isAlreadyFriends()" class="btn btn-danger" (click)="deleteFriend()">Segui già</button>
           </div>
+          <div [hidden]="(user.premium)">
+            <button class="btn btn-primary" (click)="goPremium()">Passa a premium!</button>
+          </div>
         </div>
       </div>
       <hr>
