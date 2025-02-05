@@ -507,6 +507,21 @@ public class UserDaoJDBC implements UserDao {
         }
     }
 
+    @Override
+    public void goPremium(int userId) {
+        String query = "UPDATE utente SET premium = true WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+
+            stmt.setInt(1, userId);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // Meglio usare un logger
+        }
+    }
+
+
 
     private User mapUser(ResultSet rs) throws SQLException {
         User u = new User();

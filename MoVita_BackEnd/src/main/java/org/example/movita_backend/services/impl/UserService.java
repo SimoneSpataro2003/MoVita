@@ -14,6 +14,7 @@ import java.util.List;
 public class UserService implements IUserService{
     private final UserDao userDao;
     private final UserProxy userProxy;
+    public PaymentService paymentService;
 
     public UserService() {
         this.userDao = DBManager.getInstance().getUserDAO();
@@ -59,7 +60,14 @@ public class UserService implements IUserService{
     }
 
     @Override
+    public void goPremium(int userId) {
+        userDao.goPremium(userId);
+    }
+
+    @Override
     public boolean checkFriendship(int userId1, int userId2) {
         return userDao.checkFriendship(userId1, userId2);
     }
+
+
 }

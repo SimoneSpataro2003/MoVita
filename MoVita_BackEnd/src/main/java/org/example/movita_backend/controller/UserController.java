@@ -1,6 +1,7 @@
 package org.example.movita_backend.controller;
 
 import org.example.movita_backend.model.Event;
+import org.example.movita_backend.model.Payment;
 import org.example.movita_backend.model.User;
 import org.example.movita_backend.services.impl.UserService;
 import org.example.movita_backend.services.interfaces.IImageService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -189,6 +191,22 @@ public class UserController
             return ResponseEntity.ok(areFriends);
         } catch (Exception e) {
             System.err.println("Error checking friendship: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PatchMapping("go-premium/{userId}")
+    public ResponseEntity<Boolean> goPremium(@PathVariable int userId) {
+        try
+        {
+            userService.goPremium(userId);
+            Payment payment = new Payment("Passaggio a premium", 69, LocalDate.now().toString(), userId);
+            userService. paymentService.createCheckoutSession(payment);
+            return ResponseEntity.ok(true);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error going premium: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
