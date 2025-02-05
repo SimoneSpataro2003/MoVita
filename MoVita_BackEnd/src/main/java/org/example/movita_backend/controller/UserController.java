@@ -5,6 +5,7 @@ import org.example.movita_backend.model.User;
 import org.example.movita_backend.services.impl.UserService;
 import org.example.movita_backend.services.interfaces.IImageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -93,29 +94,25 @@ public class UserController
     }
 
     @GetMapping("/get-image-user/{userId}")
-    public ResponseEntity<?> getUserImage(@PathVariable int userId)
-    {
-        try
-        {
-             return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + userId + ".jpg\"")
-                .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-                .body(imageService.getUserImage(userId));
-        }
-        catch (Exception e)
-        {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The user image doesn't exist");
+    public ResponseEntity<?> getUserImage(@PathVariable int userId) {
+        try {
+            Resource image = imageService.getUserImage(userId);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + userId + ".jpg" + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+                    .body(image);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("The event image doesn't exist");
         }
     }
 
-
     @PostMapping("/set-user-image/{userId}")
-    public ResponseEntity<String> createUserImage(@PathVariable int userId, @RequestBody MultipartFile image)
-    {
+    public ResponseEntity<String> setUserImage(@RequestBody MultipartFile image,
+                                               @PathVariable int userId) {
         try {
-            imageService.addUserImage(userId,image);
+            imageService.addUserImage(userId, image);
             return ResponseEntity.ok("Image uploaded successfully");
-        } catch (IOException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
         }
     }
