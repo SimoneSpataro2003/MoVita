@@ -157,6 +157,14 @@ export class ProfileComponent implements OnInit, Loadable {
     });
   }
 
+  passaPremium() {
+    this.userService.goPremium(this.currentUserId).subscribe({
+      next: (data) => {
+        console.log(data);
+      }
+    })
+  }
+
   goToSettings() {
     this.router.navigate(['/profile/settings', this.currentUserId]);
   }

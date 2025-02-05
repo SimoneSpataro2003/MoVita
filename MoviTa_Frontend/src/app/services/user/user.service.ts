@@ -58,4 +58,8 @@ export class UserService {
   public updateUser(id: number | null, userData: any): Observable<any> {
     return this.authHttp.put(`${this.apiUrl}/${id}`, userData);
   }
+
+  public goPremium(id: number): Observable<any> {
+    return this.authHttp.patch(`${this.apiUrl}/go-premium/${id}`, {id:id});
+  }
 }
