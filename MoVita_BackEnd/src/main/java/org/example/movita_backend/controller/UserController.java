@@ -137,7 +137,7 @@ public class UserController
         try
         {
             List<User> friends = userService.getFriends(userId);
-            System.out.println(friends);
+            System.out.println("amici: " + friends);
             return ResponseEntity.status(HttpStatus.OK).body(friends);
         }
         catch (Exception e)
