@@ -5,6 +5,7 @@ import {PaymentService} from '../../services/payment/payment.service';
 import {CardPaymentComponent} from './card-payment/card-payment.component';
 import {Utente} from '../../model/Utente';
 import {CookieService} from 'ngx-cookie-service';
+import {ToastService} from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-payment',
@@ -23,7 +24,8 @@ export class PaymentComponent implements OnInit , Loadable{
 
   constructor(
     private paymentService: PaymentService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private toastService: ToastService
   ) {
   }
 
@@ -48,8 +50,8 @@ export class PaymentComponent implements OnInit , Loadable{
         this.loaded = true;
       },
       error: (error) => {
-        console.log(error);
-    }
+        this.toastService.show('errorToast','Non riesco a visualizzare i pagamenti!', 'Impossibile visualizzare i pagamenti. \n riprova più tardi');
+      }
     })
   }
 }

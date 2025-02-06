@@ -6,6 +6,7 @@ import {AuthService} from '../../services/auth/auth.service';
 import {CookieService} from 'ngx-cookie-service';
 import {UserService} from '../../services/user/user.service';
 import {Utente} from '../../model/Utente';
+import {ToastService} from '../../services/toast/toast.service';
 
 declare var google: any;
 
@@ -28,7 +29,8 @@ export class LoginComponent implements OnInit{
 
   constructor(private authService: AuthService,
               private cookieService: CookieService,
-              private userService: UserService){}
+              private userService: UserService,
+              private toastService: ToastService){}
 
   login(){
     const body = {
@@ -40,12 +42,14 @@ export class LoginComponent implements OnInit{
       next: (body:any) =>{
         this.cookieService.set('token', body.token);
         console.log(this.cookieService.get('token'));
+        this.toastService.show('successToast', 'Successo!', "Login effettuato con successo!");
         this.getUserByUsername();
-        //this.loginError = false;
       },
-      error: (any) =>{
+      error: (err) =>{
         this.applyForm.reset();
         //this.loginError = true;
+        console.log(err.error.error);
+        this.toastService.show('errorToast', 'Errore', err.error.error);
       }
     });
   }
@@ -72,10 +76,11 @@ export class LoginComponent implements OnInit{
       next:(body:any)=>{
         this.cookieService.set('token',body.token);
         this.cookieService.set('utente', JSON.stringify(body.utente))
+        this.toastService.show('successToast', 'Successo!', "Login effettuato con successo!");
         this.goHome();
       },
-      error:(error:any)=>{
-        console.error(error);
+      error:(err:any)=>{
+        this.toastService.show('errorToast', 'Errore', 'Nessun utente è registrato con questo profilo Google.');
       }
     })
   }
@@ -87,11 +92,10 @@ export class LoginComponent implements OnInit{
         console.log(utente);
         this.cookieService.set('utente', JSON.stringify(utente));
         const a = JSON.parse(this.cookieService.get('utente'));
-        console.log(a);
         this.goHome();
       },
       error: (any) =>{
-
+        this.toastService.show('errorToast',"Errore", "Impossibile Caricare l'utente. \n Prova a ricaricare la pagina.");
       }
     });
   }

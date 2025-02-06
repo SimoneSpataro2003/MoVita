@@ -7,18 +7,18 @@ import {CookieService} from 'ngx-cookie-service';
   providedIn: 'root'
 })
 
-//FIXME:VA BENE?
 export class AuthHttpClientService{
-
   /*NOTA: SE NON È MEMORIZZATO NESSUN COOKIE? L'auth guard ti riporta direttamente nella pagina di login!*/
   private token: string;
-  private headers: HttpHeaders;
+  private headers: HttpHeaders = new HttpHeaders();
   constructor(private http: HttpClient, private cookieService: CookieService){
-    this.token = cookieService.get('token');
-    this.headers = new HttpHeaders();
+    if(cookieService.check('token')) {
+      this.token = cookieService.get('token');
+      this.createHeaders();
+    }
+    else
+      this.token = '';
 
-    //una volta ottenuto il cookie, costruisco il mio header.
-    this.createHeaders();
   }
 
   private createHeaders(){
@@ -28,26 +28,39 @@ export class AuthHttpClientService{
   }
 
   public get(url: string):Observable<any>{
+    this.checkToken();
     return this.http.get(url,{headers: this.headers});
   }
 
   public getBinaryContent(url: string):Observable<any>{
+    this.checkToken();
     return this.http.get(url,{headers: this.headers, responseType: 'blob'});
   }
 
   public post(url: string, body:any):Observable<any>{
+    this.checkToken();
     return this.http.post(url,body,{headers: this.headers});
   }
 
   public put(url:string, body:any):Observable<any>{
+    this.checkToken();
     return this.http.put(url,body,{headers: this.headers});
   }
 
   public patch(url:string, body:any):Observable<any>{
+    this.checkToken();
     return this.http.patch(url,body,{headers: this.headers});
   }
 
   public delete(url:string):Observable<any>{
+    this.checkToken();
     return this.http.delete(url,{headers: this.headers});
+  }
+
+  checkToken(){
+    if(this.token == ''){
+      this.token = this.cookieService.get('token');
+      this.createHeaders();
+    }
   }
 }

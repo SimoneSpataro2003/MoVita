@@ -12,6 +12,7 @@ import {NgOptimizedImage} from '@angular/common';
 import {UserService} from '../../../services/user/user.service';
 import {Utente} from '../../../model/Utente';
 import {CookieService} from 'ngx-cookie-service';
+import {ToastService} from '../../../services/toast/toast.service';
 
 @Component({
   selector: 'app-event-card',
@@ -39,6 +40,7 @@ export class EventCardComponent implements OnInit, Loadable{
               private eventService: EventService,
               private userService: UserService,
               private cookieService: CookieService,
+              private toastService: ToastService,
               private router: Router) {
   }
 
@@ -46,24 +48,23 @@ export class EventCardComponent implements OnInit, Loadable{
     this.utente = JSON.parse(this.cookieService.get('utente')) ;
     this.showImageEvent();
     this.showImageCreator();
-    this.showEventCategories();    
+    this.showEventCategories();
   }
 
-  
+
   showImageCreator():void{
     if(this.evento!==null && this.evento!==undefined)
     {
       this.userService.getImage(this.evento.creatore.id).subscribe(
         {
           next: (data) => {
-            this.immagineCreatore = URL.createObjectURL(data);    
-                            
+            this.immagineCreatore = URL.createObjectURL(data);
+
           },
           error: (error) =>{
-            console.log("Errore nel recupero immagine creatore",error);
-
+            this.toastService.show('errorToast',"Errore", "Impossibile recuperare l'immagine del creatore dell'evento. \n Prova a ricaricare la pagina.");
           }
-            
+
         }
       );
     }
@@ -75,13 +76,13 @@ export class EventCardComponent implements OnInit, Loadable{
       this.eventService.getImage(this.evento.id,"1.jpg").subscribe(
         {
           next: (data) => {
-            this.immagineEvento = URL.createObjectURL(data);                    
+            this.immagineEvento = URL.createObjectURL(data);
           },
           error: (error) =>{
             console.log("Errore nel recupero immagine evento card",error);
 
           }
-            
+
         }
       );
     }
@@ -94,8 +95,7 @@ export class EventCardComponent implements OnInit, Loadable{
         this.loaded = true;
       },
       error:(err) =>{
-        //TODO: mostra errore con una finestra popup!
-        console.log(err);
+        this.toastService.show('errorToast', 'Errore', 'Errore nel reperire le categorie di un evento.\n Prova a ricaricaricare la pagina.');
       }
     })
   }

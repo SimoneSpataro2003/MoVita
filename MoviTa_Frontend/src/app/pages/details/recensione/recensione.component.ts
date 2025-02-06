@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Recensione } from '../../../model/Recensione';
 import { EventService } from '../../../services/event/event.service';
+import {ToastService} from '../../../services/toast/toast.service';
 
 @Component({
   selector: 'app-recensione',
@@ -12,9 +13,10 @@ import { EventService } from '../../../services/event/event.service';
 export class RecensioneComponent {
 
   recensioni: Recensione[] = [];
-  @Input() idEvento !:number | null; 
+  @Input() idEvento !:number | null;
 
-  constructor(private eventService: EventService){}
+  constructor(private eventService: EventService,
+              private toastService: ToastService){}
 
   ottieniRecensioni():void{
     if(this.idEvento!== null){
@@ -22,11 +24,10 @@ export class RecensioneComponent {
         {
           next: (data) => {
               this.recensioni = data;
-              console.log("Recensioni ARRIVATE");
               console.log(this.recensioni);
           },
           error: (err) => {
-            console.log("Errore recupero RECENSIONI");
+            this.toastService.show('errorToast', 'Errore', 'Errore nel recupero delle recensioni.\n Prova a ricaricaricare la pagina.');
           }
         }
       );

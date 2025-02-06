@@ -4,6 +4,7 @@ import {Utente} from '../../../model/Utente';
 import {UserService} from '../../../services/user/user.service';
 import {RouterLink} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
+import {ToastService} from '../../../services/toast/toast.service';
 
 @Component({
   selector: 'app-card-friend',
@@ -24,7 +25,9 @@ export class CardFriendComponent implements OnInit, Loadable {
   protected imagineProfile: string | undefined;
 
 
-  constructor(private userService: UserService, private cookieService: CookieService) {
+  constructor(private userService: UserService,
+              private cookieService: CookieService,
+              private toastService: ToastService) {
   }
 
   isLoaded(): boolean {
@@ -51,7 +54,7 @@ export class CardFriendComponent implements OnInit, Loadable {
         this.numeroFollowers = result; // Assume 'result' is the number of followers
       },
       error: () => {
-        console.log("error show numberFollowers");
+        this.toastService.show('errorToast',"Errore", "Impossibile caricare il numero di followers. \n Prova a ricaricare la pagina.");
       }
     });
   }
@@ -63,7 +66,7 @@ export class CardFriendComponent implements OnInit, Loadable {
         console.log("verifica amicizia " + this.currentUserId + " " + this.utenteAmico.id);
       },
       error: () => {
-        console.error("Errore nel verificare l'amicizia");
+        this.toastService.show('errorToast',"Errore", "Impossibile leggere le amicizie dell'utente. \n Prova a ricaricare la pagina.");
       }
     });
   }
@@ -72,9 +75,10 @@ export class CardFriendComponent implements OnInit, Loadable {
     this.userService.deleteFriendship(this.currentUserId, this.utenteAmico.id).subscribe({
       next: () => {
         this.alreadyFollow = false; // Aggiorna lo stato dopo la rimozione
+        this.toastService.show('successToast',"Amicizia rimossa", "Amicizia rimossa correttamente.");
       },
       error: () => {
-        console.error("Errore per eliminare l'amicizia");
+        this.toastService.show('errorToast',"Errore", "Impossibile rimuovere l'amicizia. \n Prova a ricaricare la pagina.");
       }
     });
   }
@@ -82,7 +86,10 @@ export class CardFriendComponent implements OnInit, Loadable {
   addFriend(): void {
     this.userService.addFriendship(this.currentUserId, this.utenteAmico.id).subscribe({
       next: (result) => {
-        this.alreadyFollow = true;
+        this.toastService.show('successToast',"Amicizia aggiunta", "Amicizia aggiunta correttamente.");
+      },
+      error: (err) =>{
+        this.toastService.show('errorToast',"Errore", "Impossibile aggiungere una nuova amicizia. Prova a ricaricare la pagina.");
       }
     })
   }
@@ -95,7 +102,7 @@ export class CardFriendComponent implements OnInit, Loadable {
 
         },
         error: (err) => {
-          console.error("Errore nel recupero dell'immagine del creatore dell'evento", err);
+          this.toastService.show('errorToast',"Errore", "Impossibile recuperare l'immagine del profilo. \n Prova a ricaricare la pagina.");
 
         }
       }

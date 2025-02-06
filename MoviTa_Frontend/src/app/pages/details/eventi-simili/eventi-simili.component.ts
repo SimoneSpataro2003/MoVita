@@ -4,6 +4,7 @@ import { EventCardComponent } from '../../../shared/common/event-card/event-card
 import { EventService } from '../../../services/event/event.service';
 import { Categoria } from '../../../model/Categoria';
 import { CategoryService } from '../../../services/category/category.service';
+import {ToastService} from '../../../services/toast/toast.service';
 
 @Component({
   selector: 'app-eventi-simili',
@@ -15,7 +16,9 @@ import { CategoryService } from '../../../services/category/category.service';
 export class EventiSimiliComponent {
 
   eventiSimili: Evento[] = [];
-  constructor(private eventService: EventService, private categoryService: CategoryService) { }
+  constructor(private eventService: EventService,
+              private categoryService: CategoryService,
+              private toastService: ToastService) { }
 
   mostraEventiSimili(idEvento: number) {
     if (idEvento !== null) {      //ottieni categorie evento
@@ -27,7 +30,7 @@ export class EventiSimiliComponent {
           this.ottieniEventi(idEvento, categorie);
         },
         error: (err) => {
-          console.error('Errore nel recupero CATEGORIE evento', err);
+          this.toastService.show('errorToast', 'Errore', 'Errore nel reperire le categorie di un evento.\n Prova a ricaricaricare la pagina.');
         }
       });
 
@@ -36,7 +39,7 @@ export class EventiSimiliComponent {
 
   ottieniEventi(idEvento: number, categorie: Categoria[]): void {
     let eventiS = new Set<number>(); // Set di ID per il controllo dei duplicati
-   
+
     console.log("CATEGORIE ARRIVATE");
 
     for (let i of categorie) {
@@ -48,14 +51,14 @@ export class EventiSimiliComponent {
                 eventiS.add(d.id);
                 this.eventiSimili.push(d);
               }
-            }           
+            }
           },
           error: (err) => {
             console.error('Errore nel recupero eventi simili', err);
           }
         });
       }
-    
+
     }
 
 
