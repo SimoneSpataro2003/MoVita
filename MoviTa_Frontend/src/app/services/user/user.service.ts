@@ -55,7 +55,11 @@ export class UserService {
     return this.authHttp.get(`${this.apiUrl}/get-created-events/${id}`);
   }
 
-  public updateUser(id: number | null, userData: any): Observable<any> {
+  public updatePerson(id: number, userData: any): Observable<Utente> {
+    return this.authHttp.put(`${this.apiUrl}/${id}`, userData);
+  }
+
+  public updateAgency(id: number, userData: any): Observable<any> {
     return this.authHttp.put(`${this.apiUrl}/${id}`, userData);
   }
 

@@ -9,5 +9,5 @@ public class RegisterPersonRequest extends RegisterUserRequest{
 
     @NotBlank(message = "Surname shouldn't be empty")
     @Pattern(regexp = "[A-Z][a-z]+", message = "Surname is not valid. Only alphanumeric characters are allowed.")
-    String cognome;
+    String personaCognome;
 }

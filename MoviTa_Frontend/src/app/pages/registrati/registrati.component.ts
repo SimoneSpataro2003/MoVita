@@ -17,16 +17,16 @@ export class RegistratiComponent {
   //registerError: boolean = false;
 
   applyForm = new FormGroup({
-    nome: new FormControl(''),
-    cognome: new FormControl(''),
-    username: new FormControl(''),
-    email: new FormControl(''),
-    password: new FormControl(''),
-    ripetiPassword: new FormControl(''),
-    citta: new FormControl(''),
-    indirizzo: new FormControl(''),
-    recapito: new FormControl(''),
-    partitaIva: new FormControl(''),
+    nome: new FormControl('', [Validators.required, Validators.pattern(/[A-Z][a-z]+/)]),
+    personaCognome: new FormControl('', [Validators.required, Validators.pattern(/[A-Z][a-z]+/)]),
+    username: new FormControl('', [Validators.required, Validators.pattern(/[a-zA-Z0-9]+/)]),
+    email: new FormControl('', [Validators.required, Validators.pattern(/(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)])/)]),
+    password: new FormControl('', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]),
+    ripetiPassword: new FormControl('', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]),
+    citta: new FormControl('', [Validators.required, Validators.pattern(/[a-zA-Z ]+/)]),
+    aziendaIndirizzo: new FormControl('', [Validators.required, Validators.pattern(/[a-zA-z0-9 ]+/)]),
+    aziendaRecapito: new FormControl('', [Validators.required, Validators.pattern(/[0-9]{10}/)]),
+    aziendaPartitaIva: new FormControl('', [Validators.required, Validators.pattern(/[0-9]{11}/)])
   });
 
   constructor(private authService: AuthService) {}
@@ -34,7 +34,7 @@ export class RegistratiComponent {
   registerUser() {
     const body = {
       nome: this.applyForm.value.nome,
-      cognome: this.applyForm.value.cognome,
+      personaCognome: this.applyForm.value.personaCognome,
       username: this.applyForm.value.username,
       email: this.applyForm.value.email,
       password: this.applyForm.value.password,
@@ -61,9 +61,9 @@ export class RegistratiComponent {
       email: this.applyForm.value.email,
       password: this.applyForm.value.password,
       citta: this.applyForm.value.citta,
-      indirizzo: this.applyForm.value.indirizzo,
-      recapito: this.applyForm.value.recapito,
-      partitaIva: this.applyForm.value.partitaIva
+      aziendaIndirizzo: this.applyForm.value.aziendaIndirizzo,
+      aziendaRecapito: this.applyForm.value.aziendaRecapito,
+      aziendaPartitaIva: this.applyForm.value.aziendaPartitaIva
     };
     this.authService.registerAgency(body).subscribe({
       next: (response: any) => {

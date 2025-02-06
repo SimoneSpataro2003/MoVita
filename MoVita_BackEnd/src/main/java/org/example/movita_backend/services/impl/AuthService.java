@@ -76,7 +76,7 @@ public class AuthService implements IAuthService {
         newUser.setCitta(registerPersonRequest.getCitta());
         newUser.setNome(registerPersonRequest.getNome());
         newUser.setAzienda(false);
-        newUser.setPersonaCognome(registerPersonRequest.getCognome());
+        newUser.setPersonaCognome(registerPersonRequest.getPersonaCognome());
         newUser.setPremium(false);
         newUser.setAdmin(false);
         newUser.setMostraConsigliEventi(true);
@@ -96,17 +96,17 @@ public class AuthService implements IAuthService {
         newUser.setUsername(registerAgencyRequest.getUsername());
         newUser.setEmail(registerAgencyRequest.getEmail());
         newUser.setPassword(passwordEncoder.encode(registerAgencyRequest.getPassword()));
-        newUser.setCitta(registerAgencyRequest.getCitta());
         newUser.setNome(registerAgencyRequest.getNome());
+        newUser.setCitta(registerAgencyRequest.getCitta());
         newUser.setAzienda(true);
-        newUser.setAziendaPartitaIva(registerAgencyRequest.getPartitaIva());
-        newUser.setAziendaIndirizzo(registerAgencyRequest.getIndirizzo());
-        newUser.setAziendaRecapito(registerAgencyRequest.getRecapito());
+        newUser.setAziendaPartitaIva(registerAgencyRequest.getAziendaPartitaIva());
+        newUser.setAziendaIndirizzo(registerAgencyRequest.getAziendaIndirizzo());
+        newUser.setAziendaRecapito(registerAgencyRequest.getAziendaRecapito());
         newUser.setPremium(false);
         newUser.setAdmin(false);
         newUser.setMostraConsigliEventi(true);
 
-        this.userDao.createPerson(newUser);
+        this.userDao.createAgency(newUser);
 
         return newUser;
     }
