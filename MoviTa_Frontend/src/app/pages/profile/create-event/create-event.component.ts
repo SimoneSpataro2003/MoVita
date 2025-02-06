@@ -51,11 +51,18 @@ export class CreateEventComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.categoryService.findAll().subscribe(categories => {
-      console.log('Categorie ricevute:', categories);
-      this.allCategories = categories;
-    });
+ ngOnInit(): void {
+    this.categoryService.findAll().subscribe(
+      {
+        next:(data) => {
+          this.allCategories = data;
+          console.log("Categorie arrivate");
+        },
+        error: (error) => {
+          console.log("Errore nel recupero delle categorie");
+        }
+      }
+    );
   }
 
   // Getter per accedere facilmente a selectedCategories

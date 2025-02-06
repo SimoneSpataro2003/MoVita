@@ -142,8 +142,7 @@ export class DetailsComponent {
 
   partecipa():void{
     let utenteId = JSON.parse(this.cookieService.get('utente')).id;
-    console.log("Utente LOGGATO")
-    console.log(utenteId);
+
     if(this.evento!== null){
 
       const dataOggi: string = new Date().toISOString().split('T')[0];
@@ -193,10 +192,10 @@ export class DetailsComponent {
         {
           next: (data) => {
             this.prenotato = false;
-            console.log("Prenotazione effettuata con successo");
+            this.toastService.show('successToast', 'Annullamento della prenotazione effettuata', "Annullamento effettuato!");
           },
           error: (err) => {
-            console.log("Errore nell'effetuare prenotazione", err);
+            this.toastService.show('errorToast', 'Errore', "Errore durante la procedura di annullamento della prenotazione.\n Prova a ricaricaricare la pagina.");
           }
         }
         
