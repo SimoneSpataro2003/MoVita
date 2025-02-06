@@ -46,8 +46,7 @@ class BookingService implements IBookingService {
 
     @Override
     public Booking updateBooking(BookingEvent booking) throws Exception {
-        bookingDao.save(booking);
-        return bookingDao.findById(DBManager.getInstance().getUserDAO().findById(booking.getUtente()),DBManager.getInstance().getEventDAO().findById(booking.getEvento()));
+        return bookingDao.update(booking);
     }
 
     @Override
