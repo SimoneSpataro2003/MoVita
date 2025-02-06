@@ -173,5 +173,38 @@ export class DetailsComponent {
 
   } 
 
+  annullaPrenotazione():void{
+
+    let utenteId = JSON.parse(this.cookieService.get('utente')).id;
+    console.log("Utente LOGGATO")
+    console.log(utenteId);	
+    if(this.evento!== null){
+      
+      const dataOggi: string = new Date().toISOString().split('T')[0];
+      
+      let partecipazione: PartecipazioneDTO ={
+        evento: this.evento.id,
+        utente:utenteId,
+        data:dataOggi,
+        annullata:true
+      }
+
+      this.eventService.undoBooking(partecipazione).subscribe(
+        {
+          next: (data) => {
+            this.prenotato = true;
+            console.log("Prenotazione effettuata con successo");
+          },
+          error: (err) => {
+            console.log("Errore nell'effetuare prenotazione", err);
+          }
+        }
+        
+      );
+    } 
+    this.prenotato = false;
+
+  }
+
 
 }

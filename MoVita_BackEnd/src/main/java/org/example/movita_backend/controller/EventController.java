@@ -187,6 +187,14 @@ public class EventController {
         );
     }
 
+    @PostMapping("/remove-bookig-event")
+    ResponseEntity<Booking> removeBookingEvent(@RequestBody BookingEvent booking) throws Exception
+    {
+        return  ResponseEntity.ok(
+                this.bookingService.updateBooking(booking)
+        );
+    }
+
     @DeleteMapping("/delete-event")
     ResponseEntity<Void> deleteEvent(@RequestBody int idEvent)
     {
