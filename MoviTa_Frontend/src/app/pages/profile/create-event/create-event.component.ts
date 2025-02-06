@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgIf, NgForOf } from '@angular/common';
 import { EventService } from '../../../services/event/event.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-event-form',
@@ -10,7 +11,9 @@ import { EventService } from '../../../services/event/event.service';
   imports: [
     ReactiveFormsModule,
     NgIf,
-    NgForOf
+    NgForOf,
+    FormsModule,
+    RouterLink
   ],
   styleUrls: ['./create-event.component.css']
 })
@@ -88,8 +91,6 @@ export class CreateEventComponent implements OnInit {
         maxParticipants: this.eventForm.value.maxParticipants,
         minAge: this.eventForm.value.minAge,
         description: this.eventForm.value.description,
-        selectedCategories: this.eventForm.value.selectedCategories,
-        images: this.eventForm.value.images,
       };
 
       this.eventService.creaEvento(body).subscribe({
@@ -100,6 +101,19 @@ export class CreateEventComponent implements OnInit {
           console.error('Error creating event:', err);
         }
       });
+
+      this.imagePreviews = this.eventForm.value.images;
+      this.selectedCategory = this.eventForm.value.selectedCategories;
     }
+  }
+
+  removeImage(i: number) {
+    // Remove the image at index 'i' from imagePreviews
+    this.imagePreviews.splice(i, 1);
+
+    // Update the images form control to remove the corresponding file as well
+    const updatedImages = [...this.eventForm.value.images];
+    updatedImages.splice(i, 1);
+    this.eventForm.get('images')!.setValue(updatedImages);
   }
 }
