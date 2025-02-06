@@ -10,6 +10,8 @@ import {Evento} from '../../model/Evento';
 import {CookieService} from 'ngx-cookie-service';
 import {EventCardComponent} from '../../shared/common/event-card/event-card.component';
 import {Loadable} from '../../model/Loadable';
+import {PaymentService} from '../../services/payment/payment.service';
+import {Pagamento} from '../../model/Pagamento';
 
 @Component({
   selector: 'app-profile',
@@ -35,6 +37,7 @@ export class ProfileComponent implements OnInit, Loadable {
     private route: ActivatedRoute,
     private userService: UserService,
     private eventService: EventService,
+    private paymentService : PaymentService,
     private cookieService: CookieService,
   ) {
   }
@@ -159,6 +162,23 @@ export class ProfileComponent implements OnInit, Loadable {
 
   goPremium() {
     this.userService.goPremium(this.currentUserId).subscribe({
+      next: (data) => {
+        console.log(data);
+        this.addPayment();
+      }
+    })
+  }
+
+  addPayment() {
+    const nuovoPagamento: Pagamento = {
+      id: undefined,
+      name: "Abbonamento Mensile",
+      ammontare: 29.99,
+      date: new Date(),
+      id_utente: this.currentUserId
+    };
+
+    this.paymentService.createPayment(nuovoPagamento).subscribe({
       next: (data) => {
         console.log(data);
       }

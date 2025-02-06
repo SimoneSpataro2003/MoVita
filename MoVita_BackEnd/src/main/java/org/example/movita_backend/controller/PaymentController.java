@@ -34,6 +34,7 @@ public class PaymentController {
         }
         catch (Exception e)
         {
+            System.out.println(e.getMessage());
            throw new FailureToObtainPayments(e.getMessage());
         }
     }
