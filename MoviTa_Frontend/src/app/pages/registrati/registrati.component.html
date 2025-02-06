@@ -1,9 +1,9 @@
-<div class="container d-flex flex-column justify-content-center align-items-center min-vh-100" style="gap: 10px;">
+<div class="container d-flex flex-column justify-content-center align-items-center min-vh-100 px-3" style="gap: 10px;">
   @if (tipo == 0) {
-    <div class="d-flex justify-content-between align-items-center w-100 px-3" style="max-width: 300px;">
+    <div class="d-flex justify-content-between align-items-center w-100 px-3" style="max-width: 400px;">
       <button type="button" class="btn-close ms-auto" aria-label="Close" (click)="goHome()"></button>
     </div>
-    <div class="d-flex justify-content-between align-items-center w-100 px-3" style="max-width: 300px;">
+    <div class="d-flex justify-content-between align-items-center w-100 px-3" style="max-width: 400px;">
       <h2 class="text-center m-0 flex-grow-1">Registrati come</h2>
     </div>
     <div class="btn-group mb-2" role="group" aria-label="Basic example" *ngIf="!tipo" style="gap: 5px;">
@@ -11,78 +11,146 @@
       <button type="button" class="btn btn-primary" style="width: 100px;" (click)="tipo = 2">Azienda</button>
     </div>
   } @else {
-    <div class="card" style="width: 20rem; position: relative;">
+    <div class="card p-3 w-100" style="max-width: 40rem; position: relative;">
       <button type="button" class="btn-close" style="position: absolute; top: 10px; right: 10px;" aria-label="Close" (click)="tipo = 0"></button>
       <div class="card-body">
-        <form [formGroup]="applyForm" (ngSubmit)="tipo == 1 ? registerUser() : registerAgency()">
-          <div class="mb-2">
-            <label for="nome" class="form-label">Nome</label>
-            <input id="nome" type="text" class="form-control" formControlName="nome">
-          </div>
-
-          @if (tipo == 1) {
-            <div class="mb-2">
-              <label for="personaCognome" class="form-label">Cognome</label>
-              <input id="personaCognome" type="text" class="form-control" formControlName="personaCognome">
+        @if (tipo == 1) {
+          <form [formGroup]="personForm" (ngSubmit)="registerUser()" class="needs-validation" novalidate>
+            <div class="row g-3">
+              <div class="col-sm-12 col-md-6">
+                <label for="personaNome" class="form-label">Nome</label>
+                <input id="personaNome" type="text" class="form-control" formControlName="nome" [ngClass]="{'is-invalid': submitted && personForm.get('nome')?.invalid}">
+                <div class="invalid-feedback" *ngIf="submitted && personForm.get('nome')?.invalid">
+                  Inserisci un nome valido.
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <label for="personaCognome" class="form-label">Cognome</label>
+                <input id="personaCognome" type="text" class="form-control" formControlName="personaCognome" [ngClass]="{'is-invalid': submitted && personForm.get('personaCognome')?.invalid}">
+                <div class="invalid-feedback" *ngIf="submitted && personForm.get('personaCognome')?.invalid">
+                  Inserisci un cognome valido.
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <label for="personaUsername" class="form-label">Username</label>
+                <input id="personaUsername" type="text" class="form-control" formControlName="username" [ngClass]="{'is-invalid': submitted && personForm.get('username')?.invalid}">
+                <div class="invalid-feedback" *ngIf="submitted && personForm.get('username')?.invalid">
+                  Inserisci un username valido.
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <label for="personaEmail" class="form-label">Email</label>
+                <input id="personaEmail" type="email" class="form-control" formControlName="email" [ngClass]="{'is-invalid': submitted && personForm.get('email')?.invalid}">
+                <div class="invalid-feedback" *ngIf="submitted && personForm.get('email')?.invalid">
+                  Inserisci un'email valida.
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <label for="personaPassword" class="form-label">Password</label>
+                <input id="personaPassword" type="password" class="form-control" formControlName="password" [ngClass]="{'is-invalid': submitted && personForm.get('password')?.invalid}">
+                <div class="invalid-feedback" *ngIf="submitted && personForm.get('password')?.invalid">
+                  Password non valida.
+                  <div class="toast" *ngIf="showAlert" role="alert" aria-live="polite" aria-atomic="true" data-bs-delay="10000">
+                    <div role="alert" aria-live="assertive" aria-atomic="true">
+                      La password deve contenere almeno 8 caratteri, includere una lettera maiuscola, una minuscola, un numero e un carattere speciale (ad esempio &#64;, $, !, %, *, ? o &).
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <label for="personaRipetiPassword" class="form-label">Ripeti Password</label>
+                <input id="personaRipetiPassword" type="password" class="form-control" formControlName="ripetiPassword" [ngClass]="{'is-invalid': submitted && (personForm.get('ripetiPassword')?.invalid || personForm.hasError('passwordMismatch'))}">
+                <div class="invalid-feedback" *ngIf="submitted && personForm.get('ripetiPassword')?.invalid || personForm.hasError('passwordMismatch')">
+                  Le password non coincidono.
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <label for="personaCitta" class="form-label">Città</label>
+                <input id="personaCitta" type="text" class="form-control" formControlName="citta" [ngClass]="{'is-invalid': submitted && personForm.get('citta')?.invalid}">
+                <div class="invalid-feedback" *ngIf="submitted && personForm.get('citta')?.invalid">
+                  Inserisci una città valida.
+                </div>
+              </div>
             </div>
-          }
-
-          <div class="mb-2">
-            <label for="username" class="form-label">Username</label>
-            <input id="username" type="text" class="form-control" formControlName="username">
-          </div>
-
-          <div class="mb-2">
-            <label for="email" class="form-label">Email</label>
-            <input id="email" type="email" class="form-control" formControlName="email">
-          </div>
-
-          <div class="row mb-2">
-            <div class="col-6">
-              <label for="password" class="form-label">Password</label>
-              <input id="password" type="password" class="form-control" formControlName="password">
-            </div>
-
-            <div class="col-6">
-              <label for="ripetiPassword" class="form-label">Ripeti Password</label>
-              <input id="ripetiPassword" type="password" class="form-control" formControlName="ripetiPassword">
-            </div>
-          </div>
-
-          <div class="mb-2">
-            <label for="citta" class="form-label">Città</label>
-            <input id="citta" type="text" class="form-control" formControlName="citta">
-          </div>
-
-          @if (tipo == 2) {
-            <div class="row mb-2">
-              <div class="col-6">
+            <button type="submit" class="btn btn-primary w-100 mt-3">Registrati</button>
+          </form>
+        } @else if (tipo == 2) {
+          <form [formGroup]="agencyForm" (ngSubmit)="registerAgency()" class="needs-validation" novalidate>
+            <div class="row g-3">
+              <div class="col-sm-12 col-md-6">
+                <label for="aziendaNome" class="form-label">Nome</label>
+                <input id="aziendaNome" type="text" class="form-control" formControlName="nome" [ngClass]="{'is-invalid': submitted && agencyForm.get('nome')?.invalid}">
+                <div class="invalid-feedback" *ngIf="submitted && agencyForm.get('nome')?.invalid">
+                  Inserisci un nome valido.
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <label for="aziendaUsername" class="form-label">Username</label>
+                <input id="aziendaUsername" type="text" class="form-control" formControlName="username" [ngClass]="{'is-invalid': submitted && agencyForm.get('username')?.invalid}">
+                <div class="invalid-feedback" *ngIf="submitted && agencyForm.get('username')?.invalid">
+                  Inserisci un username valido.
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <label for="aziendaEmail" class="form-label">Email</label>
+                <input id="aziendaEmail" type="email" class="form-control" formControlName="email" [ngClass]="{'is-invalid': submitted && agencyForm.get('email')?.invalid}">
+                <div class="invalid-feedback" *ngIf="submitted && agencyForm.get('email')?.invalid">
+                  Inserisci un'email valida.
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <label for="aziendaCitta" class="form-label">Città</label>
+                <input id="aziendaCitta" type="text" class="form-control" formControlName="citta" [ngClass]="{'is-invalid': submitted && agencyForm.get('citta')?.invalid}">
+                <div class="invalid-feedback" *ngIf="submitted && agencyForm.get('citta')?.invalid">
+                  Inserisci una città valida.
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <label for="aziendaPassword" class="form-label">Password</label>
+                <input id="aziendaPassword" type="password" class="form-control" formControlName="password" [ngClass]="{'is-invalid': submitted && agencyForm.get('password')?.invalid}">
+                <div class="invalid-feedback" *ngIf="submitted && agencyForm.get('password')?.invalid">
+                  Password non valida.
+                  <div class="toast" *ngIf="showAlert" role="alert" aria-live="polite" aria-atomic="true" data-bs-delay="10000">
+                    <div role="alert" aria-live="assertive" aria-atomic="true">
+                      La password deve contenere almeno 8 caratteri, includere una lettera maiuscola, una minuscola, un numero e un carattere speciale (ad esempio &#64;, $, !, %, *, ? o &).
+                    </div>
+                  </div>
+                </div>
+                <div class="alert alert-danger" role="alert">
+                  </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <label for="aziendaRipetiPassword" class="form-label">Ripeti Password</label>
+                <input id="aziendaRipetiPassword" type="password" class="form-control" formControlName="ripetiPassword" [ngClass]="{'is-invalid': submitted && (agencyForm.get('ripetiPassword')?.invalid || agencyForm.hasError('passwordMismatch'))}">
+                <div class="invalid-feedback" *ngIf="submitted && agencyForm.get('ripetiPassword')?.invalid || agencyForm.hasError('passwordMismatch')">
+                  Le password non coincidono.
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
                 <label for="aziendaIndirizzo" class="form-label">Indirizzo</label>
-                <input id="aziendaIndirizzo" type="text" class="form-control" formControlName="aziendaIndirizzo">
+                <input id="aziendaIndirizzo" type="text" class="form-control" formControlName="aziendaIndirizzo" [ngClass]="{'is-invalid': submitted && agencyForm.get('aziendaIndirizzo')?.invalid}">
+                <div class="invalid-feedback" *ngIf="submitted && agencyForm.get('aziendaIndirizzo')?.invalid">
+                  Inserisci un indirizzo valido.
+                </div>
               </div>
-
-              <div class="col-6">
-                <label for="aziendaRecapito" class="form-label">N.telefono</label>
-                <input id="aziendaRecapito" type="text" class="form-control" formControlName="aziendaRecapito">
+              <div class="col-sm-12 col-md-6">
+                <label for="aziendaRecapito" class="form-label">Recapito</label>
+                <input id="aziendaRecapito" type="text" class="form-control" formControlName="aziendaRecapito" [ngClass]="{'is-invalid': submitted && agencyForm.get('aziendaRecapito')?.invalid}">
+                <div class="invalid-feedback" *ngIf="submitted && agencyForm.get('aziendaRecapito')?.invalid">
+                  Inserisci un recapito valido.
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-6">
+                <label for="aziendaPartitaIva" class="form-label">Partita Iva</label>
+                <input id="aziendaPartitaIva" type="text" class="form-control" formControlName="aziendaPartitaIva" [ngClass]="{'is-invalid': submitted && agencyForm.get('aziendaPartitaIva')?.invalid}">
+                <div class="invalid-feedback" *ngIf="submitted && agencyForm.get('aziendaPartitaIva')?.invalid">
+                  Inserisci una partita IVA valida.
+                </div>
               </div>
             </div>
-
-            <div class="mb-2">
-              <label for="aziendaPartitaIva" class="form-label">Partita Iva</label>
-              <input id="aziendaPartitaIva" type="text" class="form-control" formControlName="aziendaPartitaIva">
-            </div>
-          }
-
-          <!--
-          @if (registerError) {
-            <div class="alert alert-danger text-center">
-              Credenziali non valide. Riprova.
-            </div>
-          }
-          -->
-
-          <button type="submit" class="btn btn-primary w-100 mt-2">Registrati</button>
-        </form>
+            <button type="submit" class="btn btn-primary w-100 mt-3">Registrati</button>
+          </form>
+        }
       </div>
     </div>
   }

@@ -38,14 +38,14 @@ export class ConsigliEventoComponent implements OnInit,Loadable{
     this.showAllCategories();
   }
 
-  showAllCategories(){
+  showAllCategories() {
     this.categoryService.findAll().subscribe({
-      next: (categorie: Categoria[]) =>{
+      next: (categorie: Categoria[]) => {
         this.categorie = categorie;
         //console.log(eventi);
         this.loaded = true;
       },
-      error:(err) =>{
+      error: (err) => {
         //TODO: mostra errore con una finestra popup!
         console.log(err)
       }

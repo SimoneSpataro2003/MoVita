@@ -74,5 +74,11 @@ export class CategorieFiltroComponent {
     return this.categorieScelte.includes(categoria.id);
   }
 
+  // Function to return the array of all categories
+  getAllCategories(): Categoria[] {
+    return this.categorie;
+  }
+
+
   protected readonly IconaCategoriaMapper = IconaCategoriaMapper;
 }

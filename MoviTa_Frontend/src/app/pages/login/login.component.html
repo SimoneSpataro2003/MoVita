@@ -5,30 +5,41 @@
 
   <div class="card" style="width: 20rem; position: relative;">
     <button type="button" class="btn-close" style="position: absolute; top: 10px; right: 10px;" aria-label="Close" (click)="goHome()"></button>
+
     <div class="card-body">
       <form [formGroup]="applyForm" (submit)="login()">
         <div class="mb-2">
           <label for="username" class="form-label">Username</label>
-          <input id="username" type="text" class="form-control" formControlName="username" required>
+          <input id="username" type="text" class="form-control" formControlName="username" required [ngClass]="{'is-invalid': errorMessage}">
+          <div class="invalid-feedback" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </div>
         </div>
 
-        <div class="mb-2">
+        <div class="mb-2 position-relative">
           <label for="password" class="form-label">Password</label>
-          <input id="password" type="password" class="form-control" formControlName="password" required>
-        </div>
+          <input id="password"
+                 [type]="showPassword ? 'text' : 'password'"
+                 class="form-control"
+                 formControlName="password"
+                 required
+                 style="padding-right: 40px;"
+                 [ngClass]="{'is-invalid': errorMessage}">
 
-        <!--
-        <div class="alert alert-danger text-center">
-          Credenziali errate. Riprova.
+          <button type="button" class="password-toggle" (click)="togglePasswordVisibility()">
+            <i class="bi" [ngClass]="{'bi-eye': showPassword, 'bi-eye-slash': !showPassword}"></i>
+          </button>
+
+          <div class="invalid-feedback" *ngIf="errorMessage">
+            {{ errorMessage }}
+          </div>
         </div>
-        -->
 
         <button type="submit" class="btn btn-primary w-100 mt-2">Login</button>
       </form>
+
       <p class="text-center my-2">Oppure</p>
-
       <div id="google-signin-button"></div>
-
     </div>
   </div>
 </div>

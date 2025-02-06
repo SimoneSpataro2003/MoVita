@@ -20,11 +20,12 @@ declare var google: any;
 
 export class LoginComponent implements OnInit{
   router = inject(Router);
-  //loginError: boolean = false;
+  errorMessage: string = '';
+  showPassword: boolean = false; // Aggiungi questa variabile
 
   applyForm = new FormGroup({
-    username: new FormControl('', {validators: [Validators.required]}),
-    password: new FormControl('', {validators: [Validators.required]})
+    username: new FormControl('', { validators: [Validators.required] }),
+    password: new FormControl('', { validators: [Validators.required] })
   });
 
   constructor(private authService: AuthService,
@@ -32,14 +33,19 @@ export class LoginComponent implements OnInit{
               private userService: UserService,
               private toastService: ToastService){}
 
-  login(){
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  login() {
+    this.errorMessage = ''; // Resetta il messaggio di errore
     const body = {
       username: this.applyForm.value.username,
       password: this.applyForm.value.password
     };
 
     this.authService.login(body).subscribe({
-      next: (body:any) =>{
+      next: (body: any) => {
         this.cookieService.set('token', body.token);
         console.log(this.cookieService.get('token'));
         this.toastService.show('successToast', 'Successo!', "Login effettuato con successo!");

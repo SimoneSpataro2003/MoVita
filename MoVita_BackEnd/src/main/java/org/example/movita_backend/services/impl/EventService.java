@@ -12,6 +12,7 @@ import org.example.movita_backend.persistence.proxy.EventProxy;
 import org.example.movita_backend.services.interfaces.IEventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.example.movita_backend.model.EventRequest;
 
 import java.util.List;
 
@@ -57,14 +58,43 @@ class EventService implements IEventService {
         return eventProxy.getRecensioni();
     }
 
-    @Override
-    public Event createEvent(Event event) throws Exception {
+    // Register event method
+    private Event registerEvent(EventRequest eventRequest)
+    {
+        // Create a new Event object
+        Event event = new Event();
 
-        checkEventsValid(event);
-        int id = eventDao.save(event);
+        // Ensure the eventRequest object is not null to avoid NullPointerException
+        if (eventRequest != null)
+        {
+            // Mapping fields from EventRequest to Event
+            event.setNome(eventRequest.getTitle());  // Set event name (title)
+            event.setDescrizione(eventRequest.getDescription());  // Set event description
+            event.setData(eventRequest.getDate());  // Set event date
+            event.setPrezzo(eventRequest.getPrice());  // Set event price
+            event.setIndirizzo(eventRequest.getAddress());  // Set event address
+            event.setMaxNumPartecipanti(eventRequest.getMaxParticipants());  // Set max participants
+            event.setEtaMinima((byte) eventRequest.getMinAge());  // Set min age for participants
+        }
+        else
+        {
+            throw new IllegalArgumentException("EventRequest cannot be null");
+        }
 
+        return event;
+    }
+
+
+    // Create event method
+    public Event createEvent(EventRequest eventRequest) {
+
+        // Save event to the database (through EventDao)
+        int id = eventDao.save(registerEvent(eventRequest));
+
+        // Fetch the saved event by ID (assuming the method returns an Event object)
         return eventDao.findById(id);
     }
+
     private void checkEventsValid(Event evento) throws EventNotValid {
         if(evento==null){
             throw new EventNotValid("Event must not be null");
