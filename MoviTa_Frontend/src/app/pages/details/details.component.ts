@@ -192,7 +192,7 @@ export class DetailsComponent {
       this.eventService.undoBooking(partecipazione).subscribe(
         {
           next: (data) => {
-            this.prenotato = true;
+            this.prenotato = false;
             console.log("Prenotazione effettuata con successo");
           },
           error: (err) => {
@@ -202,7 +202,7 @@ export class DetailsComponent {
         
       );
     } 
-    this.prenotato = false;
+    
 
   }
 
