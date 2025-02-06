@@ -196,51 +196,12 @@ public class UserController
         {
             userService.updatePremiumStatus(userId);
             Payment payment = new Payment("Passaggio a premium", 69, LocalDate.now().toString(), userId);
-            userService.paymentService.createCheckoutSession(payment);
+            userService. paymentService.createCheckoutSession(payment);
             return ResponseEntity.ok(true);
         }
         catch (Exception e)
         {
             System.err.println("Error going premium: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-    @PostMapping("update-person/{userId}")
-    public ResponseEntity<User> updatePerson(@RequestBody User user) {
-        try {
-            User person = userService.updatePerson(user);
-            return ResponseEntity.ok(person);
-        }
-        catch (Exception e)
-        {
-            System.err.println("Errore nell'aggiornamento del profilo: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-    @PostMapping("update-agency/{userId}")
-    public ResponseEntity<User> updateAgency(@RequestBody User user) {
-        try {
-            User agency = userService.updateAgency(user);
-            return ResponseEntity.ok(agency);
-        }
-        catch (Exception e)
-        {
-            System.err.println("Errore nell'aggiornamento del profilo: " + e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
-    }
-
-    @PostMapping("updatePassword/{userId}")
-    public ResponseEntity<User> updateUserPassword(@PathVariable int userId, @PathVariable String password) {
-        try {
-            User anUser = userService.updateUserPassword(userId, password);
-            return ResponseEntity.ok(anUser);
-        }
-        catch (Exception e)
-        {
-            System.err.println("Errore nell'aggiornamento della password: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
