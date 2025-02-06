@@ -1,9 +1,6 @@
 package org.example.movita_backend.services.interfaces;
 
-import org.example.movita_backend.model.Booking;
-import org.example.movita_backend.model.Category;
-import org.example.movita_backend.model.Event;
-import org.example.movita_backend.model.Review;
+import org.example.movita_backend.model.*;
 import org.example.movita_backend.model.dto.EventFilter;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.proxy.EventProxy;
@@ -19,7 +16,7 @@ public interface IEventService {
     List<Booking> findPrenotazioni(int id_evento);
     List<Review> findRecensioni(int id_evento);
     String findDescrizione(int id_evento);
-    Event createEvent(Event event) throws Exception;
+    Event createEvent(EventRequest event) throws Exception;
     Event updateEvent(Event event) throws Exception;
     void deleteEvent(int eventId);
 
