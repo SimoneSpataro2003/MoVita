@@ -7,6 +7,10 @@ $danger: #d6722b;
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 
+.btn{
+  border-radius: 30px !important;
+}
+
 .btn-primary{
   color:white !important;
 }

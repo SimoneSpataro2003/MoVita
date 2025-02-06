@@ -32,6 +32,11 @@ public class UserService implements IUserService{
     }
 
     @Override
+    public User getUserByEmail(String email) {
+        return userDao.findByEmail(email);
+    }
+
+    @Override
     public void makeFriendship(int userId1, int userId2) {userDao.makeFriendships(userId1, userId2);}
 
     @Override
