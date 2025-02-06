@@ -207,4 +207,49 @@ public class CategoryDaoJDBC implements CategoryDao {
             throw new RuntimeException("Couldn't find categories", e);
         }
     }
+
+    @Override
+    public void insertCategoryToEvent(int eventId, String categoryName) {
+        // La query per ottenere l'ID della categoria in base al nome
+        String selectQuery = "SELECT id FROM categoria WHERE id = ?";
+
+        // La query per inserire la categoria nell'evento
+        String insertQuery = "INSERT INTO evento_categoria (id_evento, id_categoria) VALUES (?, ?)";
+
+        try {
+            // Disabilito il commit automatico per gestire manualmente la transazione
+            connection.setAutoCommit(false);
+
+            try {
+                // Prepara la query per ottenere l'ID della categoria
+                PreparedStatement psSelect = connection.prepareStatement(selectQuery);
+                psSelect.setString(1, categoryName);
+                ResultSet rs = psSelect.executeQuery();
+
+                if (rs.next()) {
+                    int categoryId = rs.getInt("id");  // Ottieni l'ID della categoria
+
+                    // Prepara la query per inserire la categoria nell'evento
+                    PreparedStatement psInsert = connection.prepareStatement(insertQuery);
+                    psInsert.setInt(1, eventId);
+                    psInsert.setInt(2, categoryId);
+                    psInsert.executeUpdate(); // Inserisci la categoria
+
+                    connection.commit(); // Conferma la transazione
+                } else {
+                    // Se la categoria non esiste, puoi gestirlo come preferisci
+                    System.out.println("Categoria non trovata: " + categoryName);
+                }
+            } catch (SQLException e) {
+                connection.rollback(); // Ripristina lo stato iniziale in caso di errore
+                e.printStackTrace();
+                throw new RuntimeException("Couldn't insert category for event.", e);
+            } finally {
+                connection.setAutoCommit(true); // Ripristina l'auto-commit dopo l'operazione
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Database error while handling transaction.", e);
+        }
+    }
+
 }

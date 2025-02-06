@@ -1,8 +1,9 @@
 import {Component, Input} from '@angular/core';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbActiveModal, NgbAlert, NgbAlertConfig, NgbAlertModule, NgbToast} from '@ng-bootstrap/ng-bootstrap';
 import {AuthService} from '../services/auth/auth.service';
 import {CookieService} from 'ngx-cookie-service';
 import {Router} from '@angular/router';
+import {ToastService} from '../services/toast/toast.service';
 
 @Component({
   selector: 'app-confirm-logout',
@@ -16,7 +17,8 @@ export class ConfirmLogoutComponent {
 
   constructor(private authService: AuthService,
               private cookieService: CookieService,
-              private router: Router) {
+              private router: Router,
+              private toastService: ToastService) {
   }
 
   logout(){
@@ -25,7 +27,11 @@ export class ConfirmLogoutComponent {
         this.cookieService.delete('token');
         this.cookieService.delete('utente');
         this.thisModal.close();
+        this.toastService.show('successToast',"Logout effettuato" ,"Logout effettuato con successo.");
         this.router.navigate(['/']);
+      },
+      error: (err:any) =>{
+        this.toastService.show('errorToast',"Errore" ,"Impossibile effettuare il logout.");
       }
     })
   }
