@@ -74,7 +74,7 @@ class EventService implements IEventService {
             event.setPrezzo(eventRequest.getPrice());  // Set event price
             event.setIndirizzo(eventRequest.getAddress());  // Set event address
             event.setMaxNumPartecipanti(eventRequest.getMaxParticipants());  // Set max participants
-            event.setEtaMinima(eventRequest.getMinAge());  // Set min age for participants
+            event.setEtaMinima((byte) eventRequest.getMinAge());  // Set min age for participants
         }
         else
         {
