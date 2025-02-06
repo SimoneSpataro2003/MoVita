@@ -45,6 +45,7 @@
           <div [hidden]="!isMyProfile()">
             <button class="btn btn-primary" [routerLink]="['/search-users']">Cerca amici</button>
             <button class="btn btn-primary" [routerLink]="['/payments', user.id]">Mostra pagamenti</button>
+            <button class="btn btn-primary" [routerLink]="['/create-event']">Crea un evento</button>
           </div>
           <div [hidden]="isMyProfile()">
             <button [hidden]="isAlreadyFriends()" class="btn btn-primary" (click)="addFriend()">Segui</button>

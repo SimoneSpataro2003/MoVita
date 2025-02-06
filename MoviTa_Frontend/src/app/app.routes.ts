@@ -11,6 +11,7 @@ import {PaymentComponent} from './pages/payment/payment.component';
 import {SearchFriendsComponent} from './pages/search-friends/search-friends.component';
 import {SettingsComponent} from './pages/settings/settings.component';
 import {authGuard} from './guard/auth.guard';
+import {CreateEventComponent} from './pages/profile/create-event/create-event.component';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,7 @@ export const routes: Routes = [
       {path:'profile/:id', component: ProfileComponent},
       {path: 'payments/:id', component: PaymentComponent },
       {path: 'search-users', component: SearchFriendsComponent},
+      {path: 'create-event', component: CreateEventComponent},
       {path: 'profile/settings/:id', component: SettingsComponent}
     ],
     canActivate:[authGuard],
