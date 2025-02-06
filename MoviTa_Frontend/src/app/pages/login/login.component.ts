@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AuthService} from '../../services/auth/auth.service';
-import {CookieService} from 'ngx-cookie-service';
-import {UserService} from '../../services/user/user.service';
-import {Utente} from '../../model/Utente';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth/auth.service';
+import { CookieService } from 'ngx-cookie-service';
+import { UserService } from '../../services/user/user.service';
+import { Utente } from '../../model/Utente';
 
 @Component({
   selector: 'app-login',
@@ -16,50 +16,43 @@ import {Utente} from '../../model/Utente';
 })
 export class LoginComponent {
   router = inject(Router);
-  //loginError: boolean = false;
+  errorMessage: string = '';
 
   applyForm = new FormGroup({
-    username: new FormControl('', {validators: [Validators.required]}),
-    password: new FormControl('', {validators: [Validators.required]})
+    username: new FormControl('', { validators: [Validators.required] }),
+    password: new FormControl('', { validators: [Validators.required] })
   });
 
   constructor(private authService: AuthService,
               private cookieService: CookieService,
-              private userService: UserService){}
+              private userService: UserService) {}
 
-  login(){
+  login() {
+    this.errorMessage = ''; // Resetta il messaggio di errore
     const body = {
       username: this.applyForm.value.username,
       password: this.applyForm.value.password
     };
 
     this.authService.login(body).subscribe({
-      next: (body:any) =>{
+      next: (body: any) => {
         this.cookieService.set('token', body.token);
-        console.log(this.cookieService.get('token'));
         this.getUser();
-        //this.loginError = false;
       },
-      error: (any) =>{
+      error: () => {
+        this.errorMessage = 'Credenziali non valide. Riprova.';
         this.applyForm.reset();
-        //this.loginError = true;
       }
     });
   }
 
-  getUser(){
-    console.log(this.applyForm.value.username);
-    this.userService.getUserByUsername(this.applyForm.value.username||'').subscribe({
-      next: (utente: Utente) =>{
-        console.log(utente);
+  getUser() {
+    this.userService.getUserByUsername(this.applyForm.value.username || '').subscribe({
+      next: (utente: Utente) => {
         this.cookieService.set('utente', JSON.stringify(utente));
-        const a = JSON.parse(this.cookieService.get('utente'));
-        console.log(a);
         this.goHome();
       },
-      error: (any) =>{
-
-      }
+      error: () => {}
     });
   }
 
