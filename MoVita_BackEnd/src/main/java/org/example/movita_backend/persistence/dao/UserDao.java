@@ -17,8 +17,8 @@ public interface UserDao {
     List<User> findPremiumUsers();
     void deleteById(int id);
     //update generici, che modificano dati anagrafici.
-    User updatePerson(User user);
-    User updateAgency(User user);
+    User updatePerson(int userId, User user);
+    User updateAgency(int userId, User user);
     //update specifici, che necessitano di operazioni aggiuntive separate.
     void updatePremiumStatus(int userId);
     User updatePassword(int userId, String newPassword);

@@ -1,6 +1,6 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
 import { CookieService } from 'ngx-cookie-service';
@@ -12,31 +12,36 @@ declare var google: any;
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit {
   router = inject(Router);
   errorMessage: string = '';
-  showPassword: boolean = false; // Aggiungi questa variabile
+  showPassword: boolean = false;
 
   applyForm = new FormGroup({
     username: new FormControl('', { validators: [Validators.required] }),
     password: new FormControl('', { validators: [Validators.required] })
   });
 
-  constructor(private authService: AuthService,
-              private cookieService: CookieService,
-              private userService: UserService) {}
+  constructor(
+    private authService: AuthService,
+    private cookieService: CookieService,
+    private userService: UserService
+  ) {}
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
 
+  clearError() {
+    this.errorMessage = '';
+  }
+
   login() {
-    this.errorMessage = ''; // Resetta il messaggio di errore
+    this.clearError();
     const body = {
       username: this.applyForm.value.username,
       password: this.applyForm.value.password
@@ -47,12 +52,10 @@ export class LoginComponent implements OnInit{
         this.cookieService.set('token', body.token);
         console.log(this.cookieService.get('token'));
         this.getUserByUsername();
-        //this.loginError = false;
       },
       error: () => {
         this.errorMessage = 'Credenziali non valide. Riprova.';
         this.applyForm.reset();
-        //this.loginError = true;
       }
     });
   }
@@ -76,29 +79,29 @@ export class LoginComponent implements OnInit{
   handleCredentialResponse(response: any) {
     const credential = response.credential;
     this.authService.loginWithGoogle(credential).subscribe({
-      next:(body:any)=>{
-        this.cookieService.set('token',body.token);
-        this.cookieService.set('utente', JSON.stringify(body.utente))
+      next: (body: any) => {
+        this.cookieService.set('token', body.token);
+        this.cookieService.set('utente', JSON.stringify(body.utente));
         this.goHome();
       },
-      error:(error:any)=>{
+      error: (error: any) => {
         console.error(error);
       }
-    })
+    });
   }
 
-  getUserByUsername(){
+  getUserByUsername() {
     console.log(this.applyForm.value.username);
-    this.userService.getUserByUsername(this.applyForm.value.username||'').subscribe({
-      next: (utente: Utente) =>{
+    this.userService.getUserByUsername(this.applyForm.value.username || '').subscribe({
+      next: (utente: Utente) => {
         console.log(utente);
         this.cookieService.set('utente', JSON.stringify(utente));
         const a = JSON.parse(this.cookieService.get('utente'));
         console.log(a);
         this.goHome();
       },
-      error: (any) =>{
-
+      error: (error: any) => {
+        console.error(error);
       }
     });
   }
