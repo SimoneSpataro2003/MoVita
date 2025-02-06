@@ -1,25 +1,24 @@
 <main class="container">
-
-    <div class="sticky-top content-area shadow border-0 rounded-4 bg-white row m-3 ">
-        <section class="col-10   p-4">
-            <h1>{{evento?.nome}}</h1>
+    <div class="sticky-top content-area shadow border-0 rounded-4 bg-white row m-3 p-3 d-flex justify-content-between align-items-center">
+        <section class="col-auto">
+            <h1 class="m-0">{{ evento?.nome }}</h1>
         </section>
-        <section class="col-2 p-3 d-flex justify-content-center  align-items-center">
-            @if(!this.prenotato)
+        <section class="col-auto d-flex align-items-center">
+            @if (!this.prenotato)
             {
                 <button type="button" class="btn btn-lg btn-primary" (click)="partecipa()">Partecipa</button>
             }
-            @else{
-                <div class="row">
-                    <button type="button" class="m-2 btn btn-outline-secondary">Prenotato</button>
-                    <button type="button" class="btn btn-outline-danger">Danger</button>
-
-    
+            @else
+            {
+                <div class="d-flex flex-column align-items-center">
+                    <button type="button" class="btn btn-outline-secondary mb-2">Prenotato</button>
+                    <button type="button" class="btn btn-outline-danger">Annulla</button>
                 </div>
-              
-            }            
+            }
         </section>
     </div>
+
+
 
     <div class="row">
         <div class="col-md-8 p-0">

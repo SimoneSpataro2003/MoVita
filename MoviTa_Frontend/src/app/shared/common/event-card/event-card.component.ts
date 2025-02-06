@@ -51,9 +51,9 @@ export class EventCardComponent implements OnInit, Loadable{
 
   
   showImageCreator():void{
-    if(this.utente!==null && this.utente!==undefined)
+    if(this.evento!==null && this.evento!==undefined)
     {
-      this.userService.getImage(this.utente.id).subscribe(
+      this.userService.getImage(this.evento.creatore.id).subscribe(
         {
           next: (data) => {
             this.immagineCreatore = URL.createObjectURL(data);    
