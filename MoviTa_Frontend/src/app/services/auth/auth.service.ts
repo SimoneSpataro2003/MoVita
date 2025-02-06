@@ -27,4 +27,9 @@ export class AuthService {
   logout(): Observable<any>{
     return this.http.get(this.URL +'/logout');
   }
+
+  // Metodo per il login con Google, che invia il credential (token Google) al backend
+  loginWithGoogle(credential: string): Observable<any> {
+    return this.http.post('http://localhost:8080/api/auth/login-google', { credential: credential });
+  }
 }

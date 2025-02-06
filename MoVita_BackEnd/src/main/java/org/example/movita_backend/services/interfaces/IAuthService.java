@@ -13,4 +13,7 @@ public interface IAuthService {
     String login(LoginRequest loginRequest);
 
     public void logout(String token);
+
+
+    String generateJwtToken(User user);
 }

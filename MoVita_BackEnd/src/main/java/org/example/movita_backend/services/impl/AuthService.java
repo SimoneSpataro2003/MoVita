@@ -127,4 +127,10 @@ public class AuthService implements IAuthService {
     public void logout(String token) {
         tokenInvalidatedService.invalidateToken(token);
     }
+
+    @Override
+    public String generateJwtToken(User user) {
+        // Utilizza una libreria come jjwt per creare il token
+        return jwtService.generateToken(user);
+    }
 }
