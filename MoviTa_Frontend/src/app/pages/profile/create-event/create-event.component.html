@@ -1,113 +1,97 @@
-<div class="container py-5">
-  <div class="card shadow-lg rounded">
-    <form class="row g-4 needs-validation" novalidate (ngSubmit)="onSubmit()">
-      <h2 class="text-center mb-4">Crea un evento</h2>
+<form [formGroup]="eventForm" class="row g-4 needs-validation" novalidate (ngSubmit)="createEvent()" [routerLink]="['/profile', ]" ] )>
+  <h2 class="text-center mb-4">Crea un evento</h2>
 
-      <!-- Titolo Evento -->
-      <div class="col-md-12">
-        <label for="validationServer01" class="form-label">Titolo</label>
-        <input type="text" class="form-control form-control-lg" id="validationServer01" [(ngModel)]="event.title" name="title" placeholder="Inserisci il titolo dell'evento" required [ngClass]="{ 'is-invalid': !validNome, 'is-valid': validNome }">
-        <div *ngIf="!validNome" class="invalid-feedback">
-          Il titolo non deve essere più lungo 20 caratteri.
-        </div>
-        <div *ngIf="validNome" class="valid-feedback">
-          Sembra buono!
-        </div>
-      </div>
-
-      <!-- Campo Data -->
-      <div class="col-md-6">
-        <label for="validationServerDate" class="form-label">Data</label>
-        <input type="date" class="form-control form-control-lg" id="validationServerDate" [(ngModel)]="event.date" name="date" required [ngClass]="{ 'is-invalid': !validDate }">
-        <div *ngIf="!validDate" class="invalid-feedback">
-          Seleziona una data valida.
-        </div>
-      </div>
-
-      <!-- Prezzo -->
-      <div class="col-md-6">
-        <label for="validationServerPrice" class="form-label">Prezzo</label>
-        <input type="number" class="form-control form-control-lg" id="validationServerPrice" [(ngModel)]="event.price" name="price" placeholder="Inserisci il prezzo" required [ngClass]="{ 'is-invalid': !validPrezzo }">
-        <div *ngIf="!validPrezzo" class="invalid-feedback">
-          Inserisci un prezzo valido.
-        </div>
-      </div>
-
-      <!-- Città -->
-      <div class="col-md-6">
-        <label for="validationServerCity" class="form-label">Città</label>
-        <input type="text" class="form-control form-control-lg" id="validationServerCity" [(ngModel)]="event.city" name="city" placeholder="Inserisci la città" required>
-      </div>
-
-      <!-- Indirizzo -->
-      <div class="col-md-6">
-        <label for="validationServerAddress" class="form-label">Indirizzo</label>
-        <input type="text" class="form-control form-control-lg" id="validationServerAddress" [(ngModel)]="event.address" name="address" placeholder="Inserisci l'indirizzo" required [ngClass]="{ 'is-invalid': !validIndirizzo }">
-        <div *ngIf="!validIndirizzo" class="invalid-feedback">
-          Inserisci un indirizzo valido.
-        </div>
-      </div>
-
-      <!-- Max Partecipanti -->
-      <div class="col-md-6">
-        <label for="validationServerMaxParticipants" class="form-label">Numero massimo di partecipanti</label>
-        <input type="number" class="form-control form-control-lg" id="validationServerMaxParticipants" [(ngModel)]="event.maxParticipants" name="maxParticipants" placeholder="Inserisci il numero massimo di partecipanti" required [ngClass]="{ 'is-invalid': !validMaxPartecipanti }">
-        <div *ngIf="!validMaxPartecipanti" class="invalid-feedback">
-          Inserisci un numero valido.
-        </div>
-      </div>
-
-      <!-- Età minima -->
-      <div class="col-md-6">
-        <label for="validationServerMinAge" class="form-label">Età minima</label>
-        <input type="number" class="form-control form-control-lg" id="validationServerMinAge" [(ngModel)]="event.minAge" name="minAge" placeholder="Inserisci l'età minima" required [ngClass]="{ 'is-invalid': !validEtaMinima }">
-        <div *ngIf="!validEtaMinima" class="invalid-feedback">
-          Inserisci un'età minima valida.
-        </div>
-      </div>
-
-      <!-- Campo Textarea Descrizione -->
-      <div class="col-12">
-        <label for="validationServerTextarea" class="form-label">Descrizione</label>
-        <textarea class="form-control form-control-lg" id="validationServerTextarea" [(ngModel)]="event.description" name="description" rows="4" placeholder="Inserisci una descrizione dell'evento" required [ngClass]="{ 'is-invalid': !validDescrizione }"></textarea>
-        <div *ngIf="!validDescrizione" class="invalid-feedback">
-          La descrizione è obbligatoria.
-        </div>
-      </div>
-
-      <!-- Visualizzazione delle categorie selezionate -->
-      <div class="col-md-12">
-        <h5>Categorie selezionate:</h5>
-        <ul>
-          <li *ngFor="let category of event.selectedCategories">{{ category }}</li>
-        </ul>
-      </div>
-
-      <!-- Campo di selezione della categoria e pulsante in una riga -->
-      <div class="col-md-12 d-flex align-items-center">
-        <div class="me-3 flex-grow-1">
-          <select class="form-select form-select-lg" [(ngModel)]="selectedCategory" name="category" required>
-            <option selected disabled value="">Scegli una categoria</option>
-            <option value="musica">Musica</option>
-            <option value="sport">Sport</option>
-            <option value="arte">Arte</option>
-            <option value="tecnologia">Tecnologia</option>
-            <option value="cultura">Cultura</option>
-          </select>
-          <div *ngIf="!selectedCategory" class="invalid-feedback">
-            Seleziona una categoria valida.
-          </div>
-        </div>
-
-        <div>
-          <button type="button" class="btn btn-lg btn-primary w-100" (click)="addCategory()">Aggiungi categoria</button>
-        </div>
-      </div>
-
-      <!-- Bottone per creare l'evento -->
-      <div class="col-12">
-        <button class="btn btn-lg btn-primary w-100" type="submit" [disabled]="!isFormValid()">Crea Evento</button>
-      </div>
-    </form>
+  <!-- Titolo -->
+  <div class="col-md-12">
+    <label for="title" class="form-label">Titolo</label>
+    <input type="text" class="form-control form-control-lg" id="title" formControlName="title">
+    <div *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched" class="invalid-feedback">
+      Il titolo è obbligatorio e deve avere massimo 20 caratteri.
+    </div>
   </div>
-</div>
+
+  <!-- Sezione per l'upload delle immagini -->
+  <div class="col-md-12">
+    <label for="imageUpload" class="form-label">Carica immagini</label>
+    <input type="file" class="form-control form-control-lg" id="imageUpload" (change)="onImageUpload($event)" multiple accept="image/*">
+
+    <!-- Mostra l'anteprima delle immagini caricate -->
+    <div class="mt-3 d-flex flex-wrap">
+      <div *ngFor="let image of imagePreviews; let i = index" class="me-2">
+        <img [src]="image" alt="Anteprima" class="img-thumbnail" style="width: 100px; height: 100px;">
+        <button type="button" class="btn btn-sm btn-danger d-block mt-1" (click)="removeImage(i)">Rimuovi</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Data -->
+  <div class="col-md-6">
+    <label for="date" class="form-label">Data</label>
+    <input type="date" class="form-control form-control-lg" id="date" formControlName="date">
+  </div>
+
+  <!-- Prezzo -->
+  <div class="col-md-6">
+    <label for="price" class="form-label">Prezzo</label>
+    <input type="number" class="form-control form-control-lg" id="price" formControlName="price">
+  </div>
+
+  <!-- Città -->
+  <div class="col-md-6">
+    <label for="city" class="form-label">Città</label>
+    <input type="text" class="form-control form-control-lg" id="city" formControlName="city">
+  </div>
+
+  <!-- Indirizzo -->
+  <div class="col-md-6">
+    <label for="address" class="form-label">Indirizzo</label>
+    <input type="text" class="form-control form-control-lg" id="address" formControlName="address">
+  </div>
+
+  <!-- Max Partecipanti -->
+  <div class="col-md-6">
+    <label for="maxParticipants" class="form-label">Numero massimo di partecipanti</label>
+    <input type="number" class="form-control form-control-lg" id="maxParticipants" formControlName="maxParticipants">
+  </div>
+
+  <!-- Età minima -->
+  <div class="col-md-6">
+    <label for="minAge" class="form-label">Età minima</label>
+    <input type="number" class="form-control form-control-lg" id="minAge" formControlName="minAge">
+  </div>
+
+  <!-- Descrizione -->
+  <div class="col-12">
+    <label for="description" class="form-label">Descrizione</label>
+    <textarea class="form-control form-control-lg" id="description" formControlName="description" rows="4"></textarea>
+  </div>
+
+  <!-- Categorie selezionate -->
+  <div class="col-md-12">
+    <h5>Categorie selezionate:</h5>
+    <ul class="list-group">
+      <li *ngFor="let category of eventForm.get('selectedCategories')?.value" class="list-group-item d-flex justify-content-between align-items-center">
+        {{ category }}
+        <button type="button" class="btn btn-sm btn-danger" (click)="removeCategory(category)">×</button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Selezione categoria -->
+  <div class="col-md-12 d-flex align-items-center">
+    <div class="me-3 flex-grow-1">
+      <select class="form-select form-select-lg" [(ngModel)]="selectedCategory">
+        <option selected disabled value="">Scegli una categoria</option>
+        <option *ngFor="let cat of availableCategories()" [value]="cat">{{ cat }}</option>
+      </select>
+    </div>
+    <button type="button" class="btn btn-lg btn-primary" (click)="addCategory()" [disabled]="!selectedCategory">
+      Aggiungi categoria
+    </button>
+  </div>
+
+  <!-- Bottone per invio -->
+  <div class="col-12">
+    <button class="btn btn-lg btn-primary w-100" type="submit" [disabled]="!eventForm.valid">Crea Evento</button>
+  </div>
+</form>

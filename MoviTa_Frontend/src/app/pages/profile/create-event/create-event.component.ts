@@ -1,62 +1,119 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import {NgClass, NgForOf, NgIf} from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { NgIf, NgForOf } from '@angular/common';
+import { EventService } from '../../../services/event/event.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-event-form',
   templateUrl: './create-event.component.html',
   standalone: true,
   imports: [
-    FormsModule,
-    NgClass,
+    ReactiveFormsModule,
     NgIf,
-    NgForOf
+    NgForOf,
+    FormsModule,
+    RouterLink
   ],
   styleUrls: ['./create-event.component.css']
 })
-export class CreateEventComponent {
+export class CreateEventComponent implements OnInit {
+  eventForm: FormGroup;
+  selectedCategory: string = '';
+  imagePreviews: string[] = [];
 
-  event = {
-    title: '',
-    date: '',
-    price: 0,
-    city: '',
-    address: '',
-    maxParticipants: 0,
-    minAge: 0,
-    description: '',
-    selectedCategories: [] as string[]
-  };
-
-  selectedCategory: string = ''; // Categoria selezionata dalla combo box
-
-  // Dynamic validation checks
-  get validNome() { return this.event.title.length > 0 && this.event.title.length <= 20; }
-  get validDate() { return !!this.event.date; }
-  get validPrezzo() { return this.event.price > 0; }
-  get validIndirizzo() { return this.event.address.trim().length > 0; }
-  get validMaxPartecipanti() { return this.event.maxParticipants > 0 && this.event.maxParticipants <= 16; }
-  get validEtaMinima() { return this.event.minAge > 0 && this.event.minAge <= 150; }
-  get validDescrizione() { return this.event.description.trim().length > 0; }
-
-  // Form validity check
-  isFormValid() {
-    return this.validNome && this.validDate && this.validPrezzo && this.validIndirizzo && this.validMaxPartecipanti && this.validEtaMinima && this.validDescrizione;
+  constructor(private eventService: EventService) {
+    // Initialize the form here to avoid potential issues
+    this.eventForm = new FormGroup({
+      title: new FormControl('', [Validators.required, Validators.maxLength(20)]),
+      date: new FormControl('', Validators.required),
+      price: new FormControl(0, Validators.required),
+      city: new FormControl('', Validators.required),
+      address: new FormControl('', Validators.required),
+      maxParticipants: new FormControl(0, Validators.required),
+      minAge: new FormControl(0, Validators.required),
+      description: new FormControl('', Validators.required),
+      selectedCategories: new FormControl<string[]>([]),
+      images: new FormControl<File[]>([])
+    });
   }
 
-  // Funzione per aggiungere la categoria selezionata alla lista
+  ngOnInit(): void {}
+
   addCategory() {
-    if (this.selectedCategory && !this.event.selectedCategories.includes(this.selectedCategory)) {
-      this.event.selectedCategories.push(this.selectedCategory);
-      this.selectedCategory = ''; // Reset dopo l'aggiunta
+    const selectedCategories: string[] = this.eventForm.get('selectedCategories')?.value || [];
+    if (this.selectedCategory && !selectedCategories.includes(this.selectedCategory)) {
+      this.eventForm.get('selectedCategories')!.setValue([...selectedCategories, this.selectedCategory]);
+      this.selectedCategory = '';
     }
   }
 
-  // Funzione per inviare il form
-  onSubmit() {
-    if (this.isFormValid()) {
-      console.log('Evento creato:', this.event);
-      // Aggiungi qui la logica per inviare i dati al server
+  removeCategory(category: string) {
+    const selectedCategories: string[] = this.eventForm.get('selectedCategories')?.value || [];
+    this.eventForm.get('selectedCategories')!.setValue(selectedCategories.filter(cat => cat !== category));
+  }
+
+  availableCategories() {
+    const allCategories = ['musica', 'sport', 'arte', 'tecnologia', 'cultura'];
+    const selectedCategories = this.eventForm.get('selectedCategories')?.value || [];
+    return allCategories.filter(cat => !selectedCategories.includes(cat));
+  }
+
+  onImageUpload(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      const files: File[] = Array.from(input.files);
+      this.eventForm.get('images')!.setValue(files);
+
+      this.imagePreviews = [];
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e: ProgressEvent<FileReader>) => {
+          if (e.target?.result) {
+            this.imagePreviews.push(e.target.result as string);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
     }
+  }
+
+  createEvent() {
+    if (this.eventForm.valid) {
+      console.log('Evento creato:', this.eventForm.value);
+
+      const body = {
+        title: this.eventForm.value.title,
+        date: this.eventForm.value.date,
+        price: this.eventForm.value.price,
+        city: this.eventForm.value.city,
+        address: this.eventForm.value.address,
+        maxParticipants: this.eventForm.value.maxParticipants,
+        minAge: this.eventForm.value.minAge,
+        description: this.eventForm.value.description,
+      };
+
+      this.eventService.creaEvento(body).subscribe({
+        next: (response: any) => {
+          console.log(response);
+        },
+        error: (err: any) => {
+          console.error('Error creating event:', err);
+        }
+      });
+
+      this.imagePreviews = this.eventForm.value.images;
+      this.selectedCategory = this.eventForm.value.selectedCategories;
+    }
+  }
+
+  removeImage(i: number) {
+    // Remove the image at index 'i' from imagePreviews
+    this.imagePreviews.splice(i, 1);
+
+    // Update the images form control to remove the corresponding file as well
+    const updatedImages = [...this.eventForm.value.images];
+    updatedImages.splice(i, 1);
+    this.eventForm.get('images')!.setValue(updatedImages);
   }
 }

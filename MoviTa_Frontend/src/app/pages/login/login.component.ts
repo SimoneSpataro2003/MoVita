@@ -20,6 +20,7 @@ declare var google: any;
 export class LoginComponent implements OnInit{
   router = inject(Router);
   errorMessage: string = '';
+  showPassword: boolean = false; // Aggiungi questa variabile
 
   applyForm = new FormGroup({
     username: new FormControl('', { validators: [Validators.required] }),
@@ -29,6 +30,10 @@ export class LoginComponent implements OnInit{
   constructor(private authService: AuthService,
               private cookieService: CookieService,
               private userService: UserService) {}
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 
   login() {
     this.errorMessage = ''; // Resetta il messaggio di errore
