@@ -200,4 +200,10 @@ public class Event {
                 ", recensioni=" + recensioni +
                 '}';
     }
+<<<<<<< HEAD
 }
+
+
+=======
+}
+>>>>>>> origin/main

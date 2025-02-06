@@ -128,14 +128,14 @@ public class BookingDaoJDBC implements BookingDao {
     @Override
     public Booking update(BookingEvent booking) {
         String query = "UPDATE partecipazione SET " +
-                "id_utente=?,id_evento=?,data=?, annullata=?"+
+                "annullata = ? "+
                 "WHERE id_utente = ? and id_evento = ?";
 
         try(PreparedStatement ps = connection.prepareStatement(query)){
-            ps.setInt(1, booking.getUtente());
-            ps.setInt(2, booking.getEvento());
-            ps.setTimestamp(3,java.sql.Timestamp.valueOf(booking.getData()));
-            ps.setBoolean(4, booking.getAnnullata());
+            ps.setBoolean(1, booking.getAnnullata());
+            ps.setInt(2, booking.getUtente());
+            ps.setInt(3, booking.getEvento());
+
             ps.executeUpdate();
         }catch(SQLException e){
             e.printStackTrace();

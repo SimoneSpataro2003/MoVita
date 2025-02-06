@@ -12,6 +12,7 @@ import {EventCardComponent} from '../../shared/common/event-card/event-card.comp
 import {Loadable} from '../../model/Loadable';
 import {PaymentService} from '../../services/payment/payment.service';
 import {Pagamento} from '../../model/Pagamento';
+import {ToastService} from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-profile',
@@ -39,6 +40,7 @@ export class ProfileComponent implements OnInit, Loadable {
     private eventService: EventService,
     private paymentService : PaymentService,
     private cookieService: CookieService,
+    private toastService: ToastService
   ) {
   }
 
@@ -70,11 +72,9 @@ export class ProfileComponent implements OnInit, Loadable {
       {
         next: (data) => {
           this.immagineProfilo = URL.createObjectURL(data);
-
         },
         error: (err) => {
-          console.error("Errore nel recupero dell'immagine del creatore dell'evento", err);
-
+          this.toastService.show('errorToast',"Errore", "Impossibile recuperare l'immagine del profilo. \n Prova a ricaricare la pagina.");
         }
       }
     );
@@ -89,7 +89,7 @@ export class ProfileComponent implements OnInit, Loadable {
         this.loaded = true;
       },
       error:(error) => {
-        console.log(error);
+        this.toastService.show('errorToast',"Errore", "Impossibile Caricare l'utente. \n Prova a ricaricare la pagina.");
       }
     });
   }
@@ -102,7 +102,7 @@ export class ProfileComponent implements OnInit, Loadable {
         this.numberAmici = this.friendships.length;
       },
       error:(error) => {
-        console.log(error);
+        this.toastService.show('errorToast',"Errore", "Impossibile Caricare gli amici. \n Prova a ricaricare la pagina.");
       }
     })
   }
@@ -127,7 +127,7 @@ export class ProfileComponent implements OnInit, Loadable {
         this.createdEvents = createdEvents;
       },
       error: (error) => {
-        console.log(error);
+        this.toastService.show('errorToast',"Errore", "Impossibile caricare gli eventi. Prova a ricaricare la pagina.");
       }
     })
   }
@@ -135,7 +135,10 @@ export class ProfileComponent implements OnInit, Loadable {
   addFriend() {
     this.userService.addFriendship(this.currentUserId, this.userId).subscribe({
       next: (friendship : Utente) => {
-        console.log(friendship);
+        this.toastService.show('successToast',"Amicizia aggiunta", "Amicizia aggiunta correttamente.");
+      },
+      error:(err)=>{
+        this.toastService.show('errorToast',"Errore", "Impossibile aggiungere una nuova amicizia. Prova a ricaricare la pagina.");
       }
     })
   }
@@ -143,7 +146,10 @@ export class ProfileComponent implements OnInit, Loadable {
   deleteFriend() {
     this.userService.deleteFriendship(this.currentUserId, this.userId).subscribe({
       next: (friendship : Utente) => {
-        console.log(friendship);
+        this.toastService.show('successToast',"Amicizia rimossa", "Amicizia rimossa correttamente.");
+      },
+      error:(err)=> {
+        this.toastService.show('errorToast',"Errore", "Impossibile rimuovere l'amicizia. \n Prova a ricaricare la pagina.");
       }
     })
   }
@@ -155,7 +161,7 @@ export class ProfileComponent implements OnInit, Loadable {
         console.log(this.userId + " : " + result)
       },
       error: () => {
-        console.error("Errore nel verificare l'amicizia");
+        this.toastService.show('errorToast',"Errore", "Impossibile visualizzare l'amicizia. \n Prova a ricaricare la pagina.");
       }
     });
   }
@@ -165,6 +171,9 @@ export class ProfileComponent implements OnInit, Loadable {
       next: (data) => {
         console.log(data);
         this.addPayment();
+        this.toastService.show('successToast',"Sei un membro premium!", "Benvenuto nel club! :)");
+      },error:(err) => {
+        this.toastService.show('errorToast',"Errore", "Non è stato possibile elaborare la richiesta. \n Prova a ricaricare la pagina.");
       }
     })
   }
@@ -181,6 +190,8 @@ export class ProfileComponent implements OnInit, Loadable {
     this.paymentService.createPayment(nuovoPagamento).subscribe({
       next: (data) => {
         console.log(data);
+        this.toastService.show('errorToast', 'Errore', 'Errore nel reperire le categorie di un evento.\n Prova a ricaricaricare la pagina.');
+
       }
     })
   }

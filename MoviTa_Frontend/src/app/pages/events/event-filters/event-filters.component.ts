@@ -7,6 +7,7 @@ import {IconaCategoriaMapper} from '../../../model/IconaCategoriaMapper';
 import {ConsigliEventoComponent} from '../consigli-evento/consigli-evento.component';
 import {NgbModal, NgbOffcanvasRef} from '@ng-bootstrap/ng-bootstrap';
 import {CategorieFiltroComponent} from '../categorie-filtro/categorie-filtro.component';
+import {ToastService} from '../../../services/toast/toast.service';
 
 @Component({
   selector: 'app-event-filters',
@@ -29,7 +30,8 @@ export class EventFiltersComponent implements OnChanges{
   constructor(private fb: FormBuilder,
               private cookieService: CookieService,
               private eventService: EventService,
-              private modalService: NgbModal) {
+              private modalService: NgbModal,
+              private toastService: ToastService) {
 
     if(!this.filterForm){
       this.filterForm = this.fb.group({
@@ -84,7 +86,7 @@ export class EventFiltersComponent implements OnChanges{
         this.ottieniFormGroup.emit(this.filterForm);
       },
       error:(err) =>{
-        //TODO: messaggio di errore!
+        this.toastService.show('errorToast', 'Errore', 'Errore nel reperire gli eventi.\n Prova a ricaricaricare la pagina.');
       }
     });
 
@@ -108,6 +110,7 @@ export class EventFiltersComponent implements OnChanges{
       modalRef.componentInstance.ottieniCategorieScelte.subscribe((categorieScelte: Array<number>) => {
         console.log(categorieScelte);
         this.filterForm.patchValue({ categorie: categorieScelte });
+        this.updateFilterSummary();
       });
     }
   }

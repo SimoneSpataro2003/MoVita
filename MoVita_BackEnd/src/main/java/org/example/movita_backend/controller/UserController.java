@@ -23,7 +23,6 @@ public class UserController
 {
 
     private final UserService userService;
-
     private final IImageService imageService;
 
     @Autowired
@@ -195,8 +194,6 @@ public class UserController
         try
         {
             userService.updatePremiumStatus(userId);
-            Payment payment = new Payment("Passaggio a premium", 69, LocalDate.now().toString(), userId);
-            userService. paymentService.createCheckoutSession(payment);
             return ResponseEntity.ok(true);
         }
         catch (Exception e)

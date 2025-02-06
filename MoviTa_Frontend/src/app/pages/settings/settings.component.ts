@@ -5,6 +5,7 @@ import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {UserService} from '../../services/user/user.service';
 import {Utente} from '../../model/Utente';
 import {Loadable} from '../../model/Loadable';
+import {ToastService} from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-settings',
@@ -36,7 +37,8 @@ export class SettingsComponent implements OnInit, Loadable {
 
   constructor(
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private toastService: ToastService
   ) {
   }
 
@@ -67,7 +69,7 @@ export class SettingsComponent implements OnInit, Loadable {
 
         },
         (error) => {
-          //errore
+          this.toastService.show('errorToast',"Errore", "Impossibile Caricare l'utente. \n Prova a ricaricare la pagina.");
         }
       );
     } else {
@@ -90,12 +92,10 @@ export class SettingsComponent implements OnInit, Loadable {
       next: (data: any) => {
         this.user = data;
         this.goProfile();
-        console.log(data);
-        console.log("fatto");
+        this.toastService.show('successToast',"Modifica effettuata", "Il profilo è stato modificato con successo.");
       },
       error: (any) => {
-        console.log("errore nell'aggiornamento del profilo");
-        //errore
+        this.toastService.show('errorToast',"Errore", "Impossibile aggiornare il profilo. Prova a ricaricare la pagina.");
       }
     });
   }
@@ -116,11 +116,10 @@ export class SettingsComponent implements OnInit, Loadable {
       (data) => {
         this.user = data;
         this.goProfile();
-        console.log(data);
+        this.toastService.show('successToast',"Modifica effettuata", "Il profilo è stato modificato con successo.");
       },
       (error) => {
-        console.log("errore nell'aggiornamento del profilo");
-        //errore
+        this.toastService.show('successToast',"Errore", "Non è stato possibile modificare il profilo. Prova a ricaricare la pagina.");
       }
     );
   }

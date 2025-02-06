@@ -4,6 +4,7 @@ import { UserService } from '../../services/user/user.service';
 import { Utente } from '../../model/Utente';
 import { CardFriendComponent } from '../../shared/common/card-friend/card-friend.component';
 import {CookieService} from 'ngx-cookie-service';
+import {ToastService} from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-search-friends',
@@ -22,7 +23,8 @@ export class SearchFriendsComponent implements OnInit {
 
   constructor(
     private userService: UserService,
-    private cookieService: CookieService
+    private cookieService: CookieService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -49,6 +51,9 @@ export class SearchFriendsComponent implements OnInit {
         this.users = this.users.filter(user=>user.id !=idToDelete );
 
         this.loaded = true;
+      },
+      error:(err) =>{
+        this.toastService.show('errorToast',"Errore", "Impossibile mostrare gli utenti. Prova a ricaricare la pagina.");
       }
     });
   }

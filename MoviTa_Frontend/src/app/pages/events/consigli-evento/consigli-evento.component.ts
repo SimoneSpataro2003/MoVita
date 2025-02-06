@@ -9,6 +9,7 @@ import {IconaCategoriaMapper} from "../../../model/IconaCategoriaMapper";
 import {CookieService} from 'ngx-cookie-service';
 import {Utente} from '../../../model/Utente';
 import {FormsModule} from '@angular/forms';
+import {ToastService} from '../../../services/toast/toast.service';
 
 @Component({
   selector: 'app-consigli-evento',
@@ -29,7 +30,8 @@ export class ConsigliEventoComponent implements OnInit,Loadable{
 
 
   constructor(private categoryService:CategoryService,
-              private cookieService: CookieService) {
+              private cookieService: CookieService,
+              private toastService: ToastService) {
   }
 
   ngOnInit() {
@@ -54,17 +56,16 @@ export class ConsigliEventoComponent implements OnInit,Loadable{
     let utente: Utente = JSON.parse(this.cookieService.get('utente'));
     this.categoryService.insertUserCategories(utente.id,this.categorieScelte).subscribe({
       next: () =>{
-        //TODO: mostra successo con una finestra popup!
-        console.log("fatto!");
         //ho modificato i dati dell'utente: modifico il cookie!
         let utente: Utente = JSON.parse(this.cookieService.get('utente'));
         utente.mostraConsigliEventi = false;
         this.cookieService.set('utente',JSON.stringify(utente));
+
+        this.toastService.show('successToast', 'Fatto!', 'Categorie salvate correttamente.');
         this.closeModal();
       },
       error:(err) =>{
-        //TODO: mostra errore con una finestra popup!
-        console.log(err)
+        this.toastService.show('errorToast', 'Errore', 'Impossibile salvare le categorie. Riprova.');
       }
     })
   }

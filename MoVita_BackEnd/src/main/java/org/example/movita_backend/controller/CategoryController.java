@@ -62,4 +62,10 @@ public class CategoryController {
         this.categoryService.insertEventCategories(eventCategories);
         return ResponseEntity.ok(Map.of("esito","Inserimento effettuato correttamente."));
     }
+
+    @PostMapping("/insert-event-categoty/{eventId}/{category}")
+    ResponseEntity<?> insertEventCategory(@PathVariable int eventId, @PathVariable String category) {
+        this.categoryService.insertCategoryToEvent(eventId, category);
+        return ResponseEntity.ok(Map.of("esito","Inserimento correttamente."));
+    }
 }

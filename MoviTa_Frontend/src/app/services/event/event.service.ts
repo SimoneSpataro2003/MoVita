@@ -58,7 +58,24 @@ export class EventService {
     return this.authHttp.post(this.URL +"/book-event",prenotazione);
   }
 
+  public undoBooking(prenotazione:PartecipazioneDTO):Observable<Partecipazione>{
+    return this.authHttp.post(this.URL +"/remove-bookig-event",prenotazione);
+  }
+
+
   public creaEvento( body : any) : Observable<any> {
     return this.authHttp.post(this.URL + "/create-event", body);
   }
+
+  public insertCategoryToEvent(eventId: number, category: string): Observable<any> {
+    return this.authHttp.post(`${this.URL}/insert-event-category/${eventId}/${category}/`, {});
+  }
+
+  public setEventImage(eventId: number, image: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('image', image, image.name);
+
+    return this.authHttp.post(`/api/events/set-event-image/${eventId}`, formData);
+  }
+
 }
