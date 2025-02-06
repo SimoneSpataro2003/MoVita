@@ -1,5 +1,6 @@
 package org.example.movita_backend.controller;
 
+import jakarta.validation.Valid;
 import lombok.Getter;
 import org.apache.coyote.Response;
 import org.example.movita_backend.exception.event.EventNotValid;
@@ -160,7 +161,7 @@ public class EventController {
     }
 
     @PostMapping("/create-event")
-    ResponseEntity<Event> postCreateNewEvent(@RequestBody Event event) throws Exception {
+    ResponseEntity<Event> postCreateNewEvent(@Valid @RequestBody EventRequest event) throws Exception {
         try{
             return  ResponseEntity.ok(
                     this.eventService.createEvent(event)
@@ -168,7 +169,6 @@ public class EventController {
         }catch (EventNotValid e){
             return new ResponseEntity(e.getMessage() , HttpStatusCode.valueOf(400));
         }
-
     }
 
     @PutMapping("/update-event")

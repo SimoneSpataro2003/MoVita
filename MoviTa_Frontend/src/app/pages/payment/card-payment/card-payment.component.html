@@ -1,8 +1,9 @@
-<div class="card">
+<div class="card shadow-sm mb-3">
   <div class="card-body">
-    {{pagamento.name}}
-    <div class="card-text">
-      {{ pagamento.ammontare }}
-    </div>
+    <h5 class="card-title text-primary">{{ pagamento.name }}</h5>
+    <p class="card-text">
+      <strong>Ammontare:</strong>
+      <span class="text-success">{{ pagamento.ammontare }}</span>
+    </p>
   </div>
 </div>

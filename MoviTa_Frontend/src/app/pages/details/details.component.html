@@ -1,86 +1,101 @@
-<main class="container">
-
-    <div class="sticky-top content-area shadow border-0 rounded-4 bg-white row m-3 ">
-        <section class="col-10   p-4">
-            <h1>{{evento?.nome}}</h1>
+<main class="container-fluid p-0">
+    <!-- Sezione superiore con nome evento e pulsanti -->
+    <div class="sticky-top content-area shadow border-0 rounded-4 bg-white row m-0 p-3 d-flex justify-content-between align-items-center">
+        <section class="col-12 col-md-auto mb-3 mb-md-0">
+            <h1 class="m-0 display-5 fw-bold">{{ evento?.nome }}</h1>
         </section>
-        <section class="col-2 p-3 d-flex justify-content-center  align-items-center">
-            @if(!this.prenotato)
-            {
-                <button type="button" class="btn btn-lg btn-primary" (click)="partecipa()">Partecipa</button>
-            }
-            @else{
-                <div class="row">
-                    <button type="button" class="m-2 btn btn-outline-secondary">Prenotato</button>
-                    <button type="button" class="btn btn-outline-danger">Danger</button>
-
-    
+        <section class="col-12 col-md-auto d-flex align-items-center justify-content-end">
+            @if (!this.prenotato) {
+                <button type="button" class="btn btn-lg btn-primary w-100 w-md-auto" (click)="partecipa()">Partecipa</button>
+            } @else {
+                <div class="d-flex flex-column flex-md-row align-items-center gap-2">
+                    <button type="button" class="btn btn-outline-secondary w-100 w-md-auto">Prenotato</button>
+                    <button type="button" class="btn btn-outline-danger w-100 w-md-auto">Annulla</button>
                 </div>
-              
-            }            
+            }
         </section>
     </div>
 
-    <div class="row">
-        <div class="col-md-8 p-0">
-            <section class="shadow border-0 rounded-4 bg-white   p-3 m-3">
-                <img [src]="evento?.creatore?.immagineProfilo" class="img-fluid rounded-circle" style="width: 50px; height: 50px;">
-                {{evento?.creatore?.username}}
+    <!-- Contenuto principale -->
+    <div class="row m-0">
+        <!-- Sezione sinistra (immagini e creatore) -->
+        <div class="col-12 col-md-8 p-0">
+            <section class="shadow border-0 rounded-4 bg-white p-3 m-3">
+                <div class="d-flex align-items-center">
+                    <img [src]="evento?.creatore?.immagineProfilo" class="img-fluid rounded-circle me-3" style="width: 50px; height: 50px;">
+                    <span class="fs-5 fw-medium">{{ evento?.creatore?.username }}</span>
+                </div>
             </section>
-
-            <app-carousel-event-image></app-carousel-event-image>
+            <app-carousel-event-image class="m-3"></app-carousel-event-image>
         </div>
 
-        <div class="col-md-4 mb-3 ">
-            <section class="shadow rounded-4  p-3 mb-3">
-                <ul class="bg-transparent rounded-4 bg-white list-group">
-                    <li class="bg-transparent border-0 list-group-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-fill" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
-                      </svg> {{evento?.data}}</li>
-                    <li class="bg-transparent border-0 list-group-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                        <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
-                      </svg> {{evento?.indirizzo}}, {{evento?.citta}}</li>                    
-                    <li class="bg-transparent border-0 list-group-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-arms-up" viewBox="0 0 16 16">
-                        <path d="M8 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
-                        <path d="m5.93 6.704-.846 8.451a.768.768 0 0 0 1.523.203l.81-4.865a.59.59 0 0 1 1.165 0l.81 4.865a.768.768 0 0 0 1.523-.203l-.845-8.451A1.5 1.5 0 0 1 10.5 5.5L13 2.284a.796.796 0 0 0-1.239-.998L9.634 3.84a.7.7 0 0 1-.33.235c-.23.074-.665.176-1.304.176-.64 0-1.074-.102-1.305-.176a.7.7 0 0 1-.329-.235L4.239 1.286a.796.796 0 0 0-1.24.998l2.5 3.216c.317.316.475.758.43 1.204Z"/>
-                      </svg> Partecipanti: {{evento?.numPartecipanti}}</li>
-                    <li class="bg-transparent border-0 list-group-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-euro" viewBox="0 0 16 16">
-                        <path d="M4 9.42h1.063C5.4 12.323 7.317 14 10.34 14c.622 0 1.167-.068 1.659-.185v-1.3c-.484.119-1.045.17-1.659.17-2.1 0-3.455-1.198-3.775-3.264h4.017v-.928H6.497v-.936q-.002-.165.008-.329h4.078v-.927H6.618c.388-1.898 1.719-2.985 3.723-2.985.614 0 1.175.05 1.659.177V2.194A6.6 6.6 0 0 0 10.341 2c-2.928 0-4.82 1.569-5.244 4.3H4v.928h1.01v1.265H4v.928z"/>
-                      </svg> {{evento?.prezzo}}</li>
-                    <li class="bg-transparent border-0 list-group-item">Capienza: {{evento?.maxNumPartecipanti}}</li>
-                    <li class="bg-transparent border-0 list-group-item">Eta minima: {{evento?.etaMinima}}</li>
-                    <li class="bg-transparent border-0 list-group-item"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill" viewBox="0 0 16 16">
-                        <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
-                      </svg>Valutazione: {{evento?.valutazioneMedia}}</li>
+        <!-- Sezione destra (dettagli evento) -->
+        <div class="col-12 col-md-4 p-0">
+            <section class="shadow rounded-4 bg-white p-3 m-3">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item bg-transparent border-0 d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-clock-fill me-2" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71z"/>
+                        </svg>
+                        <span class="fs-5">{{ evento?.data }}</span>
+                    </li>
+                    <li class="list-group-item bg-transparent border-0 d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill me-2" viewBox="0 0 16 16">
+                            <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+                        </svg>
+                        <span class="fs-5">{{ evento?.indirizzo }}, {{ evento?.citta }}</span>
+                    </li>
+                    <li class="list-group-item bg-transparent border-0 d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-arms-up me-2" viewBox="0 0 16 16">
+                            <path d="M8 3a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"/>
+                            <path d="m5.93 6.704-.846 8.451a.768.768 0 0 0 1.523.203l.81-4.865a.59.59 0 0 1 1.165 0l.81 4.865a.768.768 0 0 0 1.523-.203l-.845-8.451A1.5 1.5 0 0 1 10.5 5.5L13 2.284a.796.796 0 0 0-1.239-.998L9.634 3.84a.7.7 0 0 1-.33.235c-.23.074-.665.176-1.304.176-.64 0-1.074-.102-1.305-.176a.7.7 0 0 1-.329-.235L4.239 1.286a.796.796 0 0 0-1.24.998l2.5 3.216c.317.316.475.758.43 1.204Z"/>
+                        </svg>
+                        <span class="fs-5">Partecipanti: {{ evento?.numPartecipanti }}</span>
+                    </li>
+                    <li class="list-group-item bg-transparent border-0 d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-euro me-2" viewBox="0 0 16 16">
+                            <path d="M4 9.42h1.063C5.4 12.323 7.317 14 10.34 14c.622 0 1.167-.068 1.659-.185v-1.3c-.484.119-1.045.17-1.659.17-2.1 0-3.455-1.198-3.775-3.264h4.017v-.928H6.497v-.936q-.002-.165.008-.329h4.078v-.927H6.618c.388-1.898 1.719-2.985 3.723-2.985.614 0 1.175.05 1.659.177V2.194A6.6 6.6 0 0 0 10.341 2c-2.928 0-4.82 1.569-5.244 4.3H4v.928h1.01v1.265H4v.928z"/>
+                        </svg>
+                        <span class="fs-5">{{ evento?.prezzo }}</span>
+                    </li>
+                    <li class="list-group-item bg-transparent border-0"><span class="fs-5">Capienza: {{ evento?.maxNumPartecipanti }}</span></li>
+                    <li class="list-group-item bg-transparent border-0"><span class="fs-5">Età minima: {{ evento?.etaMinima }}</span></li>
+                    <li class="list-group-item bg-transparent border-0 d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-star-fill me-2" viewBox="0 0 16 16">
+                            <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                        </svg>
+                        <span class="fs-5">Valutazione: {{ evento?.valutazioneMedia }}</span>
+                    </li>
                 </ul>
             </section>
-           
         </div>
     </div>
-    <section class="row">
-        <article class="shadow rounded-4 col-md-8 p-3 m-3">
-            <h2>Descrizione</h2>
-            <div class="  p-3 m-3">
-                <p>{{evento?.descrizione}}</p>
+
+    <!-- Descrizione evento -->
+    <section class="row m-0">
+        <article class="shadow rounded-4 col-12 col-md-8 p-3 m-3">
+            <h2 class="fw-bold mb-4">Descrizione</h2>
+            <div class="p-3">
+                <p class="fs-5">{{ evento?.descrizione }}</p>
             </div>
         </article>
     </section>
-    <section class="shadow rounded-4 col-md-8 p-3 m-3">
-        <h2>Partecipanti</h2>       
-        <app-partecipanti-evento class="p-0" [idEvento]="idEvento"></app-partecipanti-evento>    
-        
-    </section>
-    <section>
-        <div class="shadow rounded-4 col-md-8 p-3 m-3">
-            <h2>Eventi Simili</h2>
-            <app-eventi-simili></app-eventi-simili>
-        </div>
-    </section>
-    <section class="row">
-        <div class="shadow rounded-4 col-md-8 p-3 m-3">
-            <h2>Recensioni </h2>
-            <app-recensione [idEvento]="idEvento"></app-recensione>
-        </div>
+
+    <!-- Partecipanti -->
+    <section class="shadow rounded-4 col-12 col-md-8 p-3 m-3">
+        <h2 class="fw-bold mb-4">Partecipanti</h2>
+        <app-partecipanti-evento [idEvento]="idEvento"></app-partecipanti-evento>
     </section>
 
+    <!-- Eventi simili -->
+    <section class="shadow rounded-4 col-12 col-md-8 p-3 m-3">
+        <h2 class="fw-bold mb-4">Eventi Simili</h2>
+        <app-eventi-simili></app-eventi-simili>
+    </section>
+
+    <!-- Recensioni -->
+    <section class="shadow rounded-4 col-12 col-md-8 p-3 m-3">
+        <h2 class="fw-bold mb-4">Recensioni</h2>
+        <app-recensione [idEvento]="idEvento"></app-recensione>
+    </section>
 </main>

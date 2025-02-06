@@ -57,4 +57,8 @@ export class EventService {
   public setEventBooking(prenotazione:PartecipazioneDTO):Observable<Partecipazione>{
     return this.authHttp.post(this.URL +"/book-event",prenotazione);
   }
+
+  public creaEvento( body : any) : Observable<any> {
+    return this.authHttp.post(this.URL + "/create-event", body);
+  }
 }
