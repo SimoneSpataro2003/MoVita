@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgIf, NgForOf } from '@angular/common';
 import { EventService } from '../../../services/event/event.service';
 import { RouterLink } from '@angular/router';
+import { CategorieFiltroComponent } from '../../events/categorie-filtro/categorie-filtro.component';  // Adjust the import based on your structure
+import { Categoria } from '../../../model/Categoria';
+import { CategoryService } from '../../../services/category/category.service';
 
 @Component({
   selector: 'app-event-form',
@@ -17,13 +20,18 @@ import { RouterLink } from '@angular/router';
   ],
   styleUrls: ['./create-event.component.css']
 })
-export class CreateEventComponent implements OnInit {
+export class CreateEventComponent implements OnInit, AfterViewInit {
   eventForm: FormGroup;
   selectedCategory: string = '';
   imagePreviews: string[] = [];
+  allCategories: Categoria[] = [];  // Store all categories here
 
-  constructor(private eventService: EventService) {
-    // Initialize the form here to avoid potential issues
+  @ViewChild(CategorieFiltroComponent) categorieFiltroComponent: CategorieFiltroComponent | undefined;
+
+  constructor(
+    private eventService: EventService,
+    private categoryService: CategoryService
+  ) {
     this.eventForm = new FormGroup({
       title: new FormControl('', [Validators.required, Validators.maxLength(20)]),
       date: new FormControl('', Validators.required),
@@ -40,6 +48,16 @@ export class CreateEventComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  ngAfterViewInit() {
+    // Ensure categories are loaded after child component is available
+    if (this.categorieFiltroComponent) {
+      this.categoryService.findAll().subscribe(categories => {
+        this.allCategories = categories;
+        // Optional: Handle any additional logic after categories are loaded
+      });
+    }
+  }
+
   addCategory() {
     const selectedCategories: string[] = this.eventForm.get('selectedCategories')?.value || [];
     if (this.selectedCategory && !selectedCategories.includes(this.selectedCategory)) {
@@ -54,9 +72,8 @@ export class CreateEventComponent implements OnInit {
   }
 
   availableCategories() {
-    const allCategories = ['musica', 'sport', 'arte', 'tecnologia', 'cultura'];
     const selectedCategories = this.eventForm.get('selectedCategories')?.value || [];
-    return allCategories.filter(cat => !selectedCategories.includes(cat));
+    return this.allCategories.filter(cat => !selectedCategories.includes(cat.id));
   }
 
   onImageUpload(event: Event) {
