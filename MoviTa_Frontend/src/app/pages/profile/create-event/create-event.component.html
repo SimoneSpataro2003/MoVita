@@ -94,72 +94,37 @@
           </div>
         </div>
 
-        <!-- Partecipanti e Età minima -->
-        <div class="col-md-6">
-          <label for="maxParticipants" class="form-label">Numero massimo di partecipanti</label>
-          <input
-            type="number"
-            class="form-control form-control-lg"
-            id="maxParticipants"
-            formControlName="maxParticipants"
-            [ngClass]="{'is-invalid': eventForm.get('maxParticipants')?.invalid && eventForm.get('maxParticipants')?.touched}"
-          >
-          <div *ngIf="eventForm.get('maxParticipants')?.invalid && eventForm.get('maxParticipants')?.touched" class="invalid-feedback">
-            Il numero massimo di partecipanti è obbligatorio.
-          </div>
-        </div>
-        <div class="col-md-6">
-          <label for="minAge" class="form-label">Età minima</label>
-          <input
-            type="number"
-            class="form-control form-control-lg"
-            id="minAge"
-            formControlName="minAge"
-            [ngClass]="{'is-invalid': eventForm.get('minAge')?.invalid && eventForm.get('minAge')?.touched}"
-          >
-          <div *ngIf="eventForm.get('minAge')?.invalid && eventForm.get('minAge')?.touched" class="invalid-feedback">
-            L'età minima è obbligatoria.
-          </div>
-        </div>
-
-        <!-- Descrizione -->
-        <div class="col-12">
-          <label for="description" class="form-label">Descrizione</label>
-          <textarea
-            class="form-control form-control-lg"
-            id="description"
-            formControlName="description"
-            rows="4"
-            [ngClass]="{'is-invalid': eventForm.get('description')?.invalid && eventForm.get('description')?.touched}"
-          ></textarea>
-          <div *ngIf="eventForm.get('description')?.invalid && eventForm.get('description')?.touched" class="invalid-feedback">
-            La descrizione è obbligatoria.
-          </div>
-        </div>
-
         <!-- Selezione Categorie -->
         <div class="col-md-12">
-          <h5>Categorie selezionate:</h5>
-          <ul class="list-group">
-            <li *ngFor="let category of selectedCategories" class="list-group-item d-flex justify-content-between align-items-center">
-              {{ category }}
-              <button type="button" class="btn btn-sm btn-danger" (click)="removeCategory(category)">×</button>
-            </li>
-          </ul>
+          <label for="category" class="form-label">Categorie</label>
+          <select
+            id="category"
+            class="form-select"
+            formControlName="selectedCategory"
+            (change)="addCategory()"
+          >
+            <option value="">-- Seleziona una categoria --</option>
+            <option *ngFor="let cat of availableCategories()" [value]="cat.nome">{{ cat.nome }}</option>
+          </select>
         </div>
 
-        <div class="col-md-12 d-flex align-items-center">
-          <div class="me-3 flex-grow-1">
-            <select class="form-select form-select-lg" formControlName="selectedCategory">
-              <option selected disabled value="">Scegli una categoria</option>
-              <option *ngFor="let cat of availableCategories()" [value]="cat.nome">{{ cat.nome }}</option>
-            </select>
+        <!-- Categorie Selezionate -->
+        <div class="col-md-12">
+          <div class="mt-2">
+            <h5>Categorie selezionate:</h5>
+            <ul class="list-group">
+              <li class="list-group-item" *ngFor="let category of selectedCategories">
+                {{ category }}
+                <button type="button" class="btn btn-sm btn-danger float-end" (click)="removeCategory(category)">
+                  Rimuovi
+                </button>
+              </li>
+            </ul>
           </div>
-          <button type="button" class="btn btn-lg btn-primary" (click)="addCategory()">Aggiungi categoria</button>
         </div>
 
-        <div class="col-md-12 text-center mt-3">
-          <button type="submit" class="btn btn-lg btn-success">Crea Evento</button>
+        <div class="col-12 mt-3">
+          <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="!eventForm.valid">Crea Evento</button>
         </div>
       </form>
     </div>

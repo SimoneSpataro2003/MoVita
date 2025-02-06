@@ -53,8 +53,8 @@ export class CreateEventComponent implements OnInit {
 
   ngOnInit(): void {
     this.categoryService.findAll().subscribe(categories => {
+      console.log('Categorie ricevute:', categories);
       this.allCategories = categories;
-      console.log(this.allCategories);
     });
   }
 
@@ -77,6 +77,7 @@ export class CreateEventComponent implements OnInit {
   }
 
   availableCategories() {
+    console.log('Categorie disponibili:', this.allCategories);
     return this.allCategories.filter(cat => !this.selectedCategories.includes(cat.nome));
   }
 
@@ -156,7 +157,6 @@ export class CreateEventComponent implements OnInit {
       console.log('Modulo non valido!');
     }
   }
-
 
   removeImage(index: number) {
     const currentImages = this.eventForm.get('images')?.value as File[];
