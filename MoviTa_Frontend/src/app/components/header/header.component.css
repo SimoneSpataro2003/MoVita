@@ -1,29 +1,29 @@
-.h-input{
-  border-style: none;
-  border-bottom: 2px solid white; /* Aggiunge solo la linea sotto */
-  border-radius: 0; /* Rimuove gli angoli arrotondati */
-  outline: none; /* Rimuove l'effetto di focus predefinito */
-  box-shadow: none; /* Rimuove eventuali ombreggiature */
-  background: transparent; /* Rende lo sfondo trasparente */
-  padding-left: 0; /* Rimuove il padding laterale */
-  color: white;
-}
-.h-input::placeholder{
-  color: white;
-  opacity: 0.6;
+
+.left-button {
+  margin-right: -30px; /* Espande il bottone verso destra */
+  z-index: 0 !important; /* Assicura che il bottone di sinistra sia sopra */
+  padding-right: 40px !important;
 }
 
+.right-button {
+  z-index: 1 !important;
+}
+
+.logout:hover {
+  background-color: #ffc107;
+}
+.login:hover{
+  background-color: #2bd6c8;
+}
 
 .h-buttonoutline{
   border-style: none;
-  border-radius: 0; /* Rimuove gli angoli arrotondati */
   outline: none; /* Rimuove l'effetto di focus predefinito */
   box-shadow: none; /* Rimuove eventuali ombreggiature */
 }
 
 .h-button{
   border-style: none;
-  border-radius: 0; /* Rimuove gli angoli arrotondati */
   outline: none; /* Rimuove l'effetto di focus predefinito */
   color:white !important;
 }

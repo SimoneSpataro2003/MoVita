@@ -45,3 +45,7 @@
   width: 25px;
   height: 25px;
 }
+
+.contenuto-card{
+  text-overflow: ellipsis; /* Aggiunge i puntini di sospensione */
+}

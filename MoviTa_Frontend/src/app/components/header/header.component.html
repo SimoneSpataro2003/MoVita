@@ -7,15 +7,15 @@
           <a class="navbar-brand text-white" routerLink="/">MoVita</a>
         </div>
 
-        @if(logged){
-          <div class="col-6 text-end">
-            <button class="btn btn-outline-warning h-button" type="submit" (click)="openLogoutModal()">Logout</button>
-            <button class="btn btn-primary h-button outline" type="submit" (click)="goToMyProfile()">Vai al profilo</button>
+        @if(logged) {
+          <div class="col-6 text-end button-container">
+            <button class="btn btn-outline-warning h-button left-button logout" type="submit" (click)="openLogoutModal()">Logout</button>
+            <button class="btn btn-primary h-button right-button" type="submit" (click)="goToMyProfile()">Vai al profilo</button>
           </div>
-        }@else{
-          <div class="col-6 text-end">
-            <button class="btn btn-outline-success h-button" type="submit" routerLink="login">Login</button>
-            <button class="btn btn-primary h-button outline" type="submit" routerLink="register">Registrati</button>
+        } @else {
+          <div class="col-6 text-end button-container">
+            <button class="btn btn-outline-success h-button left-button login" type="submit" routerLink="login">Login</button>
+            <button class="btn btn-primary h-button right-button" type="submit" routerLink="register">Registrati</button>
           </div>
         }
       </div>

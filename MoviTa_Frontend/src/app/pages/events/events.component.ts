@@ -13,6 +13,7 @@ import {CookieService} from 'ngx-cookie-service';
 import {Utente} from '../../model/Utente';
 import {EventFiltersComponent} from './event-filters/event-filters.component';
 import {FormGroup} from '@angular/forms';
+import {ToastService} from '../../services/toast/toast.service';
 
 @Component({
   selector: 'app-events',
@@ -25,7 +26,7 @@ import {FormGroup} from '@angular/forms';
   templateUrl: './events.component.html',
   styleUrl: './events.component.css'
 })
-export class EventsComponent implements OnInit, Loadable{
+export class EventsComponent implements AfterViewInit, Loadable{
   loaded: boolean = false;
   eventi: Evento[] = [];
   utente !: Utente;
@@ -39,9 +40,10 @@ export class EventsComponent implements OnInit, Loadable{
   constructor(private eventService: EventService,
               private cookieService: CookieService,
               private modalService: NgbModal,
-              private offcanvasService: NgbOffcanvas){}
+              private offcanvasService: NgbOffcanvas,
+              private toastService: ToastService){}
 
-  ngOnInit(): void {
+  ngAfterViewInit() {
     this.showAllEvents();
 
     this.utente = JSON.parse(this.cookieService.get('utente'));
@@ -52,12 +54,10 @@ export class EventsComponent implements OnInit, Loadable{
     this.eventService.getAllEvents().subscribe({
       next: (eventi: Evento[]) =>{
         this.eventi = eventi;
-        console.log(eventi);
         this.loaded = true;
       },
       error:(err) =>{
-        //TODO: mostra errore con una finestra popup!
-        console.log(err)
+        this.toastService.show('errorToast', 'Errore', 'Errore nel reperire le informazioni.\n Prova a ricaricaricare la pagina.');
       }
     })
   }

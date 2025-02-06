@@ -1,6 +1,7 @@
 import { Component, Input} from '@angular/core';
 import { Evento } from '../../../model/Evento';
 import { EventService } from '../../../services/event/event.service';
+import {ToastService} from '../../../services/toast/toast.service';
 @Component({
   selector: 'app-carousel-event-image',
   standalone: true,
@@ -16,49 +17,46 @@ export class CarouselEventImageComponent {
   immagineVisibile = 0;   //quale i-esima immagine di immaginiEvento viene visualizza in primo piano nel carousel
   nomiImmaginiCaricate: string[]= [];
 
-  constructor(private eventService: EventService){}
+  constructor(private eventService: EventService,
+              private toastService: ToastService){}
 
   ngOnInit():void{
 
   }
 
-  caricaNomiImmaginiEvento(evento:Evento):void{    
+  caricaNomiImmaginiEvento(evento:Evento):void{
     this.evento = evento;
-  
-    if(this.evento !== undefined && this.evento !== null){      
+
+    if(this.evento !== undefined && this.evento !== null){
       this.eventService.getImagesNames(this.evento.id).subscribe(
         {
           next: (data) => {
             this.evento!.immagini = data;
-            for(let i of this.evento?.immagini!) 
+            for(let i of this.evento?.immagini!)
             {
               this.caricaSingolaImmagineEvento(i);
-            }           
-      
-           
+            }
           },
           error: (err) => {
-            console.error('Errore nel recupero nome immagine evento', err);
-            
+            this.toastService.show('errorToast', 'Errore', 'Errore nel reperire le informazioni richieste.\n Prova a ricaricaricare la pagina.');
           }
         }
       );
     }
-    
+
   }
 
-  caricaSingolaImmagineEvento(nomeImmagine:string):void{    
+  caricaSingolaImmagineEvento(nomeImmagine:string):void{
     if(this.evento !== undefined && this.evento !== null && this.nomiImmaginiCaricate.indexOf(nomeImmagine)){
       this.eventService.getImage(this.evento.id, nomeImmagine).subscribe(
         {
           next: (data) => {
             this.immaginiEvento.push(URL.createObjectURL(data));
-            this.nomiImmaginiCaricate.push(nomeImmagine);            
-           
+            this.nomiImmaginiCaricate.push(nomeImmagine);
+
           },
           error: (err) => {
-            console.error('Errore nel recupero SINGOLA immagine evento', err);
-            
+            this.toastService.show('errorToast', 'Errore', "Errore nel recupero dell'immagine.\n Prova a ricaricaricare la pagina.");
           }
         }
       );

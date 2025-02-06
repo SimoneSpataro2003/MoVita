@@ -7,8 +7,20 @@ $danger: #d6722b;
 
 @import "../node_modules/bootstrap/scss/bootstrap";
 
-.btn{
+.form-control{
+  border-radius: 30px;
+}
+
+.form-check-input{
   border-radius: 30px !important;
+}
+
+.form-select{
+  border-radius: 30px;
+}
+
+.btn{
+  border-radius: 30px;
 }
 
 .btn-primary{
