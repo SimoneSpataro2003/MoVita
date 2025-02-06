@@ -63,6 +63,11 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
+    public void insertCategoryToEvent(int eventId, String categoryName) {
+        DBManager.getInstance().getCategoryDAO().insertCategoryToEvent(eventId,categoryName);
+    }
+
+    @Override
     public void insertEventCategories(EventCategories eventCategories) {
         Event event = DBManager.getInstance().getEventDAO().findById(eventCategories.getEvento_id());
         List<Category> categories = new ArrayList<>();

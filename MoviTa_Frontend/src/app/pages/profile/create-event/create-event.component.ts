@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { NgIf, NgForOf } from '@angular/common';
+import { NgIf, NgForOf, NgClass } from '@angular/common';
 import { EventService } from '../../../services/event/event.service';
 import { RouterLink } from '@angular/router';
-import { CategorieFiltroComponent } from '../../events/categorie-filtro/categorie-filtro.component';  // Adjust the import based on your structure
 import { Categoria } from '../../../model/Categoria';
 import { CategoryService } from '../../../services/category/category.service';
+import { Utente } from '../../../model/Utente';
+import { CookieService } from 'ngx-cookie-service';
+import { Evento } from '../../../model/Evento';
 
 @Component({
   selector: 'app-event-form',
@@ -16,22 +18,24 @@ import { CategoryService } from '../../../services/category/category.service';
     NgIf,
     NgForOf,
     FormsModule,
-    RouterLink
+    NgClass,
   ],
   styleUrls: ['./create-event.component.css']
 })
-export class CreateEventComponent implements OnInit, AfterViewInit {
+export class CreateEventComponent implements OnInit {
   eventForm: FormGroup;
-  selectedCategory: string = '';
   imagePreviews: string[] = [];
-  allCategories: Categoria[] = [];  // Store all categories here
-
-  @ViewChild(CategorieFiltroComponent) categorieFiltroComponent: CategorieFiltroComponent | undefined;
+  allCategories: Categoria[] = [];
+  private currentUserId: number;
 
   constructor(
     private eventService: EventService,
-    private categoryService: CategoryService
+    private categoryService: CategoryService,
+    private cookieService: CookieService,
   ) {
+    let utente: Utente = JSON.parse(this.cookieService.get('utente'));
+    this.currentUserId = utente.id;
+
     this.eventForm = new FormGroup({
       title: new FormControl('', [Validators.required, Validators.maxLength(20)]),
       date: new FormControl('', Validators.required),
@@ -41,96 +45,124 @@ export class CreateEventComponent implements OnInit, AfterViewInit {
       maxParticipants: new FormControl(0, Validators.required),
       minAge: new FormControl(0, Validators.required),
       description: new FormControl('', Validators.required),
+      selectedCategory: new FormControl(''),
       selectedCategories: new FormControl<string[]>([]),
       images: new FormControl<File[]>([])
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.categoryService.findAll().subscribe(categories => {
+      this.allCategories = categories;
+      console.log(this.allCategories);
+    });
+  }
 
-  ngAfterViewInit() {
-    // Ensure categories are loaded after child component is available
-    if (this.categorieFiltroComponent) {
-      this.categoryService.findAll().subscribe(categories => {
-        this.allCategories = categories;
-        // Optional: Handle any additional logic after categories are loaded
-      });
-    }
+  // Getter per accedere facilmente a selectedCategories
+  get selectedCategories(): string[] {
+    return this.eventForm.get('selectedCategories')?.value || [];
   }
 
   addCategory() {
-    const selectedCategories: string[] = this.eventForm.get('selectedCategories')?.value || [];
-    if (this.selectedCategory && !selectedCategories.includes(this.selectedCategory)) {
-      this.eventForm.get('selectedCategories')!.setValue([...selectedCategories, this.selectedCategory]);
-      this.selectedCategory = '';
+    const category = this.eventForm.get('selectedCategory')?.value;
+    if (category && !this.selectedCategories.includes(category)) {
+      this.eventForm.get('selectedCategories')?.setValue([...this.selectedCategories, category]);
+      this.eventForm.get('selectedCategory')?.setValue(''); // Reset selected category
     }
   }
 
   removeCategory(category: string) {
-    const selectedCategories: string[] = this.eventForm.get('selectedCategories')?.value || [];
-    this.eventForm.get('selectedCategories')!.setValue(selectedCategories.filter(cat => cat !== category));
+    const updatedCategories = this.selectedCategories.filter(cat => cat !== category);
+    this.eventForm.get('selectedCategories')?.setValue(updatedCategories);
   }
 
   availableCategories() {
-    const selectedCategories = this.eventForm.get('selectedCategories')?.value || [];
-    return this.allCategories.filter(cat => !selectedCategories.includes(cat.id));
+    return this.allCategories.filter(cat => !this.selectedCategories.includes(cat.nome));
   }
 
   onImageUpload(event: Event) {
     const input = event.target as HTMLInputElement;
-    if (input.files) {
-      const files: File[] = Array.from(input.files);
-      this.eventForm.get('images')!.setValue(files);
+    if (input.files && input.files.length > 0) {
+      const files = Array.from(input.files);
+      const currentImages = this.eventForm.get('images')?.value || [];
+      const updatedImages = [...currentImages, ...files];
 
-      this.imagePreviews = [];
-      files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (e: ProgressEvent<FileReader>) => {
-          if (e.target?.result) {
-            this.imagePreviews.push(e.target.result as string);
-          }
-        };
-        reader.readAsDataURL(file);
-      });
+      this.eventForm.get('images')?.setValue(updatedImages);
+      this.imagePreviews = updatedImages.map(file => URL.createObjectURL(file));
     }
   }
 
   createEvent() {
     if (this.eventForm.valid) {
-      console.log('Evento creato:', this.eventForm.value);
-
-      const body = {
-        title: this.eventForm.value.title,
-        date: this.eventForm.value.date,
-        price: this.eventForm.value.price,
-        city: this.eventForm.value.city,
-        address: this.eventForm.value.address,
-        maxParticipants: this.eventForm.value.maxParticipants,
-        minAge: this.eventForm.value.minAge,
-        description: this.eventForm.value.description,
-      };
-
-      this.eventService.creaEvento(body).subscribe({
-        next: (response: any) => {
-          console.log(response);
-        },
-        error: (err: any) => {
-          console.error('Error creating event:', err);
+      const formData = new FormData();
+      Object.keys(this.eventForm.controls).forEach(key => {
+        const control = this.eventForm.get(key);
+        if (control) {
+          if (key === 'images') {
+            const files = control.value as File[];
+            if (files) {
+              files.forEach((file) => {
+                formData.append('images', file, file.name);
+              });
+            }
+          } else if (key === 'selectedCategories') {
+            formData.append(key, JSON.stringify(control.value));
+          } else {
+            formData.append(key, control.value);
+          }
         }
       });
 
-      this.imagePreviews = this.eventForm.value.images;
-      this.selectedCategory = this.eventForm.value.selectedCategories;
+      formData.append('creatorId', this.currentUserId.toString());
+
+      this.eventService.creaEvento(formData).subscribe({
+        next: (response: Evento) => {
+          console.log('Evento creato con successo:', response);
+          const evento_id = response.id;
+
+          // Insert all selected categories into the event
+          const selectedCategories = this.selectedCategories;
+          selectedCategories.forEach(category => {
+            this.eventService.insertCategoryToEvent(evento_id, category).subscribe({
+              next: (res) => {
+                console.log(`Categoria ${category} aggiunta con successo all'evento.`);
+              },
+              error: (err) => {
+                console.error(`Errore durante l'inserimento della categoria ${category}:`, err);
+              }
+            });
+          });
+
+          const images = this.eventForm.get('images')?.value as File[];
+          if (images.length > 0) {
+            const imageUploadRequests = images.map((image) =>
+              this.eventService.setEventImage(evento_id, image)
+            );
+
+            Promise.all(imageUploadRequests).then(() => {
+              console.log('Tutte le immagini caricate con successo');
+              this.eventForm.reset();
+              this.imagePreviews = [];
+            }).catch((error) => {
+              console.error('Errore durante il caricamento delle immagini:', error);
+            });
+          }
+        },
+        error: (error) => {
+          console.error('Errore durante la creazione dell\'evento:', error);
+        }
+      });
+    } else {
+      console.log('Modulo non valido!');
     }
   }
 
-  removeImage(i: number) {
-    // Remove the image at index 'i' from imagePreviews
-    this.imagePreviews.splice(i, 1);
 
-    // Update the images form control to remove the corresponding file as well
-    const updatedImages = [...this.eventForm.value.images];
-    updatedImages.splice(i, 1);
-    this.eventForm.get('images')!.setValue(updatedImages);
+  removeImage(index: number) {
+    const currentImages = this.eventForm.get('images')?.value as File[];
+    currentImages.splice(index, 1);
+    this.eventForm.get('images')?.setValue(currentImages);
+
+    this.imagePreviews = currentImages.map(file => URL.createObjectURL(file));
   }
 }
