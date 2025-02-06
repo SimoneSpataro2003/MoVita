@@ -1,1 +1,18 @@
+.password-toggle {
+  position: absolute;
+  top: 72%;
+  right: 10px;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  cursor: pointer;
+}
 
+.password-toggle i {
+  font-size: 1.2rem;
+  color: #6c757d;
+}
+
+.password-toggle:hover i {
+  color: #343a40;
+}
