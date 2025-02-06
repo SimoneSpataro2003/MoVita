@@ -54,7 +54,7 @@ public class UserDaoJDBC implements UserDao {
         String query = "INSERT INTO utente " +
                 "(username, email,password,nome,citta,azienda,azienda_p_iva,azienda_indirizzo,azienda_recapito,premium,admin,mostra_consigli_eventi)" +
                 "VALUES " +
-                "(?,?,?,?,?,?,?,?,?,?,?)";
+                "(?,?,?,?,?,?,?,?,?,?,?,?)";
 
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ps.setString(1, user.getUsername());

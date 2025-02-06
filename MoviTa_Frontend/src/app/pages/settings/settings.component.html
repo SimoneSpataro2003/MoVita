@@ -1,37 +1,43 @@
-@if (!loaded) {
-  <div class="mb-3">
-    <label class="form-label">Caricamento</label>
-  </div>
-} @else {
-  <div class="container">
-    <h2>Impostazioni Profilo</h2>
-    <form (ngSubmit)="saveChanges()">
-      <div class="mb-3">
-        <label for="nome" class="form-label">Nome</label>
-        <input type="text" id="nome" class="form-control" [(ngModel)]="user.nome" name="nome">
-      </div>
+<div *ngIf="!loaded" class="mb-3">
+  <label class="form-label">Caricamento...</label>
+</div>
 
-      <div class="mb-3">
-        <label for="cognome" class="form-label">Cognome</label>
-        <input type="text" id="cognome" class="form-control" [(ngModel)]="user.personaCognome" name="cognome" *ngIf="!user.azienda">
-      </div>
+<div *ngIf="loaded" class="container py-4">
+  <h2 class="mb-4">Impostazioni Profilo</h2>
+  <form [formGroup]="applyForm" (ngSubmit)="user.azienda ? updateAgency() : updatePerson()" class="row g-3">
 
-      <div class="mb-3">
-        <label for="username" class="form-label">Username</label>
-        <input type="text" id="username" class="form-control" [(ngModel)]="user.username" name="username">
-      </div>
+    <div class="col-md-6">
+      <label for="nome" class="form-label">Nome</label>
+      <input type="text" id="nome" class="form-control" formControlName="nome" >
+    </div>
 
-      <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" id="email" class="form-control" [(ngModel)]="user.email" name="email">
-      </div>
+    <div class="col-md-6" *ngIf="!user.azienda">
+      <label for="personaCognome" class="form-label">Cognome</label>
+      <input type="text" id="personaCognome" class="form-control" formControlName="personaCognome">
+    </div>
 
-      <div class="mb-3">
-        <label for="citta" class="form-label">Città</label>
-        <input type="text" id="citta" class="form-control" [(ngModel)]="user.citta" name="citta">
-      </div>
+    <div class="col-md-6">
+      <label for="citta" class="form-label">Città</label>
+      <input type="text" id="citta" class="form-control" formControlName="citta">
+    </div>
 
+    <div class="col-md-6" *ngIf="user.azienda">
+      <label for="aziendaPartitaIva" class="form-label">Partita Iva</label>
+      <input type="text" id="aziendaPartitaIva" class="form-control" formControlName="aziendaPartitaIva">
+    </div>
+
+    <div class="col-md-6" *ngIf="user.azienda">
+      <label for="aziendaIndirizzo" class="form-label">Indirizzo</label>
+      <input type="text" id="aziendaIndirizzo" class="form-control" formControlName="aziendaIndirizzo">
+    </div>
+
+    <div class="col-md-6" *ngIf="user.azienda">
+      <label for="aziendaRecapito" class="form-label">Recapito</label>
+      <input type="text" id="aziendaRecapito" class="form-control" formControlName="aziendaRecapito">
+    </div>
+
+    <div class="col-12">
       <button type="submit" class="btn btn-primary">Salva modifiche</button>
-    </form>
-  </div>
-}
+    </div>
+  </form>
+</div>

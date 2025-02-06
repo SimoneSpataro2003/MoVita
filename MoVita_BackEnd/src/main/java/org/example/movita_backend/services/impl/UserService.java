@@ -69,5 +69,18 @@ public class UserService implements IUserService{
         return userDao.checkFriendship(userId1, userId2);
     }
 
+    @Override
+    public User updatePerson(User user) {
+        return userDao.updatePerson(user);
+    }
 
+    @Override
+    public User updateAgency(User user) {
+        return userDao.updateAgency(user);
+    }
+
+    @Override
+    public User updateUserPassword(int userId, String password) {
+        return userDao.updatePassword(userId, password);
+    }
 }
