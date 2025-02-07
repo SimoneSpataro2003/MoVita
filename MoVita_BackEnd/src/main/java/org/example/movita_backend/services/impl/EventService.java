@@ -86,10 +86,10 @@ class EventService implements IEventService {
 
 
     // Create event method
-    public Event createEvent(EventRequest eventRequest) {
+    public Event createEvent(Event event) {
 
         // Save event to the database (through EventDao)
-        int id = eventDao.save(registerEvent(eventRequest));
+        int id = eventDao.save(event);
 
         // Fetch the saved event by ID (assuming the method returns an Event object)
         return eventDao.findById(id);

@@ -161,7 +161,7 @@ public class EventController {
     }
 
     @PostMapping("/create-event")
-    ResponseEntity<Event> postCreateNewEvent(@Valid @RequestBody EventRequest event) throws Exception {
+    ResponseEntity<Event> postCreateNewEvent(@RequestBody Event event) throws Exception {
         try{
             return  ResponseEntity.ok(
                     this.eventService.createEvent(event)

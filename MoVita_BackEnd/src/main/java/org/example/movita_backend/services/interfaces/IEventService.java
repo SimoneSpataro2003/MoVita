@@ -16,7 +16,7 @@ public interface IEventService {
     List<Booking> findPrenotazioni(int id_evento);
     List<Review> findRecensioni(int id_evento);
     String findDescrizione(int id_evento);
-    Event createEvent(EventRequest event) throws Exception;
+    Event createEvent(Event event) throws Exception;
     Event updateEvent(Event event) throws Exception;
     void deleteEvent(int eventId);
 
