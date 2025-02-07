@@ -177,11 +177,11 @@ export class DetailsComponent {
 
     let utenteId = JSON.parse(this.cookieService.get('utente')).id;
     console.log("Utente LOGGATO")
-    console.log(utenteId);	
+    console.log(utenteId);
     if(this.evento!== null){
-      
+
       const dataOggi: string = new Date().toISOString().split('T')[0];
-      
+
       let partecipazione: PartecipazioneDTO ={
         evento: this.evento.id,
         utente:utenteId,
@@ -193,16 +193,16 @@ export class DetailsComponent {
         {
           next: (data) => {
             this.prenotato = false;
-            console.log("Prenotazione effettuata con successo");
+            this.toastService.show('successToast', 'Prenotazione cancellata', "Prenotazione all'evento cancellata con successo.");
           },
           error: (err) => {
-            console.log("Errore nell'effetuare prenotazione", err);
+            this.toastService.show('errorToast', 'Errore', "Errore nella cancellazione della prenotazione. \n Prova a ricaricare la pagina.");
           }
         }
-        
+
       );
-    } 
-    
+    }
+
 
   }
 
