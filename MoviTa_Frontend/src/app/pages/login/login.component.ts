@@ -58,7 +58,6 @@ export class LoginComponent implements OnInit {
       },
       error: (err) =>{
         this.applyForm.reset();
-        //this.loginError = true;
         console.log(err.error.error);
         this.toastService.show('errorToast', 'Errore', err.error.error);
       }
