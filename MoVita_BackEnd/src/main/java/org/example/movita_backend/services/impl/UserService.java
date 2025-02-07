@@ -75,13 +75,13 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public User updatePerson(User user) {
-        return userDao.updatePerson(user);
+    public User updatePerson(int userId, User user) {
+        return userDao.updatePerson(userId, user);
     }
 
     @Override
-    public User updateAgency(User user) {
-        return userDao.updateAgency(user);
+    public User updateAgency(int userId, User user) {
+        return userDao.updateAgency(userId, user);
     }
 
     @Override

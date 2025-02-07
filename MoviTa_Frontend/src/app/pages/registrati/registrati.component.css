@@ -1,0 +1,8 @@
+.bi-arrow-left {
+  color: #bbb; /* Colore chiaro di default */
+  transition: color 0.3s ease; /* Transizione fluida per il cambio di colore */
+}
+
+.bi-arrow-left:hover {
+  color: #444; /* Colore scuro al passaggio del mouse */
+}

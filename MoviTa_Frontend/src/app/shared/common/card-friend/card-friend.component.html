@@ -1,12 +1,13 @@
 @if(isLoaded())
 {
-  <div class="card text-center">
+  <div class="card rounded-4 text-center">
     <img
       [routerLink]="['/profile', utenteAmico.id]"
       [src]="imagineProfile"
       alt="Card image"
-      class="img-fluid rounded-circle mx-auto d-block"
+      class="rounded-circle mx-4 mt-4 mb-0 d-block object-fit-cover"
       width="150"
+      height="150"
     >
     <div class="card-body">
       <h5> {{utenteAmico.username}}</h5>

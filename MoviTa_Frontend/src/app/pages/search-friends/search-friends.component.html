@@ -1,6 +1,8 @@
 @if(isLoaded())
 {
   <div class="container-fluid mt-4">
+    <h1 class="text-primary text-center">Cerca altri utenti</h1>
+    <p class="text-secondary text-center">Trova nuovi amici!</p>
     <div class="row justify-content-center">
       <div class="col-md-6 col-sm-10">
         <div class="input-group mb-3 shadow-sm">
@@ -21,13 +23,17 @@
       </div>
     </div>
 
-    <div class="row justify-content-center mt-3">
+    <div class="row justify-content-center my-4">
       <div class="col-lg-8 col-md-10 col-sm-12">
         <div class="d-flex flex-wrap justify-content-center gap-3">
-          @for (user of users; track user.id) {
-            <div class="p-2">
-              <app-card-friend [userId]="user.id" [utenteAmico]="user" class="h-100 shadow-sm"></app-card-friend>
-            </div>
+          @if(users.length >0 ){
+            @for (user of users; track user.id) {
+              <div class="p-2">
+                <app-card-friend [userId]="user.id" [utenteAmico]="user" class="h-100 shadow-sm"></app-card-friend>
+              </div>
+            }
+          } @else {
+            <h3 class="my-4 text-center text-danger">Nessun utente trovato. Prova a digitare qualcos'altro!</h3>
           }
         </div>
       </div>

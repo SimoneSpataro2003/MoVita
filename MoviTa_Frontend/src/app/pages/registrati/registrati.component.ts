@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { AbstractControl, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import {AuthService} from '../../services/auth/auth.service';
 
@@ -18,7 +18,7 @@ export const passwordMatchValidator: ValidatorFn = (control: AbstractControl): V
 @Component({
   selector: 'app-registrati',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './registrati.component.html',
   styleUrl: './registrati.component.css'
 })
@@ -26,7 +26,6 @@ export class RegistratiComponent {
   router = inject(Router);
   tipo: number = 0;
   submitted: boolean = false;
-  showAlert: boolean = false;
 
   personForm = new FormGroup({
     nome: new FormControl('', [Validators.required, Validators.pattern(/[A-Z][a-z]+/)]),
@@ -50,11 +49,17 @@ export class RegistratiComponent {
     aziendaPartitaIva: new FormControl('', [Validators.required, Validators.pattern(/[0-9]{11}/)])
   }, { validators: passwordMatchValidator });
 
+  resetForms() {
+    this.personForm.reset();
+    this.agencyForm.reset();
+    this.submitted = false;
+    this.tipo = 0;
+  }
+
   constructor(private authService: AuthService) {}
 
   registerUser() {
     this.submitted = true;
-    this.showAlert = this.personForm.get('password')?.invalid || false;
     if (this.personForm.invalid || this.personForm.hasError('passwordMismatch')) {
       return;
     }
@@ -70,7 +75,6 @@ export class RegistratiComponent {
       next: (response: any) => {
         this.goLogin();
         console.log(response);
-        //this.registerError = false;
       },
       error: (any) => {
         console.log("errore nella registrazione dell'utente");
@@ -80,7 +84,6 @@ export class RegistratiComponent {
 
   registerAgency() {
     this.submitted = true;
-    this.showAlert = this.agencyForm.get('password')?.invalid || false;
     if (this.agencyForm.invalid || this.agencyForm.hasError('passwordMismatch')) {
       return;
     }
@@ -98,7 +101,6 @@ export class RegistratiComponent {
       next: (response: any) => {
         this.goLogin();
         console.log(response);
-        //this.registerError = false;
       },
       error: (any) => {
         console.log("errore nella registrazione dell'agenzia");

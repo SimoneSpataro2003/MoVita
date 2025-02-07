@@ -56,11 +56,11 @@ export class UserService {
   }
 
   public updatePerson(id: number, userData: any): Observable<Utente> {
-    return this.authHttp.put(`${this.apiUrl}/${id}`, userData);
+    return this.authHttp.patch(`${this.apiUrl}/update-person/${id}`, userData);
   }
 
-  public updateAgency(id: number, userData: any): Observable<any> {
-    return this.authHttp.put(`${this.apiUrl}/${id}`, userData);
+  public updateAgency(id: number, userData: any): Observable<Utente> {
+    return this.authHttp.patch(`${this.apiUrl}/update-agency/${id}`, userData);
   }
 
   public goPremium(id: number): Observable<any> {

@@ -17,7 +17,7 @@ public interface IUserService {
     List<User> getFriends(int userId);
     void updatePremiumStatus(int userId);
     boolean checkFriendship(int userId1, int userId2);
-    User updatePerson(User user);
-    User updateAgency(User user);
+    User updatePerson(int userId, User user);
+    User updateAgency(int userId, User user);
     User updateUserPassword(int userId, String password);
 }
