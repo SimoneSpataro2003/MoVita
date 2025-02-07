@@ -12,6 +12,7 @@ public class EventRequest {
     private String address;
     private int maxParticipants;
     private int minAge;
+    private int creator;
 
     // Default constructor
     public EventRequest() {}

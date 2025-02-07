@@ -1,11 +1,11 @@
-import {Component, inject, OnInit} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {AuthService} from '../../services/auth/auth.service';
-import {CookieService} from 'ngx-cookie-service';
-import {UserService} from '../../services/user/user.service';
-import {Utente} from '../../model/Utente';
+import { Router, RouterLink } from '@angular/router';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../services/auth/auth.service';
+import { CookieService } from 'ngx-cookie-service';
+import { UserService } from '../../services/user/user.service';
+import { Utente } from '../../model/Utente';
 import {ToastService} from '../../services/toast/toast.service';
 
 declare var google: any;
@@ -13,32 +13,37 @@ declare var google: any;
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit {
   router = inject(Router);
   errorMessage: string = '';
-  showPassword: boolean = false; // Aggiungi questa variabile
+  showPassword: boolean = false;
 
   applyForm = new FormGroup({
     username: new FormControl('', { validators: [Validators.required] }),
     password: new FormControl('', { validators: [Validators.required] })
   });
 
-  constructor(private authService: AuthService,
-              private cookieService: CookieService,
-              private userService: UserService,
-              private toastService: ToastService){}
+  constructor(
+    private authService: AuthService,
+    private cookieService: CookieService,
+    private userService: UserService,
+    private toastService: ToastService
+  ) {}
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
 
+  clearError() {
+    this.errorMessage = '';
+  }
+
   login() {
-    this.errorMessage = ''; // Resetta il messaggio di errore
+    this.clearError();
     const body = {
       username: this.applyForm.value.username,
       password: this.applyForm.value.password
@@ -88,13 +93,13 @@ export class LoginComponent implements OnInit{
       error:(err:any)=>{
         this.toastService.show('errorToast', 'Errore', 'Nessun utente è registrato con questo profilo Google.');
       }
-    })
+    });
   }
 
-  getUserByUsername(){
+  getUserByUsername() {
     console.log(this.applyForm.value.username);
-    this.userService.getUserByUsername(this.applyForm.value.username||'').subscribe({
-      next: (utente: Utente) =>{
+    this.userService.getUserByUsername(this.applyForm.value.username || '').subscribe({
+      next: (utente: Utente) => {
         console.log(utente);
         this.cookieService.set('utente', JSON.stringify(utente));
         const a = JSON.parse(this.cookieService.get('utente'));

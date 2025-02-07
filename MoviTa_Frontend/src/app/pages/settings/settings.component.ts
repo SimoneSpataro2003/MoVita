@@ -19,13 +19,16 @@ export class SettingsComponent implements OnInit, Loadable {
   userId!: number;
   user!: Utente;
   loaded: boolean = false;
+  submitted: boolean = false;
 
-  applyForm = new FormGroup({
+  personForm = new FormGroup({
     nome: new FormControl('', [Validators.required, Validators.pattern(/[A-Z][a-z]+/)]),
     personaCognome: new FormControl('', [Validators.required, Validators.pattern(/[A-Z][a-z]+/)]),
-    //username: new FormControl('', [Validators.required, Validators.pattern(/[a-zA-Z0-9]+/)]),
-    //email: new FormControl('', [Validators.required, Validators.pattern(/(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)])/)]),
-    //password: new FormControl('', [Validators.required, Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]),
+    citta: new FormControl('', [Validators.required, Validators.pattern(/[a-zA-Z ]+/)])
+  });
+
+  agencyForm = new FormGroup({
+    nome: new FormControl('', [Validators.required, Validators.pattern(/[A-Z][a-z]+/)]),
     citta: new FormControl('', [Validators.required, Validators.pattern(/[a-zA-Z ]+/)]),
     aziendaIndirizzo: new FormControl('', [Validators.required, Validators.pattern(/[a-zA-z0-9 ]+/)]),
     aziendaRecapito: new FormControl('', [Validators.required, Validators.pattern(/[0-9]{10}/)]),
@@ -48,52 +51,66 @@ export class SettingsComponent implements OnInit, Loadable {
           this.user = data;
           this.loaded = true;
 
-          // Popoliamo il form con i dati dell'utente
-          this.applyForm.patchValue({
-            nome: this.user.nome,
-            personaCognome: this.user.personaCognome,  // Evitiamo errori con `undefined`
-            //username: this.user.username,
-            //email: this.user.email,
-            citta: this.user.citta,
-            aziendaIndirizzo: this.user.aziendaIndirizzo,
-            aziendaRecapito: this.user.aziendaRecapito,
-            aziendaPartitaIva: this.user.aziendaPartitaIva
-          });
+          if(!this.user.azienda) {
+            this.personForm.patchValue({
+              nome: this.user.nome,
+              personaCognome: this.user.personaCognome,
+              citta: this.user.citta
+            });
+          } else {
+            this.agencyForm.patchValue({
+              nome: this.user.nome,
+              citta: this.user.citta,
+              aziendaIndirizzo: this.user.aziendaIndirizzo,
+              aziendaRecapito: this.user.aziendaRecapito,
+              aziendaPartitaIva: this.user.aziendaPartitaIva
+            });
+          }
+
         },
         (error) => {
           this.toastService.show('errorToast',"Errore", "Impossibile Caricare l'utente. \n Prova a ricaricare la pagina.");
         }
       );
     } else {
-      // TODO: errore ID utente non valido
+      //errore
     }
   }
 
   updatePerson() {
+    this.submitted = true;
+    if (this.personForm.invalid) {
+      return;
+    }
+    console.log("avanti");
     const body = {
-      nome: this.applyForm.value.nome,
-      personaCognome: this.applyForm.value.personaCognome,
-      citta: this.applyForm.value.citta
+      nome: this.personForm.value.nome,
+      personaCognome: this.personForm.value.personaCognome,
+      citta: this.personForm.value.citta
     };
-    this.userService.updatePerson(this.userId, body).subscribe(
-      (data) => {
+    this.userService.updatePerson(this.userId, body).subscribe({
+      next: (data: any) => {
         this.user = data;
         this.goProfile();
         this.toastService.show('successToast',"Modifica effettuata", "Il profilo è stato modificato con successo.");
       },
-      (error) => {
+      error: (any) => {
         this.toastService.show('errorToast',"Errore", "Impossibile aggiornare il profilo. Prova a ricaricare la pagina.");
       }
-    );
+    });
   }
 
   updateAgency() {
+    this.submitted = true;
+    if (this.agencyForm.invalid) {
+      return;
+    }
     const body = {
-      nome: this.applyForm.value.nome,
-      citta: this.applyForm.value.citta,
-      aziendaPartitaIva: this.applyForm.value.aziendaPartitaIva,
-      aziendaIndirizzo: this.applyForm.value.aziendaIndirizzo,
-      aziendaRecapito: this.applyForm.value.aziendaRecapito
+      nome: this.agencyForm.value.nome,
+      citta: this.agencyForm.value.citta,
+      aziendaPartitaIva: this.agencyForm.value.aziendaPartitaIva,
+      aziendaIndirizzo: this.agencyForm.value.aziendaIndirizzo,
+      aziendaRecapito: this.agencyForm.value.aziendaRecapito
     };
     this.userService.updateAgency(this.userId, body).subscribe(
       (data) => {
@@ -108,7 +125,7 @@ export class SettingsComponent implements OnInit, Loadable {
   }
 
   goProfile() {
-    this.router.navigate(['/profile']);
+    this.router.navigate(['/profile/', this.userId]);
   }
 
   isLoaded(): boolean {

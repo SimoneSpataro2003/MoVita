@@ -22,4 +22,6 @@ public interface ICategoryService {
     public void insertUserCategories(UserCategories userCategories);
 
     public void insertEventCategories(EventCategories eventCategories);
+
+    public void insertCategoryToEvent(int eventId, String categoryName);
 }

@@ -1,43 +1,89 @@
-<div *ngIf="!loaded" class="mb-3">
-  <label class="form-label">Caricamento...</label>
-</div>
+@if (!isLoaded()) {
+  <div class="mb-3">
+    <label class="form-label">Caricamento...</label>
+  </div>
+} @else {
+  <div class="container py-4">
+    <h2 class="mb-4">Impostazioni Profilo</h2>
 
-<div *ngIf="loaded" class="container py-4">
-  <h2 class="mb-4">Impostazioni Profilo</h2>
-  <form [formGroup]="applyForm" (ngSubmit)="user.azienda ? updateAgency() : updatePerson()" class="row g-3">
+    @if (!user.azienda) {
+      <form [formGroup]="personForm" (ngSubmit)="updatePerson()" class="row g-3" novalidate>
+        <div class="col-md-4">
+          <label for="personaNome" class="form-label">Nome</label>
+          <input type="text" id="personaNome" class="form-control" formControlName="nome" [ngClass]="{'is-invalid': submitted && personForm.get('nome')?.invalid}" (input)="submitted = false">
+          <div class="invalid-feedback" *ngIf="submitted && personForm.get('nome')?.invalid">
+            Inserisci un nome valido.
+          </div>
+        </div>
 
-    <div class="col-md-6">
-      <label for="nome" class="form-label">Nome</label>
-      <input type="text" id="nome" class="form-control" formControlName="nome" >
-    </div>
+        <div class="col-md-4">
+          <label for="personaCognome" class="form-label">Cognome</label>
+          <input type="text" id="personaCognome" class="form-control" formControlName="personaCognome" [ngClass]="{'is-invalid': submitted && personForm.get('personaCognome')?.invalid}" (input)="submitted = false">
+          <div class="invalid-feedback" *ngIf="submitted && personForm.get('personaCognome')?.invalid">
+            Inserisci un cognome valido.
+          </div>
+        </div>
 
-    <div class="col-md-6" *ngIf="!user.azienda">
-      <label for="personaCognome" class="form-label">Cognome</label>
-      <input type="text" id="personaCognome" class="form-control" formControlName="personaCognome">
-    </div>
+        <div class="col-md-4">
+          <label for="personaCitta" class="form-label">Città</label>
+          <input type="text" id="personaCitta" class="form-control" formControlName="citta" [ngClass]="{'is-invalid': submitted && personForm.get('citta')?.invalid}" (input)="submitted = false">
+          <div class="invalid-feedback" *ngIf="submitted && personForm.get('citta')?.invalid">
+            Inserisci una città valida.
+          </div>
+        </div>
 
-    <div class="col-md-6">
-      <label for="citta" class="form-label">Città</label>
-      <input type="text" id="citta" class="form-control" formControlName="citta">
-    </div>
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Salva modifiche</button>
+        </div>
+      </form>
+    }
 
-    <div class="col-md-6" *ngIf="user.azienda">
-      <label for="aziendaPartitaIva" class="form-label">Partita Iva</label>
-      <input type="text" id="aziendaPartitaIva" class="form-control" formControlName="aziendaPartitaIva">
-    </div>
+    @if (user.azienda) {
+      <form [formGroup]="agencyForm" (ngSubmit)="updateAgency()" class="row g-3" novalidate>
+        <div class="col-md-4">
+          <label for="aziendaNome" class="form-label">Nome</label>
+          <input type="text" id="aziendaNome" class="form-control" formControlName="nome" [ngClass]="{'is-invalid': submitted && agencyForm.get('nome')?.invalid}" (input)="submitted = false">
+          <div class="invalid-feedback" *ngIf="submitted && agencyForm.get('nome')?.invalid">
+            Inserisci un nome valido.
+          </div>
+        </div>
 
-    <div class="col-md-6" *ngIf="user.azienda">
-      <label for="aziendaIndirizzo" class="form-label">Indirizzo</label>
-      <input type="text" id="aziendaIndirizzo" class="form-control" formControlName="aziendaIndirizzo">
-    </div>
+        <div class="col-md-4">
+          <label for="aziendaCitta" class="form-label">Città</label>
+          <input type="text" id="aziendaCitta" class="form-control" formControlName="citta" [ngClass]="{'is-invalid': submitted && agencyForm.get('citta')?.invalid}" (input)="submitted = false">
+          <div class="invalid-feedback" *ngIf="submitted && agencyForm.get('citta')?.invalid">
+            Inserisci una città valida.
+          </div>
+        </div>
 
-    <div class="col-md-6" *ngIf="user.azienda">
-      <label for="aziendaRecapito" class="form-label">Recapito</label>
-      <input type="text" id="aziendaRecapito" class="form-control" formControlName="aziendaRecapito">
-    </div>
+        <div class="col-md-4">
+          <label for="aziendaIndirizzo" class="form-label">Indirizzo</label>
+          <input type="text" id="aziendaIndirizzo" class="form-control" formControlName="aziendaIndirizzo" [ngClass]="{'is-invalid': submitted && agencyForm.get('aziendaIndirizzo')?.invalid}" (input)="submitted = false">
+          <div class="invalid-feedback" *ngIf="submitted && agencyForm.get('aziendaIndirizzo')?.invalid">
+            Inserisci un indirizzo valido.
+          </div>
+        </div>
 
-    <div class="col-12">
-      <button type="submit" class="btn btn-primary">Salva modifiche</button>
-    </div>
-  </form>
-</div>
+        <div class="col-md-4">
+          <label for="aziendaRecapito" class="form-label">Recapito</label>
+          <input type="text" id="aziendaRecapito" class="form-control" formControlName="aziendaRecapito" [ngClass]="{'is-invalid': submitted && agencyForm.get('aziendaRecapito')?.invalid}" (input)="submitted = false">
+          <div class="invalid-feedback" *ngIf="submitted && agencyForm.get('aziendaRecapito')?.invalid">
+            Inserisci un recapito valido.
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <label for="aziendaPartitaIva" class="form-label">Partita Iva</label>
+          <input type="text" id="aziendaPartitaIva" class="form-control" formControlName="aziendaPartitaIva" [ngClass]="{'is-invalid': submitted && agencyForm.get('aziendaPartitaIva')?.invalid}" (input)="submitted = false">
+          <div class="invalid-feedback" *ngIf="submitted && agencyForm.get('aziendaPartitaIva')?.invalid">
+            Inserisci una partita IVA valida.
+          </div>
+        </div>
+
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary">Salva modifiche</button>
+        </div>
+      </form>
+    }
+  </div>
+}

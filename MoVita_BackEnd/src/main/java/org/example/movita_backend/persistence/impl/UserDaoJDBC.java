@@ -231,28 +231,26 @@ public class UserDaoJDBC implements UserDao {
     }
 
     @Override
-    public User updatePerson(User user) {
+    public User updatePerson(int userId, User user) {
         String query = "UPDATE utente SET " +
                 "nome=?,citta=?,persona_cognome=?,data_ultima_modifica=CURRENT_TIMESTAMP " +
                 "WHERE id=?";
-
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ps.setString(1,user.getNome());
             ps.setString(2,user.getCitta());
             ps.setString(3,user.getPersonaCognome());
-            ps.setInt(5,user.getId());
+            ps.setInt(4,userId);
 
             ps.executeUpdate();
         }catch(SQLException e){
             e.printStackTrace();
             throw new UsernameNotFoundException("Could not update user.");
         }
-
-        return findById(user.getId());
+        return findById(userId);
     }
 
     @Override
-    public User updateAgency(User user) {
+    public User updateAgency(int userId, User user) {
         String query = "UPDATE utente SET " +
                 "nome=?,citta=?,azienda_p_iva=?, azienda_indirizzo=?,azienda_recapito=?,data_ultima_modifica=CURRENT_TIMESTAMP " +
                 "WHERE id=?";
@@ -263,7 +261,7 @@ public class UserDaoJDBC implements UserDao {
             ps.setString(3,user.getAziendaPartitaIva());
             ps.setString(4,user.getAziendaIndirizzo());
             ps.setString(5, user.getAziendaRecapito());
-            ps.setInt(6, user.getId());
+            ps.setInt(6, userId);
 
             ps.executeUpdate();
         }catch(SQLException e){
@@ -271,7 +269,7 @@ public class UserDaoJDBC implements UserDao {
             throw new UsernameNotFoundException("Could not update user.");
         }
 
-        return findById(user.getId());
+        return findById(userId);
     }
 
     @Override
@@ -300,7 +298,7 @@ public class UserDaoJDBC implements UserDao {
             ps.setString(1,newPassword);
             ps.setInt(1,userId);
             ps.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e){
             e.printStackTrace();
             throw new UsernameNotFoundException("Could not update user.");
         }

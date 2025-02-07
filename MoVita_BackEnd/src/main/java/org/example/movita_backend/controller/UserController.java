@@ -23,7 +23,6 @@ public class UserController
 {
 
     private final UserService userService;
-
     private final IImageService imageService;
 
     @Autowired
@@ -195,13 +194,39 @@ public class UserController
         try
         {
             userService.updatePremiumStatus(userId);
-            Payment payment = new Payment("Passaggio a premium", 69, LocalDate.now().toString(), userId);
-            userService. paymentService.createCheckoutSession(payment);
             return ResponseEntity.ok(true);
         }
         catch (Exception e)
         {
             System.err.println("Error going premium: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PatchMapping("update-person/{userId}")
+    public ResponseEntity<User> updatePerson(@PathVariable int userId, @RequestBody User user) {
+        try
+        {
+            userService.updatePerson(userId, user);
+            return ResponseEntity.ok(user);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error update person: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PatchMapping("update-agency/{userId}")
+    public ResponseEntity<User> updateAgency(@PathVariable int userId, @RequestBody User user) {
+        try
+        {
+            userService.updateAgency(userId, user);
+            return ResponseEntity.ok(user);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error update agency: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }

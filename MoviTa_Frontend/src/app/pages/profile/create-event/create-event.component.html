@@ -1,97 +1,132 @@
-<form [formGroup]="eventForm" class="row g-4 needs-validation" novalidate (ngSubmit)="createEvent()" [routerLink]="['/profile', ]" ] )>
-  <h2 class="text-center mb-4">Crea un evento</h2>
+<div class="container mt-4">
+  <div class="card shadow-lg">
+    <div class="card-body">
+      <h2 class="text-center mb-4">Crea un evento</h2>
 
-  <!-- Titolo -->
-  <div class="col-md-12">
-    <label for="title" class="form-label">Titolo</label>
-    <input type="text" class="form-control form-control-lg" id="title" formControlName="title">
-    <div *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched" class="invalid-feedback">
-      Il titolo è obbligatorio e deve avere massimo 20 caratteri.
+      <form [formGroup]="eventForm" (ngSubmit)="createEvent()" class="row g-4 needs-validation" novalidate>
+        <!-- Titolo -->
+        <div class="col-md-12">
+          <label for="title" class="form-label">Titolo</label>
+          <input
+            type="text"
+            class="form-control form-control-lg"
+            id="title"
+            formControlName="title"
+            [ngClass]="{'is-invalid': eventForm.get('title')?.invalid && eventForm.get('title')?.touched}"
+          >
+          <div *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched" class="invalid-feedback">
+            Il titolo è obbligatorio e deve avere massimo 20 caratteri.
+          </div>
+        </div>
+
+        <!-- Caricamento Immagini -->
+        <div class="col-md-12">
+          <label for="imageUpload" class="form-label">Carica immagini</label>
+          <input
+            type="file"
+            class="form-control form-control-lg"
+            id="imageUpload"
+            (change)="onImageUpload($event)"
+            multiple
+            accept="image/*"
+          >
+          <div class="mt-3 d-flex flex-wrap">
+            <div *ngFor="let image of imagePreviews; let i = index" class="me-2">
+              <img [src]="image" alt="Anteprima" class="img-thumbnail" style="width: 100px; height: 100px;">
+              <button type="button" class="btn btn-sm btn-danger d-block mt-1" (click)="removeImage(i)">Rimuovi</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data e Prezzo -->
+        <div class="col-md-6">
+          <label for="date" class="form-label">Data</label>
+          <input
+            type="date"
+            class="form-control form-control-lg"
+            id="date"
+            formControlName="date"
+            [ngClass]="{'is-invalid': eventForm.get('date')?.invalid && eventForm.get('date')?.touched}"
+          >
+          <div *ngIf="eventForm.get('date')?.invalid && eventForm.get('date')?.touched" class="invalid-feedback">
+            La data è obbligatoria.
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="price" class="form-label">Prezzo</label>
+          <input
+            type="number"
+            class="form-control form-control-lg"
+            id="price"
+            formControlName="price"
+            [ngClass]="{'is-invalid': eventForm.get('price')?.invalid && eventForm.get('price')?.touched}"
+          >
+          <div *ngIf="eventForm.get('price')?.invalid && eventForm.get('price')?.touched" class="invalid-feedback">
+            Il prezzo è obbligatorio.
+          </div>
+        </div>
+
+        <!-- Città e Indirizzo -->
+        <div class="col-md-6">
+          <label for="city" class="form-label">Città</label>
+          <input
+            type="text"
+            class="form-control form-control-lg"
+            id="city"
+            formControlName="city"
+            [ngClass]="{'is-invalid': eventForm.get('city')?.invalid && eventForm.get('city')?.touched}"
+          >
+          <div *ngIf="eventForm.get('city')?.invalid && eventForm.get('city')?.touched" class="invalid-feedback">
+            La città è obbligatoria.
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label for="address" class="form-label">Indirizzo</label>
+          <input
+            type="text"
+            class="form-control form-control-lg"
+            id="address"
+            formControlName="address"
+            [ngClass]="{'is-invalid': eventForm.get('address')?.invalid && eventForm.get('address')?.touched}"
+          >
+          <div *ngIf="eventForm.get('address')?.invalid && eventForm.get('address')?.touched" class="invalid-feedback">
+            L'indirizzo è obbligatorio.
+          </div>
+        </div>
+
+        <!-- Selezione Categorie -->
+        <div class="col-md-12">
+          <label for="category" class="form-label">Categorie</label>
+          <select
+            id="category"
+            class="form-select"
+            formControlName="selectedCategory"
+            (change)="addCategory()"
+          >
+            <option value="">-- Seleziona una categoria --</option>
+            <option *ngFor="let cat of availableCategories()" [value]="cat.nome">{{ cat.nome }}</option>
+          </select>
+        </div>
+
+        <!-- Categorie Selezionate -->
+        <div class="col-md-12">
+          <div class="mt-2">
+            <h5>Categorie selezionate:</h5>
+            <ul class="list-group">
+              <li class="list-group-item" *ngFor="let category of selectedCategories">
+                {{ category }}
+                <button type="button" class="btn btn-sm btn-danger float-end" (click)="removeCategory(category)">
+                  Rimuovi
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="col-12 mt-3">
+          <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="!eventForm.valid">Crea Evento</button>
+        </div>
+      </form>
     </div>
   </div>
-
-  <!-- Sezione per l'upload delle immagini -->
-  <div class="col-md-12">
-    <label for="imageUpload" class="form-label">Carica immagini</label>
-    <input type="file" class="form-control form-control-lg" id="imageUpload" (change)="onImageUpload($event)" multiple accept="image/*">
-
-    <!-- Mostra l'anteprima delle immagini caricate -->
-    <div class="mt-3 d-flex flex-wrap">
-      <div *ngFor="let image of imagePreviews; let i = index" class="me-2">
-        <img [src]="image" alt="Anteprima" class="img-thumbnail" style="width: 100px; height: 100px;">
-        <button type="button" class="btn btn-sm btn-danger d-block mt-1" (click)="removeImage(i)">Rimuovi</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Data -->
-  <div class="col-md-6">
-    <label for="date" class="form-label">Data</label>
-    <input type="date" class="form-control form-control-lg" id="date" formControlName="date">
-  </div>
-
-  <!-- Prezzo -->
-  <div class="col-md-6">
-    <label for="price" class="form-label">Prezzo</label>
-    <input type="number" class="form-control form-control-lg" id="price" formControlName="price">
-  </div>
-
-  <!-- Città -->
-  <div class="col-md-6">
-    <label for="city" class="form-label">Città</label>
-    <input type="text" class="form-control form-control-lg" id="city" formControlName="city">
-  </div>
-
-  <!-- Indirizzo -->
-  <div class="col-md-6">
-    <label for="address" class="form-label">Indirizzo</label>
-    <input type="text" class="form-control form-control-lg" id="address" formControlName="address">
-  </div>
-
-  <!-- Max Partecipanti -->
-  <div class="col-md-6">
-    <label for="maxParticipants" class="form-label">Numero massimo di partecipanti</label>
-    <input type="number" class="form-control form-control-lg" id="maxParticipants" formControlName="maxParticipants">
-  </div>
-
-  <!-- Età minima -->
-  <div class="col-md-6">
-    <label for="minAge" class="form-label">Età minima</label>
-    <input type="number" class="form-control form-control-lg" id="minAge" formControlName="minAge">
-  </div>
-
-  <!-- Descrizione -->
-  <div class="col-12">
-    <label for="description" class="form-label">Descrizione</label>
-    <textarea class="form-control form-control-lg" id="description" formControlName="description" rows="4"></textarea>
-  </div>
-
-  <!-- Categorie selezionate -->
-  <div class="col-md-12">
-    <h5>Categorie selezionate:</h5>
-    <ul class="list-group">
-      <li *ngFor="let category of eventForm.get('selectedCategories')?.value" class="list-group-item d-flex justify-content-between align-items-center">
-        {{ category }}
-        <button type="button" class="btn btn-sm btn-danger" (click)="removeCategory(category)">×</button>
-      </li>
-    </ul>
-  </div>
-
-  <!-- Selezione categoria -->
-  <div class="col-md-12 d-flex align-items-center">
-    <div class="me-3 flex-grow-1">
-      <select class="form-select form-select-lg" [(ngModel)]="selectedCategory">
-        <option selected disabled value="">Scegli una categoria</option>
-        <option *ngFor="let cat of availableCategories()" [value]="cat">{{ cat }}</option>
-      </select>
-    </div>
-    <button type="button" class="btn btn-lg btn-primary" (click)="addCategory()" [disabled]="!selectedCategory">
-      Aggiungi categoria
-    </button>
-  </div>
-
-  <!-- Bottone per invio -->
-  <div class="col-12">
-    <button class="btn btn-lg btn-primary w-100" type="submit" [disabled]="!eventForm.valid">Crea Evento</button>
-  </div>
-</form>
+</div>

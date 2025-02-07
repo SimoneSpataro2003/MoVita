@@ -17,4 +17,6 @@ public interface CategoryDao {
     //associazioni
     List<User> findUsers(Category category);
     List<Event> findEvents(Category category);
+
+    void insertCategoryToEvent(int eventId, String categoryName);
 }
