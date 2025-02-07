@@ -202,4 +202,32 @@ public class UserController
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @PatchMapping("update-person/{userId}")
+    public ResponseEntity<User> updatePerson(@PathVariable int userId, @RequestBody User user) {
+        try
+        {
+            userService.updatePerson(userId, user);
+            return ResponseEntity.ok(user);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error update person: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @PatchMapping("update-agency/{userId}")
+    public ResponseEntity<User> updateAgency(@PathVariable int userId, @RequestBody User user) {
+        try
+        {
+            userService.updateAgency(userId, user);
+            return ResponseEntity.ok(user);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error update agency: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }

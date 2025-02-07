@@ -176,11 +176,11 @@ export class DetailsComponent {
 
     let utenteId = JSON.parse(this.cookieService.get('utente')).id;
     console.log("Utente LOGGATO")
-    console.log(utenteId);	
+    console.log(utenteId);
     if(this.evento!== null){
-      
+
       const dataOggi: string = new Date().toISOString().split('T')[0];
-      
+
       let partecipazione: PartecipazioneDTO ={
         evento: this.evento.id,
         utente:utenteId,
@@ -198,10 +198,10 @@ export class DetailsComponent {
             this.toastService.show('errorToast', 'Errore', "Errore durante la procedura di annullamento della prenotazione.\n Prova a ricaricaricare la pagina.");
           }
         }
-        
+
       );
-    } 
-    
+    }
+
 
   }
 

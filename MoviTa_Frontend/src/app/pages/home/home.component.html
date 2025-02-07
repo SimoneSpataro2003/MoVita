@@ -1,41 +1,76 @@
-<div id="homeCarousel" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-indicators">
-    <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div>
-  <div class="carousel-inner">
-    <div class="carousel-item active c-item">
-      <img src="img/home_party.jpg" class="d-block w-100 c-img" alt="...">
-      <div class="carousel-caption text-start d-none d-md-block">
-        <h1 class="fw-bolder">Trova i migliori eventi più vicini a te</h1>
-        <p class="text-uppercase">Vivi, esplora, gioca!</p>
-        <button class="btn btn-primary" routerLink="/events">Vedi eventi</button>
-      </div>
+<main>
+  <section id="homeCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
-    <div class="carousel-item c-item">
-      <img src="img/home_friends.jpg" class="d-block w-100 c-img" alt="...">
-      <div class="carousel-caption text-start d-none d-md-block">
-        <h1 class="fw-bolder">Conosci persone con i tuoi stessi interessi</h1>
-        <p class="text-uppercase">Con moVita, potrai farlo!</p>
-        <button class="btn btn-primary" routerLink="/search-users">Vedi amici</button>
-      </div>
+    <div class="carousel-inner">
+      <article class="carousel-item active c-item">
+        <img src="img/home_party.jpg" class="d-block w-100 c-img" alt="...">
+        <div class="carousel-caption text-start d-none d-md-block">
+          <h1 class="fw-bolder">Trova i migliori eventi più vicini a te</h1>
+          <p class="text-uppercase">Vivi, esplora, gioca!</p>
+          <button class="btn btn-primary" routerLink="/events">Vedi eventi</button>
+        </div>
+      </article>
+      <article class="carousel-item c-item">
+        <img src="img/home_friends.jpg" class="d-block w-100 c-img" alt="...">
+        <div class="carousel-caption text-start d-none d-md-block">
+          <h1 class="fw-bolder">Conosci persone con i tuoi stessi interessi</h1>
+          <p class="text-uppercase">Con moVita, potrai farlo!</p>
+          <button class="btn btn-primary" routerLink="/search-users">Vedi amici</button>
+        </div>
+      </article>
+      <article class="carousel-item c-item">
+        <img src="img/home_create.jpg" class="d-block w-100 c-img" alt="...">
+        <div class="carousel-caption text-start  mt-4 d-none d-md-block">
+          <h1 class="fw-bolder">Crea i tuoi eventi</h1>
+          <p class="text-uppercase">In pochi passi, anche tu potrai creare il tuo evento!</p>
+          <button class="btn btn-primary" routerLink="/event/create">Crea evento</button>
+        </div>
+      </article>
     </div>
-    <div class="carousel-item c-item">
-      <img src="img/home_create.jpg" class="d-block w-100 c-img" alt="...">
-      <div class="carousel-caption text-start  mt-4 d-none d-md-block">
-        <h1 class="fw-bolder">Crea i tuoi eventi</h1>
-        <p class="text-uppercase">In pochi passi, anche tu potrai creare il tuo evento!</p>
-        <button class="btn btn-primary" routerLink="/event/create">Crea evento</button>
+    <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </section>
+
+  <section class="d-flex flex-wrap my-4 justify-content-evenly">
+    <article class="mb-3">
+      <div class="card rounded-4 text-center h-100 d-flex flex-column align-items-center" style="width: 300px;">
+        <button class="cerchio rounded-circle fs-1 btn btn-secondary bi bi-calendar-check-fill mt-3" [routerLink]="['/events']"></button>
+        <div class="card-body">
+          <h5 class="text-secondary-emphasis text-uppercase mb-3">Trova gli eventi più vicini a te</h5>
+          <p>Scopri gli eventi che si svolgono nella tua zona e partecipa a quelli che più ti interessano! Con la nostra app puoi filtrare gli eventi in base alla tua posizione, alla categoria o ai tuoi interessi, trovando sempre qualcosa di emozionante da fare vicino a te.</p>
+        </div>
       </div>
-    </div>
-  </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
+    </article>
+    <article class="mb-3">
+      <div class="card rounded-4 text-center h-100 d-flex flex-column align-items-center" style="width: 300px;">
+        <button class="cerchio rounded-circle fs-1 btn btn-secondary bi bi-people-fill mt-3" [routerLink]="['/search-users']"></button>
+        <div class="card-body">
+          <h5 class="text-secondary-emphasis text-uppercase mb-3">Conosci nuove persone con i tuoi stessi interessi</h5>
+          <p>Espandi la tua rete sociale incontrando persone che condividono le tue passioni! Puoi inviare richieste di amicizia, partecipare agli eventi a cui sono iscritti altri utenti e creare nuove connessioni basate sui tuoi hobby e attività preferite.</p>
+        </div>
+      </div>
+    </article>
+    <article class="mb-3">
+      <div class="card rounded-4 text-center h-100 d-flex flex-column align-items-center" style="width: 300px;">
+        <button class="cerchio rounded-circle fs-1 btn btn-secondary bi bi-check-circle-fill mt-3" [routerLink]="['/']"></button>
+        <div class="card-body">
+          <h5 class="text-secondary-emphasis text-uppercase mb-3">Crea i tuoi eventi</h5>
+          <p>Organizza eventi su misura per la tua community! Che tu sia un privato o un'azienda, puoi gestire ogni dettaglio per garantire un'esperienza perfetta. Dai vita alle tue idee e coinvolgi nuove persone!</p>
+        </div>
+      </div>
+    </article>
+  </section>
+
+
+
+</main>
