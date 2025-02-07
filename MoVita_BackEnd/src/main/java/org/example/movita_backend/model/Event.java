@@ -200,4 +200,8 @@ public class Event {
                 ", recensioni=" + recensioni +
                 '}';
     }
+
 }
+
+
+

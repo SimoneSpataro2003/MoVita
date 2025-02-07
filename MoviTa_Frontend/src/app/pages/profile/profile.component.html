@@ -51,16 +51,16 @@
             <button [hidden]="isAlreadyFriends()" class="btn btn-primary" (click)="addFriend()">Segui</button>
             <button [hidden]="!isAlreadyFriends()" class="btn btn-danger" (click)="deleteFriend()">Segui già</button>
           </div>
-          <div [hidden]="(user.premium)">
+          <div [hidden]="(user.premium) || !isMyProfile()">
             <button class="btn btn-primary" (click)="goPremium()">Passa a premium!</button>
           </div>
         </div>
       </div>
-      <hr>
+      <hr class="my-2">
       <h5>Amici</h5>
       <div class="row mb-4">
         <div class="col-12">
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3 flex-nowrap" style="overflow-x: auto;">
+          <div class="row row-cols-auto g-3 flex-nowrap" style="overflow-x: auto;">
             <!-- Loop sugli amici -->
             @for(friendship of this.friendships; track friendship.id)
             {
@@ -70,7 +70,7 @@
             }
           </div>
         </div>
-        <hr>
+        <hr class="my-2">
         <h5>Eventi creati</h5>
         <div class="row mb-4">
           <div class="col-12">
@@ -84,7 +84,7 @@
               }
             </div>
           </div>
-          <hr>
+          <hr class="my-2">
           <h5>Partecipazioni</h5>
           <div class="row mb-4">
             <div class="col-12">

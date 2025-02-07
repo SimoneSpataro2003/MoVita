@@ -3,33 +3,18 @@
     <div class="card-body">
       <h2 class="text-center mb-4">Crea un evento</h2>
 
-      <form [formGroup]="eventForm" (ngSubmit)="createEvent()" class="row g-4 needs-validation" novalidate>
+      <form [formGroup]="eventForm" (ngSubmit)="createEvent()" class="row g-4">
         <!-- Titolo -->
         <div class="col-md-12">
           <label for="title" class="form-label">Titolo</label>
-          <input
-            type="text"
-            class="form-control form-control-lg"
-            id="title"
-            formControlName="title"
-            [ngClass]="{'is-invalid': eventForm.get('title')?.invalid && eventForm.get('title')?.touched}"
-          >
-          <div *ngIf="eventForm.get('title')?.invalid && eventForm.get('title')?.touched" class="invalid-feedback">
-            Il titolo è obbligatorio e deve avere massimo 20 caratteri.
-          </div>
+          <input type="text" class="form-control form-control-lg" id="title" formControlName="title">
         </div>
 
         <!-- Caricamento Immagini -->
         <div class="col-md-12">
           <label for="imageUpload" class="form-label">Carica immagini</label>
-          <input
-            type="file"
-            class="form-control form-control-lg"
-            id="imageUpload"
-            (change)="onImageUpload($event)"
-            multiple
-            accept="image/*"
-          >
+          <input type="file" class="form-control form-control-lg" id="imageUpload" (change)="onImageUpload($event)"
+            multiple accept="image/*">
           <div class="mt-3 d-flex flex-wrap">
             <div *ngFor="let image of imagePreviews; let i = index" class="me-2">
               <img [src]="image" alt="Anteprima" class="img-thumbnail" style="width: 100px; height: 100px;">
@@ -40,69 +25,30 @@
 
         <!-- Data e Prezzo -->
         <div class="col-md-6">
-          <label for="date" class="form-label">Data</label>
-          <input
-            type="date"
-            class="form-control form-control-lg"
-            id="date"
-            formControlName="date"
-            [ngClass]="{'is-invalid': eventForm.get('date')?.invalid && eventForm.get('date')?.touched}"
-          >
-          <div *ngIf="eventForm.get('date')?.invalid && eventForm.get('date')?.touched" class="invalid-feedback">
-            La data è obbligatoria.
-          </div>
+          <label for="date" class="form-label">Inserisci Data e Ora (YYYY-MM-DD HH:mm:ss)</label>
+          <input type="text" class="form-control form-control-lg" id="date" formControlName="date"
+            placeholder="2025-06-15 12:00:00" />
         </div>
+
         <div class="col-md-6">
           <label for="price" class="form-label">Prezzo</label>
-          <input
-            type="number"
-            class="form-control form-control-lg"
-            id="price"
-            formControlName="price"
-            [ngClass]="{'is-invalid': eventForm.get('price')?.invalid && eventForm.get('price')?.touched}"
-          >
-          <div *ngIf="eventForm.get('price')?.invalid && eventForm.get('price')?.touched" class="invalid-feedback">
-            Il prezzo è obbligatorio.
-          </div>
+          <input type="number" class="form-control form-control-lg" id="price" formControlName="price">
         </div>
 
         <!-- Città e Indirizzo -->
         <div class="col-md-6">
           <label for="city" class="form-label">Città</label>
-          <input
-            type="text"
-            class="form-control form-control-lg"
-            id="city"
-            formControlName="city"
-            [ngClass]="{'is-invalid': eventForm.get('city')?.invalid && eventForm.get('city')?.touched}"
-          >
-          <div *ngIf="eventForm.get('city')?.invalid && eventForm.get('city')?.touched" class="invalid-feedback">
-            La città è obbligatoria.
-          </div>
+          <input type="text" class="form-control form-control-lg" id="city" formControlName="city">
         </div>
         <div class="col-md-6">
           <label for="address" class="form-label">Indirizzo</label>
-          <input
-            type="text"
-            class="form-control form-control-lg"
-            id="address"
-            formControlName="address"
-            [ngClass]="{'is-invalid': eventForm.get('address')?.invalid && eventForm.get('address')?.touched}"
-          >
-          <div *ngIf="eventForm.get('address')?.invalid && eventForm.get('address')?.touched" class="invalid-feedback">
-            L'indirizzo è obbligatorio.
-          </div>
+          <input type="text" class="form-control form-control-lg" id="address" formControlName="address">
         </div>
 
         <!-- Selezione Categorie -->
         <div class="col-md-12">
           <label for="category" class="form-label">Categorie</label>
-          <select
-            id="category"
-            class="form-select"
-            formControlName="selectedCategory"
-            (change)="addCategory()"
-          >
+          <select id="category" class="form-select" formControlName="selectedCategory" (change)="addCategory()">
             <option value="">-- Seleziona una categoria --</option>
             <option *ngFor="let cat of availableCategories()" [value]="cat.nome">{{ cat.nome }}</option>
           </select>
@@ -124,7 +70,7 @@
         </div>
 
         <div class="col-12 mt-3">
-          <button type="submit" class="btn btn-primary btn-lg w-100" [disabled]="!eventForm.valid">Crea Evento</button>
+          <button type="submit" class="btn btn-primary btn-lg w-100">Crea Evento</button>
         </div>
       </form>
     </div>

@@ -62,8 +62,7 @@ export class EventService {
     return this.authHttp.post(this.URL +"/remove-bookig-event",prenotazione);
   }
 
-
-  public creaEvento( body : any) : Observable<any> {
+  public creaEvento( body : any) : Observable<Evento> {
     return this.authHttp.post(this.URL + "/create-event", body);
   }
 
