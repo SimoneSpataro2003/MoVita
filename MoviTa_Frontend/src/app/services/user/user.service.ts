@@ -63,7 +63,7 @@ export class UserService {
     return this.authHttp.patch(`${this.apiUrl}/update-agency/${id}`, userData);
   }
 
-  public updatePassword(id: number, newPassword: any): Observable<Utente> {
+  public updatePassword(id: number, newPassword: String): Observable<Utente> {
     return this.authHttp.patch(`${this.apiUrl}/update-password/${id}`, newPassword);
   }
 

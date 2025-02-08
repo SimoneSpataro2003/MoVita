@@ -233,13 +233,14 @@ public class UserDaoJDBC implements UserDao {
     @Override
     public User updatePerson(int userId, User user) {
         String query = "UPDATE utente SET " +
-                "nome=?,citta=?,persona_cognome=?,data_ultima_modifica=CURRENT_TIMESTAMP " +
+                "nome=?,citta=?,persona_cognome=?,email=?,data_ultima_modifica=CURRENT_TIMESTAMP " +
                 "WHERE id=?";
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ps.setString(1,user.getNome());
             ps.setString(2,user.getCitta());
             ps.setString(3,user.getPersonaCognome());
-            ps.setInt(4,userId);
+            ps.setString(4,user.getEmail());
+            ps.setInt(5,userId);
 
             ps.executeUpdate();
         }catch(SQLException e){
@@ -252,16 +253,18 @@ public class UserDaoJDBC implements UserDao {
     @Override
     public User updateAgency(int userId, User user) {
         String query = "UPDATE utente SET " +
-                "nome=?,citta=?,azienda_p_iva=?, azienda_indirizzo=?,azienda_recapito=?,data_ultima_modifica=CURRENT_TIMESTAMP " +
+                "nome=?,citta=?,email=?,azienda=?,azienda_p_iva=?, azienda_indirizzo=?,azienda_recapito=?,data_ultima_modifica=CURRENT_TIMESTAMP " +
                 "WHERE id=?";
 
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ps.setString(1,user.getNome());
             ps.setString(2,user.getCitta());
-            ps.setString(3,user.getAziendaPartitaIva());
-            ps.setString(4,user.getAziendaIndirizzo());
-            ps.setString(5, user.getAziendaRecapito());
-            ps.setInt(6, userId);
+            ps.setString(3,user.getEmail());
+            ps.setBoolean(4,user.isAzienda());
+            ps.setString(5,user.getAziendaPartitaIva());
+            ps.setString(6,user.getAziendaIndirizzo());
+            ps.setString(7, user.getAziendaRecapito());
+            ps.setInt(8, userId);
 
             ps.executeUpdate();
         }catch(SQLException e){
@@ -291,12 +294,12 @@ public class UserDaoJDBC implements UserDao {
     @Override
     public User updatePassword(int userId, String newPassword) {
         String query = "UPDATE utente SET " +
-                "password=?" +
-                "WHERE id=?";
+                "password = ? " +
+                "WHERE id = ?";
 
         try(PreparedStatement ps = connection.prepareStatement(query)){
             ps.setString(1,newPassword);
-            ps.setInt(1,userId);
+            ps.setInt(2,userId);
             ps.executeUpdate();
         } catch (SQLException e){
             e.printStackTrace();

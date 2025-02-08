@@ -232,11 +232,11 @@ public class UserController
     }
 
     @PatchMapping("update-password/{userId}")
-    public ResponseEntity<User> updatePassword(@PathVariable int userId, @RequestBody User user, @PathVariable String newPassword) {
+    public ResponseEntity<Boolean> updatePassword(@PathVariable int userId, @RequestBody String newPassword) {
         try
         {
             userService.updateUserPassword(userId, newPassword);
-            return ResponseEntity.ok(user);
+            return ResponseEntity.ok(true);
         }
         catch (Exception e)
         {
