@@ -37,8 +37,13 @@
               <span class="badge bg-secondary"><i class="bi bi-star-fill"></i></span>
             }
           </p>
-
-          <p><strong>Email:</strong> {{ user.email }}</p>
+          @if(user.azienda)
+          {
+          <p>
+            <strong>Email:</strong>
+            {{ user.email }}
+          </p>
+          }
           <p><strong>Città:</strong> {{ user.citta }}</p>
           <p><strong>Followers:</strong> {{ numberAmici }}</p>
 
