@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import {Router, ActivatedRoute, RouterLink} from '@angular/router';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {UserService} from '../../services/user/user.service';
 import {Utente} from '../../model/Utente';
@@ -10,7 +10,7 @@ import {ToastService} from '../../services/toast/toast.service';
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, RouterLink],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.css'
 })

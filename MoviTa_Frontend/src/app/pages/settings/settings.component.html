@@ -4,8 +4,10 @@
   </div>
 } @else {
   <div class="container py-4">
-    <h2 class="mb-4">Impostazioni Profilo</h2>
-
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h2 class="mb-0">Impostazioni Profilo</h2>
+      <button type="button" class="btn-close ms-3" aria-label="Close" [routerLink]="['/profile/', userId]"></button>
+    </div>
     @if (!user.azienda) {
       <form [formGroup]="personForm" (ngSubmit)="updatePerson()" class="row g-3" novalidate>
         <div class="col-md-4">

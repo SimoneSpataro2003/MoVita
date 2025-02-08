@@ -108,10 +108,6 @@ export class RegistratiComponent {
     });
   }
 
-  goHome() {
-    this.router.navigate(['/']);
-  }
-
   goLogin() {
     this.router.navigate(['/login']);
   }

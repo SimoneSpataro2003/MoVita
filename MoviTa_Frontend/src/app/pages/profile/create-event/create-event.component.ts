@@ -8,6 +8,7 @@ import { CategoryService } from '../../../services/category/category.service';
 import { Utente } from '../../../model/Utente';
 import { CookieService } from 'ngx-cookie-service';
 import { Evento } from '../../../model/Evento';
+import { ToastService } from '../../../services/toast/toast.service';
 
 @Component({
   selector: 'app-event-form',
@@ -15,10 +16,8 @@ import { Evento } from '../../../model/Evento';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    NgIf,
     NgForOf,
-    FormsModule,
-    NgClass,
+    FormsModule
   ],
   styleUrls: ['./create-event.component.css']
 })
@@ -26,15 +25,20 @@ export class CreateEventComponent implements OnInit {
   eventForm: FormGroup;
   imagePreviews: string[] = [];
   allCategories: Categoria[] = [];
-  private currentUserId: number;
+  private currentUserId: number = 0;
+  utente: Utente | null = null;
 
   constructor(
     private eventService: EventService,
     private categoryService: CategoryService,
     private cookieService: CookieService,
+    private toastService: ToastService
   ) {
-    let utente: Utente = JSON.parse(this.cookieService.get('utente'));
-    this.currentUserId = utente.id;
+    this.utente = JSON.parse(this.cookieService.get('utente'));
+    if(this.utente!=null){
+      this.currentUserId = this.utente.id;
+    }
+
 
     this.eventForm = new FormGroup({
       title: new FormControl('', [Validators.required, Validators.maxLength(20)]),
@@ -84,7 +88,6 @@ export class CreateEventComponent implements OnInit {
   }
 
   availableCategories() {
-    console.log('Categorie disponibili:', this.allCategories);
     return this.allCategories.filter(cat => !this.selectedCategories.includes(cat.nome));
   }
 
@@ -101,68 +104,75 @@ export class CreateEventComponent implements OnInit {
   }
 
   createEvent() {
-    if (this.eventForm.valid) {
-      const formData = new FormData();
-      Object.keys(this.eventForm.controls).forEach(key => {
-        const control = this.eventForm.get(key);
-        if (control) {
-          if (key === 'images') {
-            const files = control.value as File[];
-            if (files) {
-              files.forEach((file) => {
-                formData.append('images', file, file.name);
-              });
-            }
-          } else if (key === 'selectedCategories') {
-            formData.append(key, JSON.stringify(control.value));
-          } else {
-            formData.append(key, control.value);
+    console.log(this.eventForm);
+    // if (this.eventForm.valid) {
+    console.log("VALIDIIIIII");
+    const formData = new FormData();
+    Object.keys(this.eventForm.controls).forEach(key => {
+      const control = this.eventForm.get(key);
+      if (control) {
+        if (key === 'images') {
+          const files = control.value as File[];
+          if (files) {
+            files.forEach((file) => {
+              formData.append('images', file, file.name);
+            });
           }
+        } else if (key === 'selectedCategories') {
+          formData.append(key, JSON.stringify(control.value));
+        } else {
+          formData.append(key, control.value);
         }
-      });
+      }
+    });
 
-      formData.append('creatorId', this.currentUserId.toString());
+    formData.append('creatorId', this.currentUserId.toString());
 
-      this.eventService.creaEvento(formData).subscribe({
-        next: (response: Evento) => {
-          console.log('Evento creato con successo:', response);
-          const evento_id = response.id;
+    const evento: any = {
+      nome: this.eventForm.get('title')?.value,
+      data: this.eventForm.get('date')?.value,
+      prezzo: this.eventForm.get('price')?.value,
+      citta: this.eventForm.get('city')?.value,
+      indirizzo: this.eventForm.get('address')?.value,
+      numPartecipanti: 0,
+      maxNumPartecipanti: this.eventForm.get('maxParticipants')?.value,
+      etaMinima: this.eventForm.get('minAge')?.value,
+      descrizione: "",
+      creatore: {
+        id: this.currentUserId,
+        nome: this.utente?.nome!,
+        email: this.utente?.email!
+      }
+    };
 
-          // Insert all selected categories into the event
-          const selectedCategories = this.selectedCategories;
-          selectedCategories.forEach(category => {
-            this.eventService.insertCategoryToEvent(evento_id, category).subscribe({
-              next: (res) => {
-                console.log(`Categoria ${category} aggiunta con successo all'evento.`);
+    this.eventService.creaEvento(evento).subscribe({
+      next: (response: Evento) => {
+        this.toastService.show('successToast', 'Evento Creato!!!', "Evento Creato con successo");
+        const evento_id = response.id;
+
+        const images = this.eventForm.get('images')?.value as File[];
+
+        if (images.length > 0) {
+          for (let i of images) {
+            this.eventService.setEventImage(evento_id, i).subscribe({
+              next: (data) => {
+                console.log("Immagini arrivate");
               },
               error: (err) => {
-                console.error(`Errore durante l'inserimento della categoria ${category}:`, err);
+                console.log("Errore caricamento immagini");
               }
             });
-          });
-
-          const images = this.eventForm.get('images')?.value as File[];
-          if (images.length > 0) {
-            const imageUploadRequests = images.map((image) =>
-              this.eventService.setEventImage(evento_id, image)
-            );
-
-            Promise.all(imageUploadRequests).then(() => {
-              console.log('Tutte le immagini caricate con successo');
-              this.eventForm.reset();
-              this.imagePreviews = [];
-            }).catch((error) => {
-              console.error('Errore durante il caricamento delle immagini:', error);
-            });
           }
-        },
-        error: (error) => {
-          console.error('Errore durante la creazione dell\'evento:', error);
         }
-      });
-    } else {
-      console.log('Modulo non valido!');
-    }
+
+      },
+      error: (error) => {
+        console.error('Errore durante la creazione dell\'evento:', error);
+      }
+    });
+    // } else {
+    //   console.log('Modulo non valido!');
+    // }
   }
 
   removeImage(index: number) {
