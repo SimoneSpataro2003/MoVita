@@ -5,21 +5,21 @@ import { EventService } from '../../services/event/event.service';
 import { ActivatedRoute } from '@angular/router';
 import { Partecipazione } from '../../model/Partecipazione';
 import { CategoryService } from '../../services/category/category.service';
-import { Categoria } from '../../model/Categoria';
 import { CookieService } from 'ngx-cookie-service';
 import { UserService } from '../../services/user/user.service';
 import { CarouselEventImageComponent } from './carousel-event-image/carousel-event-image.component';
 import { PartecipantiEventoComponent } from './partecipanti-evento/partecipanti-evento.component';
 import { EventiSimiliComponent } from './eventi-simili/eventi-simili.component';
 import { RecensioneComponent } from './recensione/recensione.component';
-import { Utente } from '../../model/Utente';
 import { PartecipazioneDTO } from '../../model/partecipazione-dto';
 import {ToastService} from '../../services/toast/toast.service';
+import { AggiungiRecensioneComponent } from './aggiungi-recensione/aggiungi-recensione.component';
+import { Recensione } from '../../model/Recensione';
 
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [CommonModule, RecensioneComponent ,EventiSimiliComponent, PartecipantiEventoComponent,CarouselEventImageComponent],
+  imports: [CommonModule, RecensioneComponent ,EventiSimiliComponent, PartecipantiEventoComponent,CarouselEventImageComponent, AggiungiRecensioneComponent],
   templateUrl: './details.component.html',
   styleUrl: './details.component.css',
 })
@@ -35,6 +35,8 @@ export class DetailsComponent {
   @ViewChild(EventiSimiliComponent) eventiSimiliComponent!: EventiSimiliComponent;
   @ViewChild(RecensioneComponent) recensioneComponent!: RecensioneComponent;
   prenotato = false;
+  passato = false;  
+  creatoDaMe = false;
 
 
 
@@ -59,12 +61,22 @@ export class DetailsComponent {
     if (this.idEvento) {
       this.eventService.getEventById(this.idEvento).subscribe({
         next: (data) => {
-          this.evento = data;
+          this.evento = data;          
           this.mostraDescrizioneEvento();
           this.caricaImmagineCreatoreEvento();
           this.carouselImage.caricaNomiImmaginiEvento(this.evento);
           this.eventiSimiliComponent.mostraEventiSimili(this.idEvento);
-          this.recensioneComponent.ottieniRecensioni();
+          const timestampEvento = new Date(this.evento.data).getTime();        
+          const timestampAttuale = Date.now();
+          if (timestampEvento < timestampAttuale){
+            this.passato = true;
+            this.recensioneComponent.ottieniRecensioni();           
+          }
+          if(this.evento.creatore.id === JSON.parse(this.cookieService.get('utente')).id)
+          {
+            this.creatoDaMe = true;
+          }          
+          
         },
         error: (err) => {
           this.toastService.show('errorToast', 'Errore', "Errore nel reperire le informazioni dell'evento.\n Prova a ricaricaricare la pagina.");

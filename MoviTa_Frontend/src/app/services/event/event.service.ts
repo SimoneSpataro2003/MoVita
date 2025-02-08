@@ -50,22 +50,24 @@ export class EventService {
   public getBookingByEvent(idEvento:number):Observable<Partecipazione[]>{
     return this.authHttp.get(this.URL +`/get-booking-by-event/${idEvento}`);
   }
+  
   public getEventReview(idEvento:number):Observable<Recensione[]>{
     return this.authHttp.get(this.URL +`/get-event-review/${idEvento}`);
+  }
+  public setEventReview(recensione:any):Observable<Recensione>{
+    return this.authHttp.post(this.URL +"/create-event-review",recensione);
   }
 
   public setEventBooking(prenotazione:PartecipazioneDTO):Observable<Partecipazione>{
     return this.authHttp.post(this.URL +"/book-event",prenotazione);
   }
-
   public undoBooking(prenotazione:PartecipazioneDTO):Observable<Partecipazione>{
     return this.authHttp.post(this.URL +"/remove-bookig-event",prenotazione);
   }
-
+  
   public creaEvento( body : any) : Observable<Evento> {
     return this.authHttp.post(this.URL + "/create-event", body);
   }
-
   public setEventImage(eventId: number, body: File): Observable<string> {
     const formData = new FormData();
     formData.append('image', body);
