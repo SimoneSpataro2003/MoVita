@@ -1,20 +1,25 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Pagamento} from '../../../model/Pagamento';
+import {CurrencyPipe, DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-card-payment',
   standalone: true,
-  imports: [],
+  imports: [
+    DatePipe,
+    CurrencyPipe
+  ],
   templateUrl: './card-payment.component.html',
   styleUrl: './card-payment.component.css'
 })
-export class CardPaymentComponent {
+export class CardPaymentComponent implements OnInit {
   @Input() pagamento!: Pagamento;
-  loaded: boolean = false;
 
 
   constructor() {
   }
 
-
+  ngOnInit() {
+    console.log("pagamento : " + this.pagamento.id);
+  }
 }

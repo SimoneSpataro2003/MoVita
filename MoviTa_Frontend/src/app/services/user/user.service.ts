@@ -63,6 +63,14 @@ export class UserService {
     return this.authHttp.patch(`${this.apiUrl}/update-agency/${id}`, userData);
   }
 
+  public updatePassword(id: number, newPassword: any): Observable<Utente> {
+    return this.authHttp.patch(`${this.apiUrl}/update-password/${id}`, newPassword);
+  }
+
+  public setUserImage(id: number, userData: any): Observable<Utente> {
+    return this.authHttp.post(`${this.apiUrl}/set-user-image/${id}`, userData);
+  }
+
   public goPremium(id: number): Observable<any> {
     return this.authHttp.patch(`${this.apiUrl}/go-premium/${id}`, {id:id});
   }

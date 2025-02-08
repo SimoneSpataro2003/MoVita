@@ -230,4 +230,18 @@ public class UserController
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @PatchMapping("update-password/{userId}")
+    public ResponseEntity<User> updatePassword(@PathVariable int userId, @RequestBody User user, @PathVariable String newPassword) {
+        try
+        {
+            userService.updateUserPassword(userId, newPassword);
+            return ResponseEntity.ok(user);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error update password: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }

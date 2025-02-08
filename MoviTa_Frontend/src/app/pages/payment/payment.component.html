@@ -1,19 +1,25 @@
-<div class="container">
-  <h5>Pagamenti</h5>
+<div class="container py-4">
+  <h5 class="mb-4 text-center text-uppercase text-primary">Pagamenti</h5>
+
   @if(isLoaded())
   {
-    <div class="row mb-4">
+    <div class="row">
       <div class="col-12">
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3 flex-nowrap" style="overflow-x: auto; white-space: nowrap;">
-          <!-- Loop sugli pagamenti -->
-          @for(pagamento of this.payments; track pagamento.id)
+        <div class="" style="gap: 1rem;">
+
+          @for (pagamento of this.payments; track pagamento.id)
           {
-            <app-card-payment [pagamento] = pagamento></app-card-payment>
+            <app-card-payment [pagamento]="pagamento" class="flex-shrink-0" style="min-width: 250px;"></app-card-payment>
           }
+
         </div>
       </div>
     </div>
   }
+  @else
+  {
+    <div>
+      <p>Caricamento...</p>
+    </div>
+  }
 </div>
-
-

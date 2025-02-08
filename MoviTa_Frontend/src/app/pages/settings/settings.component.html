@@ -6,10 +6,17 @@
   <div class="container py-4">
     <div class="d-flex align-items-center justify-content-between mb-4">
       <h2 class="mb-0">Impostazioni Profilo</h2>
-      <button type="button" class="btn-close ms-3" aria-label="Close" [routerLink]="['/profile/', userId]"></button>
     </div>
     @if (!user.azienda) {
       <form [formGroup]="personForm" (ngSubmit)="updatePerson()" class="row g-3" novalidate>
+        <!--<div class="col-md-4">
+          <label for="personaNome" class="form-label">Nome</label>
+          <input type="text" id="personaNome" class="form-control" formControlName="nome" [ngClass]="{'is-invalid': submitted && personForm.get('nome')?.invalid}" (input)="submitted = false">
+          <div class="invalid-feedback" *ngIf="submitted && personForm.get('nome')?.invalid">
+            Inserisci un nome valido.
+          </div>
+        </div>-->
+
         <div class="col-md-4">
           <label for="personaNome" class="form-label">Nome</label>
           <input type="text" id="personaNome" class="form-control" formControlName="nome" [ngClass]="{'is-invalid': submitted && personForm.get('nome')?.invalid}" (input)="submitted = false">
@@ -34,8 +41,53 @@
           </div>
         </div>
 
-        <div class="col-12">
+        <!--
+        <div class="col-md-12">
+          Reimposta password:
+        </div>
+
+        <div class="col-md-4">
+          <label for="personaVecchiaPassword" class="form-label">Vecchia password</label>
+          <input type="password" id="personaVecchiaPassword" class="form-control" formControlName="vecchiaPassword" [ngClass]="{'is-invalid': submitted && personForm.get('vecchiaPassword')?.invalid}" (input)="submitted = false">
+          <div class="invalid-feedback" *ngIf="submitted && personForm.get('vecchiaPassword')?.invalid && !isPasswordCorrect()">
+            La password non è corretta.
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <label for="personaNuovaPassword" class="form-label">Nuova password</label>
+          <input type="password" id="personaNuovaPassword" class="form-control" formControlName="nuovaPassword" [ngClass]="{'is-invalid': submitted && personForm.get('nuovaPassword')?.invalid}" (input)="submitted = false">
+          <div class="invalid-feedback" *ngIf="submitted && personForm.get('nuovaPassword')?.invalid">
+            Inserire una password valida.
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <label for="personaRipetiNuovaPassword" class="form-label">Ripeti nuova password</label>
+          <input type="password" id="personaRipetiNuovaPassword" class="form-control" formControlName="ripetiNuovaPassword" [ngClass]="{'is-invalid': submitted && personForm.get('ripetiNuovaPassword')?.invalid}" (input)="submitted = false">
+          <div class="invalid-feedback" *ngIf="submitted && personForm.get('ripetiNuovaPassword')?.invalid && !isTheSame()">
+            Le password non coincidono.
+          </div>
+        </div>
+        -->
+
+        <div class="col-md-4">
+          <label for="personaImageUpload" class="form-label">Cambia immagine profilo</label>
+          <input type="file" class="form-control form-control-lg" id="personaImageUpload" (change)="onImageUpload(personForm)"
+                 accept="image/*">
+          <div class="mt-3 d-flex flex-wrap">
+            <div *ngIf="imagePreviews.length > 0" class="me-2">
+              <img [src]="imagePreviews[0]" alt="Anteprima" class="img-thumbnail" style="width: 100px; height: 100px;">
+              <button type="button" class="btn btn-sm btn-danger d-block mt-1" (click)="removeImage(personForm, 'personaImageUpload')">Rimuovi</button>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="col-12 d-flex justify-content-between">
           <button type="submit" class="btn btn-primary">Salva modifiche</button>
+          <button type="button" class="btn btn-primary" [routerLink]="['/profile/', userId]">Torna al profilo</button>
         </div>
       </form>
     }
@@ -82,8 +134,21 @@
           </div>
         </div>
 
-        <div class="col-12">
+        <div class="col-md-4">
+          <label for="aziendaImageUpload" class="form-label">Cambia immagine profilo</label>
+          <input type="file" class="form-control form-control-lg" id="aziendaImageUpload" (change)="onImageUpload(agencyForm)"
+                 multiple accept="image/*">
+          <div class="mt-3 d-flex flex-wrap">
+            <div *ngFor="let image of imagePreviews; let i = index" class="me-2">
+              <img [src]="image" alt="Anteprima" class="img-thumbnail" style="width: 100px; height: 100px;">
+              <button type="button" class="btn btn-sm btn-danger d-block mt-1" (click)="removeImage(agencyForm, 'aziendaImageUpload')">Rimuovi</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 d-flex justify-content-between">
           <button type="submit" class="btn btn-primary">Salva modifiche</button>
+          <button type="button" class="btn btn-primary" [routerLink]="['/profile/', userId]">Torna al profilo</button>
         </div>
       </form>
     }
