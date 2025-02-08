@@ -40,6 +40,6 @@ export class CategoryService {
 
   insertEventCategories(evento_id:number, categorie_id: number[]){
     const body = {evento_id: evento_id, categorie_id: categorie_id}
-    return this.authHttp.post(this.URL+'/insert-user-categories',body);
+    return this.authHttp.post(this.URL+'/insert-event-categories',body);
   }
 }

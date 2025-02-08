@@ -94,13 +94,13 @@ public class EventController {
     }
 
     @PostMapping("/set-event-image/{eventId}")
-    public ResponseEntity<String> setEventImage(@RequestBody MultipartFile image,
+    public ResponseEntity<?> setEventImage(@RequestBody MultipartFile image,
                                               @PathVariable int eventId) {
         try {
             imageService.addEventImage(eventId, image);
-            return ResponseEntity.ok("Image uploaded successfully");
+            return ResponseEntity.ok(Map.of("response", "Image uploaded successfully"));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload image");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("response", "Failed to upload image"));
         }
     }
 
