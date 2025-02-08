@@ -151,23 +151,49 @@ export class CreateEventComponent implements OnInit {
         const evento_id = response.id;
 
         const images = this.eventForm.get('images')?.value as File[];
-
-        if (images.length > 0) {
-          for (let i of images) {
+        
+        for(let i of images) {
+          
+            console.log("Lunghezza")
+            console.log(images.length)
             this.eventService.setEventImage(evento_id, i).subscribe({
-              next: (data) => {
-                console.log("Immagini arrivate");
+              next: (data) => { 
+                console.log(data);
               },
               error: (err) => {
-                console.log("Errore caricamento immagini");
+                this.toastService.show('errorToast', 'Errore', "Immagini non inviate.\n Prova a ricaricaricare la pagina.");                
               }
             });
+          
+        }
+        
+        let categorie_id: number[] = [];
+        for(let j of this.selectedCategories){
+          for(let k of this.allCategories){
+            if(k.nome === j)
+            {
+              categorie_id.push(k.id);
+            }
           }
+        }    
+        if(categorie_id.length > 0)
+        {
+          this.categoryService.insertEventCategories(evento_id,categorie_id).subscribe(
+            {
+              next: (data) =>{
+                console.log("Categorie caricate on successo",data);
+              },
+              error: (error) => {
+                this.toastService.show('errorToast', 'Errore', "Immagini invio categorie.\n Prova a ricaricaricare la pagina.");                
+              }
+            }
+          );
         }
 
       },
       error: (error) => {
-        console.error('Errore durante la creazione dell\'evento:', error);
+        this.toastService.show('errorToast', 'Errore', "Errore durante la creazione dell'evento.\n Prova a ricaricaricare la pagina.");                
+        
       }
     });
     // } else {
