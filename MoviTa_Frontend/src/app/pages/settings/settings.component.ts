@@ -20,11 +20,16 @@ export class SettingsComponent implements OnInit, Loadable {
   user!: Utente;
   loaded: boolean = false;
   submitted: boolean = false;
+  imagePreviews: string[] = [];
 
   personForm = new FormGroup({
+    //username:new FormControl('', [Validators.required, Validators.pattern(/[a-zA-Z0-9]+/)]),
     nome: new FormControl('', [Validators.required, Validators.pattern(/[A-Z][a-z]+/)]),
     personaCognome: new FormControl('', [Validators.required, Validators.pattern(/[A-Z][a-z]+/)]),
-    citta: new FormControl('', [Validators.required, Validators.pattern(/[a-zA-Z ]+/)])
+    citta: new FormControl('', [Validators.required, Validators.pattern(/[a-zA-Z ]+/)]),
+    vecchiaPassword: new FormControl(''),
+    nuovaPassword: new FormControl('', [Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]),
+    ripetiNuovaPassword: new FormControl('')
   });
 
   agencyForm = new FormGroup({
@@ -32,7 +37,10 @@ export class SettingsComponent implements OnInit, Loadable {
     citta: new FormControl('', [Validators.required, Validators.pattern(/[a-zA-Z ]+/)]),
     aziendaIndirizzo: new FormControl('', [Validators.required, Validators.pattern(/[a-zA-z0-9 ]+/)]),
     aziendaRecapito: new FormControl('', [Validators.required, Validators.pattern(/[0-9]{10}/)]),
-    aziendaPartitaIva: new FormControl('', [Validators.required, Validators.pattern(/[0-9]{11}/)])
+    aziendaPartitaIva: new FormControl('', [Validators.required, Validators.pattern(/[0-9]{11}/)]),
+    vecchiaPassword: new FormControl(''),
+    nuovaPassword: new FormControl('', [Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]),
+    ripetiNuovaPassword: new FormControl('')
   });
 
   constructor(
@@ -46,8 +54,8 @@ export class SettingsComponent implements OnInit, Loadable {
     this.userId = Number(this.route.snapshot.paramMap.get('id'));
 
     if (this.userId) {
-      this.userService.getUserById(this.userId).subscribe(
-        (data) => {
+      this.userService.getUserById(this.userId).subscribe({
+        next: (data: any) => {
           this.user = data;
           this.loaded = true;
 
@@ -68,10 +76,10 @@ export class SettingsComponent implements OnInit, Loadable {
           }
 
         },
-        (error) => {
+        error: (any) => {
           this.toastService.show('errorToast',"Errore", "Impossibile Caricare l'utente. \n Prova a ricaricare la pagina.");
         }
-      );
+      });
     } else {
       //errore
     }
@@ -82,7 +90,6 @@ export class SettingsComponent implements OnInit, Loadable {
     if (this.personForm.invalid) {
       return;
     }
-    console.log("avanti");
     const body = {
       nome: this.personForm.value.nome,
       personaCognome: this.personForm.value.personaCognome,
@@ -91,13 +98,40 @@ export class SettingsComponent implements OnInit, Loadable {
     this.userService.updatePerson(this.userId, body).subscribe({
       next: (data: any) => {
         this.user = data;
-        this.goProfile();
         this.toastService.show('successToast',"Modifica effettuata", "Il profilo è stato modificato con successo.");
       },
       error: (any) => {
         this.toastService.show('errorToast',"Errore", "Impossibile aggiornare il profilo. Prova a ricaricare la pagina.");
       }
     });
+
+    //TODO: fixare
+    /*
+    if (this.personForm.value.vecchiaPassword != "" &&
+        this.personForm.value.nuovaPassword != "" &&
+        this.personForm.value.ripetiNuovaPassword != "") {
+      this.userService.updatePassword(this.userId, this.personForm.value.nuovaPassword).subscribe({
+        next: (data: any) => {
+          this.user = data;
+          this.toastService.show('successToast', "Modifica effettuata", "La password è stato aggiornata con successo.");
+        },
+        error: (any) => {
+          this.toastService.show('errorToast', "Errore", "Impossibile aggiornare la password.");
+        }
+      });
+    }
+    */
+
+    if (this.imagePreviews.length == 1) { //ho effettivamente caricato un immagine
+      this.userService.setUserImage(this.userId, this.imagePreviews[0]).subscribe({
+        next: (data: any) => {
+          this.toastService.show('successToast',"Modifica effettuata", "Il profilo è stato modificato con successo.");
+        },
+        error: (any) => {
+          this.toastService.show('errorToast', "Errore", "Impossibile aggiornare l'immagine profilo.");
+        }
+      });
+    }
   }
 
   updateAgency() {
@@ -112,16 +146,61 @@ export class SettingsComponent implements OnInit, Loadable {
       aziendaIndirizzo: this.agencyForm.value.aziendaIndirizzo,
       aziendaRecapito: this.agencyForm.value.aziendaRecapito
     };
-    this.userService.updateAgency(this.userId, body).subscribe(
-      (data) => {
+    this.userService.updateAgency(this.userId, body).subscribe({
+      next: (data: any) => {
         this.user = data;
         this.goProfile();
+        this.toastService.show('successToast', "Modifica effettuata", "Il profilo è stato modificato con successo.");
+      },
+      error: (any) => {
+        this.toastService.show('successToast', "Errore", "Non è stato possibile modificare il profilo. Prova a ricaricare la pagina.");
+      }
+    });
+
+    this.userService.updatePassword(this.userId, this.agencyForm.value.nuovaPassword).subscribe({
+      next: (data: any) => {
+        this.user = data;
         this.toastService.show('successToast',"Modifica effettuata", "Il profilo è stato modificato con successo.");
       },
-      (error) => {
-        this.toastService.show('successToast',"Errore", "Non è stato possibile modificare il profilo. Prova a ricaricare la pagina.");
+      error: (any) => {
+        this.toastService.show('errorToast',"Errore", "Impossibile aggiornare il profilo. Prova a ricaricare la pagina.");
       }
-    );
+    });
+  }
+
+  isPasswordCorrect(){
+    if (!this.user.azienda) {
+      return this.personForm.value.vecchiaPassword == this.user.password;
+    } else {
+      return this.agencyForm.value.vecchiaPassword == this.user.password;
+    }
+  }
+
+  isTheSame() {
+    if (!this.user.azienda) {
+      return this.personForm.value.nuovaPassword == this.personForm.value.ripetiNuovaPassword;
+    } else {
+      return this.agencyForm.value.nuovaPassword == this.agencyForm.value.ripetiNuovaPassword;
+    }
+  }
+
+  onImageUpload(form: FormGroup) {
+    const input = document.getElementById('personaImageUpload') as HTMLInputElement;
+    if (input && input.files && input.files.length > 0) {
+      const file = input.files[0];  // Prendiamo solo il primo file caricato
+      form.get('images')?.setValue([file]);  // Impostiamo il form con il file selezionato
+      this.imagePreviews = [URL.createObjectURL(file)];  // Creiamo la preview dell'immagine
+    }
+  }
+
+  removeImage(form: FormGroup, id: string) {
+    // Rimuovi l'immagine
+    form.get('images')?.setValue([]);
+    this.imagePreviews = [];  // Rimuovi l'anteprima
+    const input = document.getElementById(id) as HTMLInputElement;
+    if (input) {
+      input.value = '';  // Reset del valore dell'input file
+    }
   }
 
   goProfile() {

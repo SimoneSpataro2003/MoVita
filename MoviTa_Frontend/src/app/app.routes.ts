@@ -26,7 +26,7 @@ export const routes: Routes = [
       {path: 'payments/:id', component: PaymentComponent },
       {path: 'search-users', component: SearchFriendsComponent},
       {path: 'create-event', component: CreateEventComponent},
-      {path: 'profile/settings/:id', component: SettingsComponent}
+      {path: 'profile/settings/:id', component: SettingsComponent},
     ],
     canActivate:[authGuard],
     canActivateChild:[authGuard]
