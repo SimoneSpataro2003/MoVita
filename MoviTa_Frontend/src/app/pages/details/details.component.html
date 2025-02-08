@@ -5,14 +5,17 @@
             <h1 class="m-0 display-5 fw-bold">{{ evento?.nome }}</h1>
         </section>
         <section class="col-12 col-md-auto d-flex align-items-center justify-content-end">
-            @if (!this.prenotato) {
-                <button type="button" class="btn btn-lg btn-primary w-100 w-md-auto" (click)="partecipa()">Partecipa</button>
-            } @else {
-                <div class="d-flex flex-column flex-md-row align-items-center gap-2">
-                    <button type="button" class="btn btn-outline-secondary w-100 w-md-auto disabled">Prenotato</button>
-                    <button type="button" class="btn btn-outline-danger w-100 w-md-auto" (click)="annullaPrenotazione()">Annulla</button>
-                </div>
+            @if(!passato && !creatoDaMe){
+                @if (!prenotato) {
+                    <button type="button" class="btn btn-lg btn-primary w-100 w-md-auto" (click)="partecipa()">Partecipa</button>
+                } @else {
+                    <div class="d-flex flex-column flex-md-row align-items-center gap-2">
+                        <button type="button" class="btn btn-outline-secondary w-100 w-md-auto disabled">Prenotato</button>
+                        <button type="button" class="btn btn-outline-danger w-100 w-md-auto" (click)="annullaPrenotazione()">Annulla</button>
+                    </div>
+                }
             }
+            
         </section>
     </div>
 
@@ -96,6 +99,12 @@
     <!-- Recensioni -->
     <section class="shadow rounded-4 col-12 col-md-8 p-3 m-3">
         <h2 class="fw-bold mb-4">Recensioni</h2>
-        <app-recensione [idEvento]="idEvento"></app-recensione>
+        @if(prenotato && passato && !creatoDaMe){
+            <app-aggiungi-recensione [idEvento]="idEvento" (metodoAggiornaParent)="recensioneComponent.ottieniRecensioni()" ></app-aggiungi-recensione>
+        }        
+        @else if(!passato){
+            <p>Non ci sono recensioni disponibili perché l'evento non si è ancora verificato.</p>
+        }       
+        <app-recensione [idEvento]="idEvento" [passato]="passato"></app-recensione>
     </section>
 </main>

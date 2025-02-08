@@ -1,15 +1,35 @@
+@if(recensioni.length===0 && passato)
+{
+    <p>Nessuna recensione</p>
+}
 @for (item of recensioni; track $index) {
 <section class="shadow border-0 rounded-4 bg-white p-3 m-3">
-    <img [src]="item.utente?.immagineProfilo" class="img-fluid rounded-circle" style="width: 50px; height: 50px;">
-    {{item.utente.username}}
+    <!-- Immagine profilo e username -->
+    <div class="d-flex align-items-center mb-3">
+        <img [src]="item.utente?.immagineProfilo" class="img-fluid rounded-circle me-3"
+            style="width: 50px; height: 50px;">
+        <div>
+            <strong>{{item.utente.username}}</strong>
+            <br>
+            <small class="text-muted">{{item.data}}</small>
+        </div>
+    </div>
 
-    {{item.data}}
+    <!-- Titolo della recensione -->
+    <h5 class="mb-2">{{item.titolo}}</h5>
 
-    <br>
-    {{item.titolo}}
-    {{item.valutazione}}
-    {{item.descrizione}}
+    <!-- Stelle per la valutazione -->
+    <div class="mb-2">
 
 
+        @for (star of starsArray; track star) {
+        <i class="bi" [ngClass]="getStarClass(star,item)"></i>
+        }
+
+
+    </div>
+
+    <!-- Descrizione della recensione -->
+    <p class="mb-0">{{item.descrizione}}</p>
 </section>
 }
