@@ -136,6 +136,7 @@ export class ProfileComponent implements OnInit, Loadable {
     this.userService.addFriendship(this.currentUserId, this.userId).subscribe({
       next: (friendship : Utente) => {
         this.toastService.show('successToast',"Amicizia aggiunta", "Amicizia aggiunta correttamente.");
+        this.alreadyFollow = true;
       },
       error:(err)=>{
         this.toastService.show('errorToast',"Errore", "Impossibile aggiungere una nuova amicizia. Prova a ricaricare la pagina.");
@@ -147,7 +148,8 @@ export class ProfileComponent implements OnInit, Loadable {
     this.userService.deleteFriendship(this.currentUserId, this.userId).subscribe({
       next: (friendship : Utente) => {
         this.toastService.show('successToast',"Amicizia rimossa", "Amicizia rimossa correttamente.");
-      },
+         this.alreadyFollow = false;
+        },
       error:(err)=> {
         this.toastService.show('errorToast',"Errore", "Impossibile rimuovere l'amicizia. \n Prova a ricaricare la pagina.");
       }
@@ -171,6 +173,7 @@ export class ProfileComponent implements OnInit, Loadable {
       next: (data) => {
         console.log(data);
         this.addPayment();
+        this.user.premium = true;
         this.toastService.show('successToast',"Sei un membro premium!", "Benvenuto nel club! :)");
       },error:(err) => {
         this.toastService.show('errorToast',"Errore", "Non è stato possibile elaborare la richiesta. \n Prova a ricaricare la pagina.");
@@ -181,9 +184,9 @@ export class ProfileComponent implements OnInit, Loadable {
   addPayment() {
     const nuovoPagamento: Pagamento = {
       id: undefined,
-      name: "Abbonamento Mensile",
+      titolo: "Abbonamento Mensile",
       ammontare: 29.99,
-      date: new Date(),
+      data: new Date(),
       id_utente: this.currentUserId
     };
 

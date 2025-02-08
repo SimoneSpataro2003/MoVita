@@ -12,6 +12,7 @@ import {SearchFriendsComponent} from './pages/search-friends/search-friends.comp
 import {SettingsComponent} from './pages/settings/settings.component';
 import {authGuard} from './guard/auth.guard';
 import {CreateEventComponent} from './pages/profile/create-event/create-event.component';
+import {NotFoundComponent} from './pages/not-found/not-found.component';
 
 export const routes: Routes = [
   {
@@ -44,5 +45,6 @@ export const routes: Routes = [
       {path: 'login', component:LoginComponent},
       {path: 'register', component: RegistratiComponent},
     ]
-  }
+  },
+  { path: '**', component: NotFoundComponent }
 ];

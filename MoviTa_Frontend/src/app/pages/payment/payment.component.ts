@@ -34,19 +34,22 @@ export class PaymentComponent implements OnInit , Loadable{
   }
 
   ngOnInit(): void {
-    let utente: Utente = JSON.parse(this.cookieService.get('utente'));
-    this.currentUserId = utente.id;
-
-    console.log(this.currentUserId);
-
-    this.showAllPayments();
+      if (this.cookieService.check('utente'))
+      {
+      let utente: Utente = JSON.parse(this.cookieService.get('utente'));
+      this.currentUserId = utente.id;
+      this.showAllPayments();
+    } else {
+      this.toastService.show('errorToast', 'Errore', 'Utente non autenticato.');
+    }
   }
 
   showAllPayments() {
     this.paymentService.getPayments(this.currentUserId).subscribe({
-      next: (payment : Pagamento[]) => {
-        this.payments = payment;
-        console.log(payment);
+      next: (payments : Pagamento[]) => {
+        console.log(payments.length);
+        this.payments = payments;
+        console.log(payments);
         this.loaded = true;
       },
       error: (error) => {

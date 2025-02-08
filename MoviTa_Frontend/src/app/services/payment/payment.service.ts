@@ -17,7 +17,7 @@ export class PaymentService {
   }
 
   createPayment(payment: Pagamento): Observable<Pagamento> {
-    const body = { id: 0, titolo: payment.name, ammontare: payment.ammontare, date: payment.date, id_utente: payment.id_utente };
+    const body = { id: 0, titolo: payment.titolo, ammontare: payment.ammontare, date: payment.data, id_utente: payment.id_utente };
 
     return this.authHttp.post(`${this.apiUrl}/create-payment/${payment}`, body)
       .pipe(
