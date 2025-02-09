@@ -38,7 +38,7 @@ export class CarouselEventImageComponent {
             }
           },
           error: (err) => {
-            this.toastService.show('errorToast', 'Errore', 'Errore nel reperire le informazioni richieste.\n Prova a ricaricaricare la pagina.');
+            this.immaginiEvento.push("/img/event_default.jpg");            
           }
         }
       );

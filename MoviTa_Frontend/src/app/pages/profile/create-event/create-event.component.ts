@@ -39,7 +39,6 @@ export class CreateEventComponent implements OnInit {
       this.currentUserId = this.utente.id;
     }
 
-
     this.eventForm = new FormGroup({
       title: new FormControl('', [Validators.required, Validators.maxLength(20)]),
       date: new FormControl('', Validators.required),
@@ -51,7 +50,8 @@ export class CreateEventComponent implements OnInit {
       description: new FormControl('', Validators.required),
       selectedCategory: new FormControl(''),
       selectedCategories: new FormControl<string[]>([]),
-      images: new FormControl<File[]>([])
+      images: new FormControl<File[]>([]),
+      capacity: new FormControl(1, [Validators.required, Validators.min(1)]) 
     });
   }
 
@@ -132,12 +132,12 @@ export class CreateEventComponent implements OnInit {
       nome: this.eventForm.get('title')?.value,
       data: this.eventForm.get('date')?.value,
       prezzo: this.eventForm.get('price')?.value,
+      descrizione: this.eventForm.get('description')?.value,
       citta: this.eventForm.get('city')?.value,
       indirizzo: this.eventForm.get('address')?.value,
       numPartecipanti: 0,
-      maxNumPartecipanti: this.eventForm.get('maxParticipants')?.value,
+      maxNumPartecipanti: this.eventForm.get('capacity')?.value,
       etaMinima: this.eventForm.get('minAge')?.value,
-      descrizione: "",
       creatore: {
         id: this.currentUserId,
         nome: this.utente?.nome!,

@@ -99,7 +99,7 @@ export class CardFriendComponent implements OnInit, Loadable {
         this.imagineProfile = URL.createObjectURL(data);
       },
       error: () => {
-        this.toastService.show('errorToast', "Errore", "Impossibile recuperare l'immagine del profilo. \n Prova a ricaricare la pagina.");
+        this.imagineProfile = "/img/user_default.jpg";
       }
     });
   }

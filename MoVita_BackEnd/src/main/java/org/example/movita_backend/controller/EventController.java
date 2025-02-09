@@ -187,7 +187,7 @@ public class EventController {
         );
     }
 
-    @PostMapping("/remove-bookig-event")
+    @PostMapping("/update-bookig-event")
     ResponseEntity<Booking> removeBookingEvent(@RequestBody BookingEvent booking) throws Exception
     {
         return  ResponseEntity.ok(

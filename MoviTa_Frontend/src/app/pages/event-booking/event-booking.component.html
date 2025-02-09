@@ -1,0 +1,8 @@
+<main class="container p-0">
+
+    @for (item of partecipazioni; track $index)
+    {
+        <app-user-card-orizzontale [username]="item.utente.username" [immagineUser]="item.utente.immagineProfilo"></app-user-card-orizzontale>
+    } 
+
+</main>

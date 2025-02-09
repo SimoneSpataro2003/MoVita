@@ -16,6 +16,7 @@ import {ToastService} from '../../../services/toast/toast.service';
 export class EventiSimiliComponent {
 
   eventiSimili: Evento[] = [];
+  @Input() idEvento !:number;
   constructor(private eventService: EventService,
               private categoryService: CategoryService,
               private toastService: ToastService) { }
@@ -47,7 +48,7 @@ export class EventiSimiliComponent {
         this.categoryService.findEventsByCategory(String(i.id)).subscribe({
           next: (data) => {
             for (let d of data) {
-              if (!eventiS.has(d.id)) {  // Controllo basato sull'id
+              if (!eventiS.has(d.id) && d.id !== this.idEvento) {  // Controllo basato sull'id
                 eventiS.add(d.id);
                 this.eventiSimili.push(d);
               }

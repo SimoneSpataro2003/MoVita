@@ -30,11 +30,9 @@ export class EventCardComponent implements OnInit, Loadable {
   utente!: Utente;
   categorie: Categoria[] = [];
   loaded: boolean = false;
-  immagineEvento: string = "";
-  immagineCreatore: string = "";
+  immagineEvento: string = "/img/event_default.jpg";
+  immagineCreatore: string = "/img/user_default.jpg";
   readonly IconaCategoriaMapper = IconaCategoriaMapper;
-
-
 
   constructor(private categoryService: CategoryService,
     private eventService: EventService,
@@ -61,7 +59,7 @@ export class EventCardComponent implements OnInit, Loadable {
 
           },
           error: (error) => {
-            this.toastService.show('errorToast', "Errore", "Impossibile recuperare l'immagine del creatore dell'evento. \n Prova a ricaricare la pagina.");
+            
           }
 
         }
@@ -88,7 +86,7 @@ export class EventCardComponent implements OnInit, Loadable {
 
           },
           error: (err) => {
-            this.toastService.show('errorToast', 'Errore', 'Errore nel reperire le informazioni richieste.\n Prova a ricaricaricare la pagina.');
+           
           }
         }
       );

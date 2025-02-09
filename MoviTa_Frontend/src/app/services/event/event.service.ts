@@ -61,8 +61,8 @@ export class EventService {
   public setEventBooking(prenotazione:PartecipazioneDTO):Observable<Partecipazione>{
     return this.authHttp.post(this.URL +"/book-event",prenotazione);
   }
-  public undoBooking(prenotazione:PartecipazioneDTO):Observable<Partecipazione>{
-    return this.authHttp.post(this.URL +"/remove-bookig-event",prenotazione);
+  public updateBooking(prenotazione:PartecipazioneDTO):Observable<Partecipazione>{
+    return this.authHttp.post(this.URL +"/update-bookig-event",prenotazione);
   }
   
   public creaEvento( body : any) : Observable<Evento> {
