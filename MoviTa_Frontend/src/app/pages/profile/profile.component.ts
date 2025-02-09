@@ -74,7 +74,7 @@ export class ProfileComponent implements OnInit, Loadable {
           this.immagineProfilo = URL.createObjectURL(data);
         },
         error: (err) => {
-          this.toastService.show('errorToast',"Errore", "Impossibile recuperare l'immagine del profilo. \n Prova a ricaricare la pagina.");
+          this.immagineProfilo = "/img/user_default.jpg";
         }
       }
     );
