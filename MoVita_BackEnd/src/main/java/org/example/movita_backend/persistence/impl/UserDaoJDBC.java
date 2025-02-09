@@ -1,5 +1,6 @@
 package org.example.movita_backend.persistence.impl;
 
+import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.ResultSetMapper;
 import org.example.movita_backend.persistence.DBManager;
@@ -15,6 +16,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static org.example.movita_backend.model.ResultSetMapper.mapUser;
 
 @Repository
 public class UserDaoJDBC implements UserDao {
@@ -505,29 +508,24 @@ public class UserDaoJDBC implements UserDao {
         }
     }
 
-    private User mapUser(ResultSet rs) throws SQLException {
-        User u = new User();
+    @Override
+    public List<Category> findCategories(User user) {
+        String query = "SELECT c.* FROM categoria c, persona_categoria pc WHERE c.id = pc.id_categoria AND pc.id_persona = ?";
+        List<Category> toRet = new ArrayList<>();
 
-        u.setId(rs.getInt("id"));
-        u.setUsername(rs.getString("username"));
-        u.setEmail(rs.getString("email"));
-        u.setPassword(rs.getString("password"));
-        u.setNome(rs.getString("nome"));
-        u.setImmagineProfilo(rs.getString("immagine_profilo"));
-        u.setCitta(rs.getString("citta"));
-        u.setAzienda(rs.getBoolean("azienda"));
-        u.setPersonaCognome(rs.getString("persona_cognome"));
-        u.setAziendaPartitaIva(rs.getString("azienda_p_iva"));
-        u.setAziendaIndirizzo(rs.getString("azienda_indirizzo"));
-        u.setAziendaRecapito(rs.getString("azienda_recapito"));
-        u.setPremium(rs.getBoolean("premium"));
-        u.setPremiumDataInizio(rs.getString("premium_data_inizio"));
-        u.setPremiumDataFine(rs.getString("premium_data_fine"));
-        u.setAdmin(rs.getBoolean("admin"));
-        u.setDataCreazione(rs.getString("data_creazione"));
-        u.setDataUltimaModifica(rs.getString("data_ultima_modifica"));
-        u.setMostraConsigliEventi(rs.getBoolean("mostra_consigli_eventi"));
+        try(PreparedStatement ps = connection.prepareStatement(query))
+        {
+            ps.setInt(1, user.getId());
+            ResultSet rs = ps.executeQuery();
 
-        return u;
-    }
+            while(rs.next())
+            {
+                toRet.add(ResultSetMapper.mapCategory(rs));
+            }
+            return toRet;
+        }
+        catch (SQLException e)
+        {
+            throw new RuntimeException(e.getMessage());
+        }    }
 }

@@ -8,6 +8,9 @@ import {ConsigliEventoComponent} from '../consigli-evento/consigli-evento.compon
 import {NgbModal, NgbOffcanvasRef} from '@ng-bootstrap/ng-bootstrap';
 import {CategorieFiltroComponent} from '../categorie-filtro/categorie-filtro.component';
 import {ToastService} from '../../../services/toast/toast.service';
+import {Utente} from '../../../model/Utente';
+import {UserService} from '../../../services/user/user.service';
+import {Categoria} from '../../../model/Categoria';
 
 @Component({
   selector: 'app-event-filters',
@@ -30,6 +33,7 @@ export class EventFiltersComponent implements OnChanges{
   constructor(private fb: FormBuilder,
               private cookieService: CookieService,
               private eventService: EventService,
+              private userService: UserService,
               private modalService: NgbModal,
               private toastService: ToastService) {
 
@@ -90,12 +94,14 @@ export class EventFiltersComponent implements OnChanges{
       }
     });
 
-    this.thisOffCanvas.close();
+    //this.thisOffCanvas.close();
   }
 
   resetFilters() {
     this.filterForm.reset({ prezzoMax: 1000, valutazioneMedia: 0, almenoMetaPartecipanti: false, categorie: [] });
     this.updateFilterSummary();
+
+    this.getEventsByFilter();
   }
 
   protected readonly IconaCategoriaMapper = IconaCategoriaMapper;
@@ -123,4 +129,6 @@ export class EventFiltersComponent implements OnChanges{
   get prezzoMax(){
     return this.filterForm.value.prezzoMax;
   }
+
+
 }

@@ -15,12 +15,12 @@ import java.util.List;
 public class PaymentService implements IPaymentService {
 
     private final PaymentDAO paymentDao;
-    private final UserProxy userProxy;
+    private final UserDao userDao;
 
     @Autowired
     public PaymentService(PaymentDAO paymentDao, UserDao userDao) {
         this.paymentDao = paymentDao;
-        this.userProxy = new UserProxy();
+        this.userDao = userDao;
     }
 
     @Override
@@ -35,6 +35,7 @@ public class PaymentService implements IPaymentService {
 
     @Override
     public List<Payment> getPayments(int userId) {
+        UserProxy userProxy = new UserProxy(userDao.findById(userId));
         return userProxy.getPayments(userId);
     }
 }

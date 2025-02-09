@@ -1,11 +1,14 @@
 package org.example.movita_backend.services.impl;
 
+import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.User;
 import org.example.movita_backend.persistence.DBManager;
 import org.example.movita_backend.persistence.dao.UserDao;
 import org.example.movita_backend.persistence.proxy.UserProxy;
 import org.example.movita_backend.services.interfaces.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,12 +16,12 @@ import java.util.List;
 @Service
 public class UserService implements IUserService{
     private final UserDao userDao;
-    private final UserProxy userProxy;
-    public PaymentService paymentService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public UserService() {
         this.userDao = DBManager.getInstance().getUserDAO();
-        this.userProxy = new UserProxy();
     }
 
     @Override
@@ -51,7 +54,14 @@ public class UserService implements IUserService{
 
     @Override
     public List<Event> getCreatedEventsByUserId(int userId) {
+        UserProxy userProxy = new UserProxy(userDao.findById(userId));
         return userProxy.getCreatedEvents(userId);
+    }
+
+    @Override
+    public List<Category> getCategories(int userId) {
+        UserProxy userProxy = new UserProxy(userDao.findById(userId));
+        return userProxy.getCategorieInteressate();
     }
 
     @Override
@@ -61,6 +71,8 @@ public class UserService implements IUserService{
 
     @Override
     public List<User> getFriends(int userId) {
+        UserProxy userProxy = new UserProxy(userDao.findById(userId));
+
         return userProxy.getAmici(userId);
     }
 
@@ -86,6 +98,6 @@ public class UserService implements IUserService{
 
     @Override
     public User updateUserPassword(int userId, String password) {
-        return userDao.updatePassword(userId, password);
+        return userDao.updatePassword(userId, passwordEncoder.encode(password));
     }
 }

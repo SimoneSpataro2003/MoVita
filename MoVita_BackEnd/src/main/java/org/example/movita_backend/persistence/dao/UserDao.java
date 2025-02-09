@@ -1,7 +1,9 @@
 package org.example.movita_backend.persistence.dao;
 
+import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.User;
+import org.example.movita_backend.persistence.proxy.UserProxy;
 
 import java.util.List;
 
@@ -34,6 +36,8 @@ public interface UserDao {
 
     List<Event> getCreatedEventsByUserId(int userId);
     boolean checkFriendship(int userId1, int userId2);
+
+    List<Category> findCategories(User user);
 
     //TODO: ALTRI
     //associazioni

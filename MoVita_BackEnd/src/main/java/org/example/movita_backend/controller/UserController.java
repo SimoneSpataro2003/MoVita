@@ -1,5 +1,6 @@
 package org.example.movita_backend.controller;
 
+import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.Payment;
 import org.example.movita_backend.model.User;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
@@ -61,13 +63,13 @@ public class UserController
     }
 
     @PostMapping("/make-friendship/{userId1}/{userId2}")
-    public ResponseEntity<String> createFriendship(@PathVariable int userId1, @PathVariable int userId2)
+    public ResponseEntity<?> createFriendship(@PathVariable int userId1, @PathVariable int userId2)
     {
         try
         {
             System.out.println("aggiungo amicizia " + userId1 + "-" + userId2);
             userService.makeFriendship(userId1, userId2);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Friendship created successfully.");
+            return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("status","Friendship created successfully."));
         }
         catch (Exception e)
         {
@@ -142,6 +144,21 @@ public class UserController
         catch (Exception e)
         {
             System.err.println("Error finding friends: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/find-categories/{userId}")
+    public ResponseEntity<List<Category>> getCategoriesById(@PathVariable int userId)
+    {
+        try
+        {
+            List<Category> categories = userService.getCategories(userId);
+            return ResponseEntity.status(HttpStatus.OK).body(categories);
+        }
+        catch (Exception e)
+        {
+            System.err.println("Error finding categories: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
