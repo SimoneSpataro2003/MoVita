@@ -6,8 +6,14 @@
       <form [formGroup]="eventForm" (ngSubmit)="createEvent()" class="row g-4">
         <!-- Titolo -->
         <div class="col-md-12">
-          <label for="title" class="form-label">Titolo</label>
-          <input type="text" class="form-control form-control-lg" id="title" formControlName="title">
+          <label for="title" class="form-label">Titolo <span class="text-danger">*</span></label>
+          <input type="text" class="form-control form-control-lg" id="title" formControlName="title" required>
+        </div>
+
+        <!-- Descrizione -->
+        <div class="col-md-12">
+          <label for="description" class="form-label">Descrizione</label>
+          <textarea class="form-control form-control-lg" id="description" formControlName="description" rows="4"></textarea>
         </div>
 
         <!-- Caricamento Immagini -->
@@ -25,24 +31,35 @@
 
         <!-- Data e Prezzo -->
         <div class="col-md-6">
-          <label for="date" class="form-label">Inserisci Data e Ora (YYYY-MM-DD HH:mm:ss)</label>
-          <input type="text" class="form-control form-control-lg" id="date" formControlName="date"
-            placeholder="2025-06-15 12:00:00" />
+          <label for="date" class="form-label">Inserisci Data e Ora (YYYY-MM-DD HH:mm:ss) <span class="text-danger">*</span></label>
+          <input type="text" class="form-control form-control-lg" id="date" formControlName="date" placeholder="2025-06-15 12:00:00" required>
         </div>
 
         <div class="col-md-6">
-          <label for="price" class="form-label">Prezzo</label>
-          <input type="number" class="form-control form-control-lg" id="price" formControlName="price">
+          <label for="price" class="form-label">Prezzo <span class="text-danger">*</span></label>
+          <input type="number" class="form-control form-control-lg" id="price" formControlName="price" required>
         </div>
 
         <!-- Città e Indirizzo -->
         <div class="col-md-6">
-          <label for="city" class="form-label">Città</label>
-          <input type="text" class="form-control form-control-lg" id="city" formControlName="city">
+          <label for="city" class="form-label">Città <span class="text-danger">*</span></label>
+          <input type="text" class="form-control form-control-lg" id="city" formControlName="city" required>
         </div>
         <div class="col-md-6">
-          <label for="address" class="form-label">Indirizzo</label>
-          <input type="text" class="form-control form-control-lg" id="address" formControlName="address">
+          <label for="address" class="form-label">Indirizzo <span class="text-danger">*</span></label>
+          <input type="text" class="form-control form-control-lg" id="address" formControlName="address" required>
+        </div>
+
+        <!-- Capienza Massima -->
+        <div class="col-md-6">
+          <label for="capacity" class="form-label">Capienza Massima <span class="text-danger">*</span></label>
+          <input type="number" class="form-control form-control-lg" id="capacity" formControlName="capacity" min="1" required>
+        </div>
+
+        <!-- Età Minima -->
+        <div class="col-md-6">
+          <label for="minAge" class="form-label">Età Minima</label>
+          <input type="number" class="form-control form-control-lg" id="minAge" formControlName="minAge" min="0">
         </div>
 
         <!-- Selezione Categorie -->
@@ -67,6 +84,11 @@
               </li>
             </ul>
           </div>
+        </div>
+
+        <!-- Messaggio campi obbligatori -->
+        <div class="col-12 mt-3">
+          <p class="text-muted"><span class="text-danger">*</span> Campi obbligatori</p>
         </div>
 
         <div class="col-12 mt-3">
