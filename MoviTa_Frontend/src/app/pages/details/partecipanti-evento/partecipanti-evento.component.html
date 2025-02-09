@@ -1,17 +1,26 @@
-<div class="d-flex p-0">
-    @for (partecipazione of altriUtenti.slice(0, 3); track partecipazione; let i = $index) {
+<div class="container">
+    <div class="row justify-content-center">
+      @for (partecipazione of altriUtenti.slice(0, 3); track partecipazione; let i = $index) {
         @if(!partecipazione.annullata){
-            <app-card-friend class="m-3" [utenteAmico]="partecipazione.utente" [userId]="partecipazione.utente.id"></app-card-friend>
+          <div class="col-md-3 col-sm-6 col-12 d-flex justify-content-center">
+            <app-card-friend class="m-3" 
+                             [utenteAmico]="partecipazione.utente" 
+                             [userId]="partecipazione.utente.id">
+            </app-card-friend>
+          </div>
         }       
-    }
-    @if(altriUtenti.length>3)
-    {
-        <div class="card w-50 m-3">
-            <div class="card-body mt-4 text-center">
-              <h5 class="card-title">Piu di {{altriUtenti.length}}</h5>              
+      }
+  
+      @if(altriUtenti.length > 3) {
+        <div class="col-md-3 col-sm-6 col-12 d-flex justify-content-center">
+          <div class="card text-center m-3 w-100">
+            <div class="card-body mt-4">
+              <h5 class="card-title">Più di {{altriUtenti.length}}</h5>              
               <a href="#" class="btn btn-outline-primary mt-4">Mostra Tutti</a>
             </div>
+          </div>
         </div>          
-    }
-
-</div>
+      }
+    </div>
+  </div>
+  
