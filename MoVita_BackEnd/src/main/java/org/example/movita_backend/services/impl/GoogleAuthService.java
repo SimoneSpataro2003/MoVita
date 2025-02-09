@@ -6,12 +6,13 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
+import org.example.movita_backend.services.interfaces.IGoogleAuthService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
 @Service
-public class GoogleAuthService {
+public class GoogleAuthService implements IGoogleAuthService {
     private static final String CLIENT_ID = "100245284964-18vc9ql529e46ptpgtsqfl1ifu4b1ej2.apps.googleusercontent.com";
 
     private final GoogleIdTokenVerifier verifier;
@@ -23,6 +24,7 @@ public class GoogleAuthService {
                 .build();
     }
 
+    @Override
     public String verifyTokenAndGetEmail(String idTokenString) {
         try {
             GoogleIdToken idToken = verifier.verify(idTokenString);

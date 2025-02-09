@@ -18,7 +18,7 @@ public class PaymentService implements IPaymentService {
     private final UserDao userDao;
 
     @Autowired
-    public PaymentService(PaymentDAO paymentDao) {
+    public PaymentService(PaymentDAO paymentDao, UserDao userDao) {
         this.paymentDao = paymentDao;
         this.userDao = userDao;
     }
