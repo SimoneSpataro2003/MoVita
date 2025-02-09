@@ -10,14 +10,14 @@ import lombok.Setter;
 public class Payment {
     protected int id;
     protected String titolo;
-    protected int ammontare;
+    protected double ammontare;
     protected String data;
     protected int id_utente;
 
     public Payment() {
     }
 
-    public Payment(String titolo, int ammontare, String data, int id_utente)
+    public Payment(String titolo, double ammontare, String data, int id_utente)
     {
         this.titolo = titolo;
         this.ammontare = ammontare;

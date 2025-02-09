@@ -16,16 +16,8 @@ export class PaymentService {
     return this.authHttp.get(`${this.apiUrl}/get-payments/${id}`);
   }
 
-  createPayment(payment: Pagamento): Observable<Pagamento> {
-    const body = { id: 0, titolo: payment.titolo, ammontare: payment.ammontare, date: payment.data, id_utente: payment.id_utente };
-
-    return this.authHttp.post(`${this.apiUrl}/create-payment/${payment}`, body)
-      .pipe(
-        catchError((error) => {
-          console.error('Payment creation failed', error);
-          throw error;  // Or handle appropriately
-        })
-      );
+  createPayment(payment: any): Observable<Pagamento> {
+    return this.authHttp.post(`${this.apiUrl}/create-payment`, payment);
   }
 
 }

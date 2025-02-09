@@ -47,9 +47,9 @@ public class ResultSetMapper {
     public static Payment mapPayment(ResultSet rs) throws SQLException
     {
         Payment payment = new Payment();
-        payment.setId(rs.getInt("id_pagamento"));
-        payment.setTitolo(rs.getString("titolo_pagamento"));
-        payment.setAmmontare(rs.getShort("ammontare"));
+        payment.setId(rs.getInt("id"));
+        payment.setTitolo(rs.getString("titolo"));
+        payment.setAmmontare(rs.getDouble("ammontare"));
         payment.setData(rs.getString("data"));
         payment.setId_utente(rs.getInt("id_utente"));
         return payment;
