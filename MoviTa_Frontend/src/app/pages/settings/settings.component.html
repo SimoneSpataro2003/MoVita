@@ -151,10 +151,10 @@
         <div class="col-md-4">
           <label for="aziendaImageUpload" class="form-label">Cambia immagine profilo</label>
           <input type="file" class="form-control form-control-lg" id="aziendaImageUpload" (change)="onImageUpload(agencyForm)"
-                 accept="image/*">
+                 multiple accept="image/jpeg">
           <div class="mt-3 d-flex flex-wrap">
-            <div *ngIf="imagePreviews.length > 0" class="me-2">
-              <img [src]="imagePreviews[0]" alt="Anteprima" class="img-thumbnail" style="width: 100px; height: 100px;">
+            <div *ngFor="let image of imagePreviews; let i = index" class="me-2">
+              <img [src]="image" alt="Anteprima" class="img-thumbnail" style="width: 100px; height: 100px;">
               <button type="button" class="btn btn-sm btn-danger d-block mt-1" (click)="removeImage(agencyForm, 'aziendaImageUpload')">Rimuovi</button>
             </div>
           </div>

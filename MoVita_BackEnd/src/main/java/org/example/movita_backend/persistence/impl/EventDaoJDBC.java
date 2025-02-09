@@ -221,21 +221,16 @@ public class EventDaoJDBC implements EventDao {
         }
     }
 
+
     //FIXME: USA mapEvent
-
-
     public int save(Event event) {
+
         String query = "INSERT INTO evento (nome, data, prezzo, citta, indirizzo, num_partecipanti, max_num_partecipanti, eta_minima, descrizione, valutazione_media, creatore) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?); ";
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0,?); ";
 
         try (PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, event.getNome());
-
-            // Converti la stringa in Timestamp se necessario
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-            LocalDateTime localDateTime = LocalDateTime.parse(event.getData(), formatter);
-            statement.setTimestamp(2, java.sql.Timestamp.valueOf(localDateTime));
-
+            statement.setTimestamp(2, java.sql.Timestamp.valueOf(event.getData()));
             statement.setFloat(3, event.getPrezzo());
             statement.setString(4, event.getCitta());
             statement.setString(5, event.getIndirizzo());
@@ -247,19 +242,21 @@ public class EventDaoJDBC implements EventDao {
 
             statement.executeUpdate();
 
+            // Recupera la chiave primaria generata
             try (ResultSet generatedPrimaryKey = statement.getGeneratedKeys()) {
+                int generatedId = -1;
                 if (generatedPrimaryKey.next()) {
-                    return generatedPrimaryKey.getInt(1);
+                    generatedId = generatedPrimaryKey.getInt(1);
                 }
+                return generatedId;
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return -1; // In caso di errore restituisci -1
         }
-        return -1; // Restituisce -1 in caso di errore
     }
 
-
-    @Override
+        @Override
     public void delete(int eventId) {
         String query = "DELETE FROM evento WHERE id = ?";
 
