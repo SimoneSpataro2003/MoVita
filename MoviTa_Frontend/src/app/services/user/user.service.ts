@@ -68,12 +68,14 @@ export class UserService {
     return this.authHttp.patch(`${this.apiUrl}/update-agency/${id}`, userData);
   }
 
-  public updatePassword(id: number, newPassword: any): Observable<Utente> {
+  public updatePassword(id: number, newPassword: String): Observable<Utente> {
     return this.authHttp.patch(`${this.apiUrl}/update-password/${id}`, newPassword);
   }
 
-  public setUserImage(id: number, userData: any): Observable<Utente> {
-    return this.authHttp.post(`${this.apiUrl}/set-user-image/${id}`, userData);
+  public setUserImage(id: number, body: File): Observable<string> {
+    const formData = new FormData();
+    formData.append('image', body);
+    return this.authHttp.post(`${this.apiUrl}/set-user-image/${id}`, formData);
   }
 
   public goPremium(id: number): Observable<any> {

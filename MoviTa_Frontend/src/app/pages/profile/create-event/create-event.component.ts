@@ -40,8 +40,8 @@ export class CreateEventComponent implements OnInit {
     }
 
     this.eventForm = new FormGroup({
-      title: new FormControl('', [Validators.required, Validators.maxLength(20)]),
-      date: new FormControl('', Validators.required),
+      title: new FormControl('', [Validators.required]),
+      date: new FormControl('', [Validators.required]),
       price: new FormControl(0, Validators.required),
       city: new FormControl('', Validators.required),
       address: new FormControl('', Validators.required),
@@ -103,9 +103,18 @@ export class CreateEventComponent implements OnInit {
     }
   }
 
-  createEvent() {
-    console.log(this.eventForm);
-    // if (this.eventForm.valid) {
+  validaData(data: string): boolean {
+    const dateTimePattern = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/;
+    return dateTimePattern.test(data); 
+  }
+  seValido():boolean{
+    
+    return (this.eventForm.get('title')?.value!=='') && this.validaData(this.eventForm.get('date')?.value) &&(this.eventForm.get('price')?.value!=='') && (this.eventForm.get('city')?.value!=='') && (this.eventForm.get('address')?.value!=='') && (this.eventForm.get('capacity')?.value!=='') && (this.eventForm.get('minAge')?.value!=='');
+     
+  }
+
+  createEvent() {    
+    if (this.seValido()) {
     console.log("VALIDIIIIII");
     const formData = new FormData();
     Object.keys(this.eventForm.controls).forEach(key => {
@@ -196,9 +205,10 @@ export class CreateEventComponent implements OnInit {
         
       }
     });
-    // } else {
-    //   console.log('Modulo non valido!');
-    // }
+     } else {
+      this.toastService.show('errorToast', 'Errore', "Form non valido.\n Compila correttamente il form e inserisci la data nel corretto formato");
+        
+     }
   }
 
   removeImage(index: number) {

@@ -2,6 +2,6 @@ export interface Pagamento {
   id?: number;
   titolo: string;
   ammontare: number;
-  data: Date;
+  data: string;
   id_utente: number;
 }

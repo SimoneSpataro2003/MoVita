@@ -74,7 +74,7 @@ export class ProfileComponent implements OnInit, Loadable {
           this.immagineProfilo = URL.createObjectURL(data);
         },
         error: (err) => {
-          this.toastService.show('errorToast',"Errore", "Impossibile recuperare l'immagine del profilo. \n Prova a ricaricare la pagina.");
+          this.immagineProfilo = "/img/user_default.jpg";
         }
       }
     );
@@ -183,21 +183,26 @@ export class ProfileComponent implements OnInit, Loadable {
 
   addPayment() {
     const nuovoPagamento: Pagamento = {
-      id: undefined,
-      titolo: "Abbonamento Mensile",
-      ammontare: 29.99,
-      data: new Date(),
-      id_utente: this.currentUserId
+      "titolo": "Abbonamento mensile",
+      "ammontare": 10,
+      "data": new Date().toISOString().split('T')[0], // YYYY-MM-DD
+      "id_utente": this.currentUserId
     };
+
+    console.log(nuovoPagamento.data);
 
     this.paymentService.createPayment(nuovoPagamento).subscribe({
       next: (data) => {
         console.log(data);
-        this.toastService.show('errorToast', 'Errore', 'Errore nel reperire le categorie di un evento.\n Prova a ricaricaricare la pagina.');
-
+        this.toastService.show('successToast', 'Pagamento effettuato', 'Il pagamento è stato completato con successo!');
+      },
+      error: (err) => {
+        console.log(err);
+        this.toastService.show('errorToast', 'Errore', 'Errore nell\'effettuare il pagamento. Prova a ricaricare la pagina.');
       }
-    })
+    });
   }
+
 
   goToSettings() {
     this.router.navigate(['/profile/settings', this.currentUserId]);
