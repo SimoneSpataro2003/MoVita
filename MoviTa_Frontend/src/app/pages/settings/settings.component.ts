@@ -64,7 +64,8 @@ export class SettingsComponent implements OnInit, Loadable {
     email: new FormControl('', [Validators.required ,Validators.pattern(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/)]),
     citta: new FormControl('', [Validators.required, Validators.pattern(/[a-zA-Z ]+/)]),
     nuovaPassword: new FormControl('', [Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]),
-    ripetiNuovaPassword: new FormControl('', [Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)])
+    ripetiNuovaPassword: new FormControl('', [Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]),
+    personaImageUpload: new FormControl<File | null>(null)
   }, { validators: passwordMatchValidator });
 
   agencyForm = new FormGroup({
@@ -75,7 +76,8 @@ export class SettingsComponent implements OnInit, Loadable {
     aziendaRecapito: new FormControl('', [Validators.required, Validators.pattern(/[0-9]{10}/)]),
     aziendaPartitaIva: new FormControl('', [Validators.required, Validators.pattern(/[0-9]{11}/)]),
     nuovaPassword: new FormControl('', [Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/)]),
-    ripetiNuovaPassword: new FormControl('')
+    ripetiNuovaPassword: new FormControl(''),
+    aziendaImageUpload: new FormControl<File | null>(null)
   }, { validators: passwordMatchValidator });
 
   constructor(
@@ -158,17 +160,20 @@ export class SettingsComponent implements OnInit, Loadable {
       });
     }
 
-    // immagine
-    if (this.imagePreviews.length == 1) { //ho effettivamente caricato un immagine
-      this.userService.setUserImage(this.userId, this.imagePreviews[0]).subscribe({
-        next: (data: any) => {
-          this.toastService.show('successToast',"Modifica effettuata", "Il profilo è stato modificato con successo.");
-        },
-        error: (any) => {
-          this.toastService.show('errorToast', "Errore", "Impossibile aggiornare l'immagine profilo.");
-        }
-      });
-    }
+     //TODO: fixare
+    // if (this.personForm.get('personaImageUpload')?.value !== null && this.personForm.get('personaImageUpload')?.value !== undefined) { //ho effettivamente caricato un immagine
+    //   console.log("IMMAGINE DA CAMBIARE")
+    //   console.log(this.personForm.get('personaImageUpload')?.value);
+    //   this.userService.setUserImage(this.userId,this.personForm.get('personaImageUpload')?.value!).subscribe({
+    //     next: (data) => {
+    //       this.toastService.show('successToast',"Modifica effettuata", "Il profilo è stato modificato con successo.");
+    //     },
+    //     error: (error) => {
+    //       console.log(error)
+    //       this.toastService.show('errorToast', "Errore", "Impossibile aggiornare l'immagine profilo.");
+    //     }
+    //   });
+    // }
   }
 
   updateAgency() {
@@ -209,17 +214,20 @@ export class SettingsComponent implements OnInit, Loadable {
       });
     }
 
-    // immagine
-    if (this.imagePreviews.length == 1) { //ho effettivamente caricato un immagine
-      this.userService.setUserImage(this.userId, this.imagePreviews[0]).subscribe({
-        next: (data: any) => {
-          this.toastService.show('successToast',"Modifica effettuata", "Il profilo è stato modificato con successo.");
-        },
-        error: (any) => {
-          this.toastService.show('errorToast', "Errore", "Impossibile aggiornare l'immagine profilo.");
-        }
-      });
-    }
+     //TODO: fixare
+    // if (this.agencyForm.get('aziendaImageUpload')?.value !== null && this.agencyForm.get('aziendaImageUpload')?.value !== undefined) { //ho effettivamente caricato un immagine
+    //   console.log("IMMAGINE DA CAMBIARE")
+    //   console.log(this.agencyForm.get('aziendaImageUpload')?.value);
+    //   this.userService.setUserImage(this.userId,this.agencyForm.get('aziendaImageUpload')?.value!).subscribe({
+    //     next: (data) => {
+    //       this.toastService.show('successToast',"Modifica effettuata", "Il profilo è stato modificato con successo.");
+    //     },
+    //     error: (error) => {
+    //       console.log(error);
+    //       this.toastService.show('errorToast', "Errore", "Impossibile aggiornare l'immagine profilo.");
+    //     }
+    //   });
+    // }
   }
 
   onImageUpload(form: FormGroup) {
