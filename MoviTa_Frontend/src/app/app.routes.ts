@@ -13,6 +13,7 @@ import {SettingsComponent} from './pages/settings/settings.component';
 import {authGuard} from './guard/auth.guard';
 import {CreateEventComponent} from './pages/profile/create-event/create-event.component';
 import {NotFoundComponent} from './pages/not-found/not-found.component';
+import { EventBookingComponent } from './pages/event-booking/event-booking.component';
 
 export const routes: Routes = [
   {
@@ -27,6 +28,7 @@ export const routes: Routes = [
       {path: 'search-users', component: SearchFriendsComponent},
       {path: 'create-event', component: CreateEventComponent},
       {path: 'profile/settings/:id', component: SettingsComponent},
+      {path: 'event-booking/:id', component: EventBookingComponent },
     ],
     canActivate:[authGuard],
     canActivateChild:[authGuard]

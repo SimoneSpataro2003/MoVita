@@ -3,6 +3,8 @@ import { Utente } from '../../../model/Utente';
 import { Partecipazione } from '../../../model/Partecipazione';
 import { EventService } from '../../../services/event/event.service';
 import { CardFriendComponent } from '../../../shared/common/card-friend/card-friend.component';
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-partecipanti-evento',
   standalone: true,
@@ -16,7 +18,7 @@ export class PartecipantiEventoComponent {
   altriUtenti: Partecipazione[] = [];
   @Input() idEvento !:number | null;
 
-  constructor(private eventService:EventService){}
+  constructor(private eventService:EventService,  private router: Router){}
 
   ngOnInit():void{
     this.ottieniPrenotazioni();
@@ -42,13 +44,9 @@ export class PartecipantiEventoComponent {
     }
 
   }
-  
 
-
-
-
-
-
-
+  navigaMostraTutti():void{
+    this.router.navigate([`/event-booking/${this.idEvento}`]);
+  }
 
 }

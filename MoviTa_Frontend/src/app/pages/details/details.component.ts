@@ -15,11 +15,11 @@ import { PartecipazioneDTO } from '../../model/partecipazione-dto';
 import { ToastService } from '../../services/toast/toast.service';
 import { AggiungiRecensioneComponent } from './aggiungi-recensione/aggiungi-recensione.component';
 import { Recensione } from '../../model/Recensione';
-
+import { UserCardOrizzontaleComponent } from '../../shared/common/user-card-orizzontale/user-card-orizzontale.component';
 @Component({
   selector: 'app-details',
   standalone: true,
-  imports: [CommonModule, RecensioneComponent, EventiSimiliComponent, PartecipantiEventoComponent, CarouselEventImageComponent, AggiungiRecensioneComponent],
+  imports: [CommonModule, UserCardOrizzontaleComponent, RecensioneComponent, EventiSimiliComponent, PartecipantiEventoComponent, CarouselEventImageComponent, AggiungiRecensioneComponent],
   templateUrl: './details.component.html',
   styleUrl: './details.component.css',
 })
@@ -153,7 +153,7 @@ export class DetailsComponent {
 
           },
           error: (err) => {
-            this.toastService.show('errorToast', "Errore", "Impossibile recuperare l'immagine del creatore dell'evento. \n Prova a ricaricare la pagina.");
+            this.evento!.creatore.immagineProfilo = "/img/user_default.jpg";
           }
         }
       );
