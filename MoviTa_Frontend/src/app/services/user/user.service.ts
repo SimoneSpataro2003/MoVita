@@ -4,6 +4,7 @@ import {MonoTypeOperatorFunction, Observable, OperatorFunction, TruthyTypesOf} f
 import { Utente } from '../../model/Utente';
 import {AuthHttpClientService} from '../auth-http/auth-http-client.service';
 import {Evento} from '../../model/Evento';
+import {Categoria} from '../../model/Categoria';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,10 @@ export class UserService {
 
   public getFriends(id: number): Observable<Utente[]> {
     return this.authHttp.get(`${this.apiUrl}/find-friends/${id}`);
+  }
+
+  public getCategories(id: number): Observable<Categoria[]> {
+    return this.authHttp.get(`${this.apiUrl}/find-categories/${id}`);
   }
 
   public getUserByUsername(username: string): Observable<Utente> {

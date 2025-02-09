@@ -1,5 +1,6 @@
 package org.example.movita_backend.services.interfaces;
 
+import org.example.movita_backend.model.Category;
 import org.example.movita_backend.model.Event;
 import org.example.movita_backend.model.User;
 
@@ -14,6 +15,7 @@ public interface IUserService {
     List<User> searchUsers(String filter);
     int countFriendships(int userId);
     List<Event> getCreatedEventsByUserId(int userId);
+    List<Category> getCategories(int userId);
     List<User> getFriends(int userId);
     void updatePremiumStatus(int userId);
     boolean checkFriendship(int userId1, int userId2);

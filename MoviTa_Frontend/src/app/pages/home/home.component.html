@@ -41,35 +41,50 @@
     </button>
   </section>
 
-  <section class="d-flex flex-wrap my-4 justify-content-evenly">
-    <article class="mb-3">
-      <div class="card rounded-4 text-center h-100 d-flex flex-column align-items-center" style="width: 300px;">
-        <button class="cerchio rounded-circle fs-1 btn btn-secondary bi bi-calendar-check-fill mt-3" [routerLink]="['/events']"></button>
-        <div class="card-body">
-          <h5 class="text-secondary-emphasis text-uppercase mb-3">Trova gli eventi più vicini a te</h5>
-          <p>Scopri gli eventi che si svolgono nella tua zona e partecipa a quelli che più ti interessano! Con la nostra app puoi filtrare gli eventi in base alla tua posizione, alla categoria o ai tuoi interessi, trovando sempre qualcosa di emozionante da fare vicino a te.</p>
+  <section class="container my-4">
+    <div class="row mb-4">
+      <article class="col-12">
+        <div class="row bg-primary-subtle rounded-4 p-3">
+          <div class="col-md-3 d-flex justify-content-center align-items-center">
+            <button class="cerchio rounded-circle fs-1 btn btn-secondary bi bi-calendar-check-fill" [routerLink]="['/events']"></button>
+          </div>
+          <div class="col-md-9">
+            <h5 class="text-secondary  text-uppercase mb-3">Trova gli eventi più vicini a te</h5>
+            <p>Scopri gli eventi che si svolgono nella tua zona e partecipa a quelli che più ti interessano! Con la nostra app puoi filtrare gli eventi in base alla tua posizione, alla categoria o ai tuoi interessi, trovando sempre qualcosa di emozionante da fare vicino a te.</p>
+          </div>
         </div>
-      </div>
-    </article>
-    <article class="mb-3">
-      <div class="card rounded-4 text-center h-100 d-flex flex-column align-items-center" style="width: 300px;">
-        <button class="cerchio rounded-circle fs-1 btn btn-secondary bi bi-people-fill mt-3" [routerLink]="['/search-users']"></button>
-        <div class="card-body">
-          <h5 class="text-secondary-emphasis text-uppercase mb-3">Conosci nuove persone con i tuoi stessi interessi</h5>
-          <p>Espandi la tua rete sociale incontrando persone che condividono le tue passioni! Puoi inviare richieste di amicizia, partecipare agli eventi a cui sono iscritti altri utenti e creare nuove connessioni basate sui tuoi hobby e attività preferite.</p>
+      </article>
+    </div>
+
+    <div class="row mb-4">
+      <article class="col-12">
+        <div class="row bg-primary-subtle rounded-4 p-3">
+          <div class="col-md-9">
+            <h5 class="text-secondary text-end text-uppercase mb-3">Conosci nuove persone con i tuoi stessi interessi</h5>
+            <p>Espandi la tua rete sociale incontrando persone che condividono le tue passioni! Puoi inviare richieste di amicizia, partecipare agli eventi a cui sono iscritti altri utenti e creare nuove connessioni basate sui tuoi hobby e attività preferite.</p>
+          </div>
+          <div class="col-md-3 d-flex justify-content-center align-items-center">
+            <button class="cerchio rounded-circle fs-1 btn btn-secondary bi bi-people-fill" [routerLink]="['/search-users']"></button>
+          </div>
         </div>
-      </div>
-    </article>
-    <article class="mb-3">
-      <div class="card rounded-4 text-center h-100 d-flex flex-column align-items-center" style="width: 300px;">
-        <button class="cerchio rounded-circle fs-1 btn btn-secondary bi bi-check-circle-fill mt-3" [routerLink]="['/']"></button>
-        <div class="card-body">
-          <h5 class="text-secondary-emphasis text-uppercase mb-3">Crea i tuoi eventi</h5>
-          <p>Organizza eventi su misura per la tua community! Che tu sia un privato o un'azienda, puoi gestire ogni dettaglio per garantire un'esperienza perfetta. Dai vita alle tue idee e coinvolgi nuove persone!</p>
+      </article>
+    </div>
+
+    <div class="row mb-4">
+      <article class="col-12">
+        <div class="row bg-primary-subtle rounded-4 p-3">
+          <div class="col-md-3 d-flex justify-content-center align-items-center">
+            <button class="cerchio rounded-circle fs-1 btn btn-secondary bi bi-check-circle-fill" [routerLink]="['/create-event']"></button>
+          </div>
+          <div class="col-md-9">
+            <h5 class="text-secondary text-uppercase mb-3">Crea i tuoi eventi</h5>
+            <p>Organizza eventi su misura per la tua community! Che tu sia un privato o un'azienda, puoi gestire ogni dettaglio per garantire un'esperienza perfetta. Dai vita alle tue idee e coinvolgi nuove persone!</p>
+          </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </div>
   </section>
+
 
 
 

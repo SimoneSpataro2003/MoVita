@@ -26,11 +26,10 @@
           <input type="text" id="creatoreFiltro" class="form-control" formControlName="creatore" placeholder="Cerca per Creatore">
         </div>
 
-        <div class="mb-3 col-6">
+        <div class="mb-3 col-5">
           <label for="cittaFiltro" class="form-label h6">Cerca per Città</label>
           <input type="text" id="cittaFiltro" class="form-control" formControlName="citta" placeholder="Cerca per città">
         </div>
-
       </div>
 
       <div class="row">
@@ -67,7 +66,8 @@
         <div class="col-sm-12 col-lg-1">
           <button type="button" class="btn btn-secondary" (click)="openCategoryFilterModal()">Scegli...</button>
         </div>
-        <article class="shadow rounded-4 col-lg-11">
+
+        <article class="shadow rounded-4 col-lg-10">
           @if(categorie.length == 0){
             <p class="text-center">Nessuna categoria scelta.</p>
           }@else{

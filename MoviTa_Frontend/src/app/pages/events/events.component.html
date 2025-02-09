@@ -7,21 +7,30 @@
       </div>
     </div>
     <div class="row mb-4">
-      <button class="btn btn-primary" (click)="showFiltriEvento()">Filtri: {{filterSummary}}</button>
+      <button class="btn btn-primary" (click)="showFiltriEvento()">{{filterSummary}}</button>
     </div>
-    @if(eventi.length >0){
+    @if(eventi.length > 0) {
       <div class="row mb-4">
         <div class="col-12">
-          <div class="row row-cols-1 row-cols-sm-2 row-cols-xxl-3 g-3 flex-nowrap" style="overflow-x: auto; white-space: nowrap;">
-            <!-- Loop sugli eventi -->
-            @for(evento of this.eventi; track evento.id){
-              <div class="col" style="display: inline-block; float: none;">
+          <div class="row row-cols-1 row-cols-sm-2 row-cols-xxl-3 g-3"
+            style="max-height: 500px; overflow-y: auto;">
+
+            @for(evento of this.eventi.slice(0, visibleEventsCount); track evento.id) {
+              <div class="col">
                 <app-event-card [evento]="evento" class="h-100"></app-event-card>
               </div>
             }
           </div>
+
+          <!-- Pulsante per mostrare più eventi -->
+          @if(visibleEventsCount < eventi.length) {
+            <div class="text-center mt-3">
+              <button class="btn btn-primary" (click)="loadMoreEvents()">Mostra altri</button>
+            </div>
+          }
         </div>
       </div>
+
       <div class="row">
         <div class="col-12">
           <h3 class="text-secondary text-center">Mappa degli eventi</h3>

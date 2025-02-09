@@ -1,9 +1,6 @@
 package org.example.movita_backend.persistence.proxy;
 
-import org.example.movita_backend.model.Event;
-import org.example.movita_backend.model.Payment;
-import org.example.movita_backend.model.ResultSetMapper;
-import org.example.movita_backend.model.User;
+import org.example.movita_backend.model.*;
 import org.example.movita_backend.persistence.DBManager;
 
 import java.sql.Connection;
@@ -14,9 +11,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserProxy extends User {
-    private final Connection connection;
-    public UserProxy() {
-        this.connection = DBManager.getInstance().getConnection();
+    private final Connection connection = DBManager.getInstance().getConnection();
+    public UserProxy(User user) {
+        this.id = user.getId();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+        this.nome = user.getNome();
+        this.immagineProfilo = user.getImmagineProfilo();
+        this.citta = user.getCitta();
+        this.azienda = user.isAzienda();
+        this.personaCognome = user.getPersonaCognome();
+        this.aziendaPartitaIva = user.getAziendaPartitaIva();
+        this.aziendaIndirizzo = user.getAziendaIndirizzo();
+        this.aziendaRecapito = user.getAziendaRecapito();
+        this.premium = user.isPremium();
+        this.premiumDataInizio = user.getPremiumDataInizio();
+        this.premiumDataFine = user.getPremiumDataFine();
+        this.dataCreazione = user.getDataCreazione();
+        this.dataUltimaModifica = user.getDataUltimaModifica();
+        this.mostraConsigliEventi = user.isMostraConsigliEventi();
     }
 
     public List<User> getAmici(int userId) {
@@ -31,7 +45,6 @@ public class UserProxy extends User {
         if (super.pagamenti != null) {
             return super.pagamenti;
         }
-
         String query = "SELECT * FROM pagamento WHERE pagamento.id_utente = ? ORDER BY data";
         List<Payment> payments = new ArrayList<>();
 
@@ -50,6 +63,12 @@ public class UserProxy extends User {
         }
     }
 
+    @Override
+    public List<Category> getCategorieInteressate(){
+        this.categorieInteressate = DBManager.getInstance().getUserDAO().findCategories(this);
+        return categorieInteressate;
+    }
+
     public List<User> searchFriendsWithFilter(String filter) {
         if (super.utentiCercati == null) {
             System.out.println("Uso il proxy per recuperare gli amici con il filtro");
@@ -66,29 +85,6 @@ public class UserProxy extends User {
         return super.eventiCreati;
     }
 
-    private User mapUser(ResultSet rs) throws SQLException {
-        User user = new User();
-        user.setId(rs.getInt("id"));
-        user.setEmail(rs.getString("email"));
-        user.setPassword(rs.getString("password"));
-        user.setNome(rs.getString("nome"));
-        user.setImmagineProfilo(rs.getString("immagine_profilo"));
-        user.setCitta(rs.getString("citta"));
-        user.setAzienda(rs.getBoolean("azienda"));
-        user.setPersonaCognome(rs.getString("persona_cognome"));
-        user.setAziendaPartitaIva(rs.getString("azienda_p_iva"));
-        user.setAziendaIndirizzo(rs.getString("azienda_indirizzo"));
-        user.setAziendaRecapito(rs.getString("azienda_recapito"));
-        user.setPremium(rs.getBoolean("premium"));
-        user.setPremiumDataInizio(rs.getString("premium_data_inizio"));
-        user.setPremiumDataFine(rs.getString("premium_data_fine"));
-        user.setAdmin(rs.getBoolean("admin"));
-        user.setDataCreazione(rs.getString("data_creazione"));
-        user.setDataUltimaModifica(rs.getString("data_ultima_modifica"));
-        user.setMostraConsigliEventi(rs.getBoolean("mostra_consigli_eventi"));
-        return user;
-    }
-
     private Payment mapPayment(ResultSet rs) throws SQLException {
         Payment payment = new Payment();
         payment.setId(rs.getInt("id"));
@@ -98,4 +94,5 @@ public class UserProxy extends User {
         payment.setId_utente(rs.getInt("id_utente"));
         return payment;
     }
+
 }

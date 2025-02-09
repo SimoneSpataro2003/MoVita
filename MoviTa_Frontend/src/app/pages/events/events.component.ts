@@ -12,8 +12,9 @@ import {Categoria} from '../../model/Categoria';
 import {CookieService} from 'ngx-cookie-service';
 import {Utente} from '../../model/Utente';
 import {EventFiltersComponent} from './event-filters/event-filters.component';
-import {FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {ToastService} from '../../services/toast/toast.service';
+import {UserService} from '../../services/user/user.service';
 
 @Component({
   selector: 'app-events',
@@ -33,6 +34,9 @@ export class EventsComponent implements AfterViewInit, Loadable{
   filterSummary : string = 'Nessun filtro selezionato';
   filterForm !: FormGroup;
 
+  visibleEventsCount: number = 6; // Numero iniziale di eventi visibili
+
+
   /*
   * eventService: chiamate API al backend
   * modalService: far comparire finestre modali via typescript.
@@ -40,13 +44,28 @@ export class EventsComponent implements AfterViewInit, Loadable{
   constructor(private eventService: EventService,
               private cookieService: CookieService,
               private modalService: NgbModal,
+              private userService: UserService,
               private offcanvasService: NgbOffcanvas,
-              private toastService: ToastService){}
+              private fb: FormBuilder,
+              private toastService: ToastService){
+
+    if(!this.filterForm){
+      this.filterForm = this.fb.group({
+        creatore:[''],
+        nome: [''],
+        citta: [''],
+        prezzoMax: [1000],
+        etaMinima: [''],
+        valutazioneMedia: [0],
+        almenoMetaPartecipanti: [false],
+        categorie: [[]],
+      });
+    }
+  }
 
   ngAfterViewInit() {
-    this.showAllEvents();
-
-    this.utente = JSON.parse(this.cookieService.get('utente'));
+    //this.showAllEvents();
+    this.getEvents();
     this.showConsigliEvento();
   }
 
@@ -60,6 +79,53 @@ export class EventsComponent implements AfterViewInit, Loadable{
         this.toastService.show('errorToast', 'Errore', 'Errore nel reperire le informazioni.\n Prova a ricaricaricare la pagina.');
       }
     })
+  }
+
+  getEvents() {
+    this.utente = JSON.parse(this.cookieService.get('utente'));
+
+    this.userService.getCategories(this.utente.id).subscribe({
+      next: (categories: Categoria[]) => {
+        let categorieId: number[] = []
+
+        for(let c of categories)
+          categorieId.push(c.id);
+
+        this.filterForm.patchValue({categorie: categorieId});
+        this.filterForm.patchValue({citta: this.utente.citta});
+        this.filterSummary = 'Citta: "' + this.utente.citta +'"'
+        if(categories.length) this.filterSummary += ' | Categorie scelte: ' + categories.length
+
+        this.getPreferredEvents()
+      },
+      error: (err) => {
+        this.toastService.show('errorToast', 'Errore', 'Errore nel reperire le tue categorie. \n Prova a ricaricare la pagina.');
+      }
+    });
+  }
+
+  loadMoreEvents() {
+    this.visibleEventsCount +=6; // Aggiunge altri 8 eventi alla visualizzazione
+  }
+
+  getPreferredEvents(){
+    const body = {
+      citta: this.filterForm.value.citta,
+      categorieId: this.filterForm.value.categorie
+    }
+
+    this.eventService.getEventsByFilter(body).subscribe({
+      next: (eventi: Evento[])=>{
+        this.eventi = eventi;
+        console.log(eventi);
+        this.loaded = true;
+      },
+      error:(err) =>{
+        this.toastService.show('errorToast', 'Errore', 'Errore nel reperire gli eventi.\n Prova a ricaricare la pagina.');
+      }
+    });
+
+    //this.thisOffCanvas.close();
   }
 
   showEvents($event: Evento[]){
