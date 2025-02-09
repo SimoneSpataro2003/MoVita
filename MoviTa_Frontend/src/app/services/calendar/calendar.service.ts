@@ -25,7 +25,7 @@ export class CalendarService {
   getParticipations(userId: number): Observable<Partecipazione[]> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer YOUR_AUTH_TOKEN` // Sostituisci con il token di autorizzazione
+      'Authorization': `Bearer ${this.apiKey}`
     });
 
     return this.http.get<Partecipazione[]>(`${this.apiUrl}/participations?userId=${userId}`, { headers });
