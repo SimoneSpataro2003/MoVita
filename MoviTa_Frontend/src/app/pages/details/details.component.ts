@@ -39,6 +39,7 @@ export class DetailsComponent {
   creatoDaMe = false;
   capienzaRaggiunta = false;
   prenotatoPrima = false;
+  azienda = false;
 
 
   constructor(private route: ActivatedRoute,
@@ -77,6 +78,10 @@ export class DetailsComponent {
           }
           if(this.evento.maxNumPartecipanti == this.evento.numPartecipanti){
             this.capienzaRaggiunta = true;
+          }
+          if(JSON.parse(this.cookieService.get('utente')).azienda)
+          {
+            this.azienda = true;
           }
 
         },
