@@ -147,20 +147,20 @@ export class SettingsComponent implements OnInit, Loadable {
     });
 
     // password
-    if (this.personForm.value.nuovaPassword != "" &&
-        this.personForm.value.ripetiNuovaPassword != "") {
-      this.userService.updatePassword(this.userId, this.personForm.value.nuovaPassword || "").subscribe({
-        next: (data: any) => {
-          this.user = data;
-          this.toastService.show('successToast', "Modifica effettuata", "La password è stato aggiornata con successo.");
-        },
-        error: (any) => {
-          this.toastService.show('errorToast', "Errore", "Impossibile aggiornare la password.");
-        }
-      });
-    }
+     if (this.personForm.value.nuovaPassword != "" &&
+         this.personForm.value.ripetiNuovaPassword != "") {
+       this.userService.updatePassword(this.userId, this.personForm.value.nuovaPassword || "").subscribe({
+         next: (data: any) => {
+           this.user = data;
+           this.toastService.show('successToast', "Modifica effettuata", "La password è stato aggiornata con successo.");
+         },
+         error: (any) => {
+           this.toastService.show('errorToast', "Errore", "Impossibile aggiornare la password.");
+         }
+       });
+     }
 
-     //TODO: fixare
+     //immagini
     // if (this.personForm.get('personaImageUpload')?.value !== null && this.personForm.get('personaImageUpload')?.value !== undefined) { //ho effettivamente caricato un immagine
     //   console.log("IMMAGINE DA CAMBIARE")
     //   console.log(this.personForm.get('personaImageUpload')?.value);
@@ -202,19 +202,19 @@ export class SettingsComponent implements OnInit, Loadable {
 
     // password
     if (this.agencyForm.value.nuovaPassword != "" &&
-      this.agencyForm.value.ripetiNuovaPassword != "") {
-      this.userService.updatePassword(this.userId, this.agencyForm.value.nuovaPassword || "").subscribe({
-        next: (data: any) => {
-          this.user = data;
-          this.toastService.show('successToast', "Modifica effettuata", "La password è stato aggiornata con successo.");
-        },
-        error: (any) => {
-          this.toastService.show('errorToast', "Errore", "Impossibile aggiornare la password.");
-        }
-      });
-    }
+       this.agencyForm.value.ripetiNuovaPassword != "") {
+       this.userService.updatePassword(this.userId, this.agencyForm.value.nuovaPassword || "").subscribe({
+         next: (data: any) => {
+           this.user = data;
+           this.toastService.show('successToast', "Modifica effettuata", "La password è stato aggiornata con successo.");
+         },
+         error: (any) => {
+           this.toastService.show('errorToast', "Errore", "Impossibile aggiornare la password.");
+         }
+       });
+     }
 
-     //TODO: fixare
+     //immagini
     // if (this.agencyForm.get('aziendaImageUpload')?.value !== null && this.agencyForm.get('aziendaImageUpload')?.value !== undefined) { //ho effettivamente caricato un immagine
     //   console.log("IMMAGINE DA CAMBIARE")
     //   console.log(this.agencyForm.get('aziendaImageUpload')?.value);
