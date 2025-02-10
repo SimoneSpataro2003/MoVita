@@ -4,7 +4,7 @@ export class IconaCategoriaMapper{
   private static iconMap: Record<number, string> = {
     1: "bi-music-note-beamed", // Concerto
     2: "bi-music-player", // Festival musicale
-    3: "bi-theater", // Teatro
+    3: "bi-projector-fill", // Teatro
     4: "bi-emoji-laughing", // Cabaret e stand-up comedy
     5: "bi-film", // Cinema
     6: "bi-book", // Evento letterario
